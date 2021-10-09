@@ -1,9 +1,7 @@
 package com.app.medium;
 
-import java.util.Scanner;
-
 /**
- * @author t0k02w6 on 27/07/21
+ * @author t0k02w6 on 06/10/21
  * @project ds-algo-2021
  */
 public class LongestPalindromicSubstringLeetcode05 {
@@ -11,17 +9,15 @@ public class LongestPalindromicSubstringLeetcode05 {
         if(s.length() <= 1)
             return s;
         int n = s.length();
-
-        int i = 0;
-        int maxLen = 0;
-        int start = -1;
-        while(i < n) {
+        int start = 0;
+        int maxlen = 0;
+        for(int i = 0; i < n; i++) {
             int left = i;
             int right = i;
             while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
-                if(maxLen < (right - left + 1)) {
+                if((right - left + 1) > maxlen) {
                     start = left;
-                    maxLen = (right - left + 1);
+                    maxlen = (right - left) + 1;
                 }
                 left--;
                 right++;
@@ -30,26 +26,23 @@ public class LongestPalindromicSubstringLeetcode05 {
             left = i - 1;
             right = i;
             while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
-                if(maxLen < (right - left + 1)) {
+                if((right - left + 1) > maxlen) {
                     start = left;
-                    maxLen = (right - left + 1);
+                    maxlen = (right - left) + 1;
                 }
                 left--;
                 right++;
             }
-            i++;
-        }
 
-        return s.substring(start, start + maxLen);
+        }
+        return s.substring(start, start + maxlen);
     }
 
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        String str = "a";
 
-        String str = scanner.nextLine();
-        System.out.println(longestPalindrome(str));
+        String ans = longestPalindrome(str);
 
-        scanner.close();
+        System.out.println(ans);
     }
 }

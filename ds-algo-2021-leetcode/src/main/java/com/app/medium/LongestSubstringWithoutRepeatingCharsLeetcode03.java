@@ -15,6 +15,7 @@ public class LongestSubstringWithoutRepeatingCharsLeetcode03 {
         Map<Character, Integer> map = new HashMap<>();
 
         int maxLen = 0;
+
         int j = 0;
         for(int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);

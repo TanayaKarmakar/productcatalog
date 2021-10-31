@@ -6,22 +6,20 @@ package com.app.medium;
  */
 public class ContainerWithMostWaterLeetcode11 {
     private static int maxArea(int[] height) {
-        int left = 0;
-        int right = height.length - 1;
-        int max = 0;
+       int left = 0;
+       int right = height.length - 1;
 
-        while(left < right) {
-            int curr = 0;
-            if(height[left] < height[right]) {
-                curr = height[left] * (right - left);
-                left++;
-            } else {
-                curr = height[right] * (right - left);
-                right--;
-            }
-            max = Integer.max(max, curr);
-        }
-        return max;
+       int max = 0;
+       while(left < right) {
+           int currentVal = Integer.min(height[left], height[right]) * (right - left);
+           max = Integer.max(max, currentVal);
+
+           if(height[left] < height[right])
+               left++;
+           else
+               right--;
+       }
+       return max;
     }
 
     public static void main(String[] args) {

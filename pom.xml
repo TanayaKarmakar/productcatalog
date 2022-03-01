@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>ds-algo-2021-leetcode</module>
+        <module>pepcoding</module>
     </modules>
 
     <properties>

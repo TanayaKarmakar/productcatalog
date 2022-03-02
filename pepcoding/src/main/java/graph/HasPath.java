@@ -1,5 +1,7 @@
 package graph;
 
+import common.GraphUtil;
+
 import java.util.*;
 
 /**
@@ -47,34 +49,17 @@ public class HasPath {
     }
 
     private static boolean hasPath(int[][] paths, int start, int end) {
-        Map<Integer, List<Integer>> adjList = buildGraph(paths);
+        Map<Integer, List<Integer>> adjList = GraphUtil.buildGraph(paths);
 
         Set<Integer> visited = new HashSet<>();
         return bfs(adjList, visited, start, end);
     }
 
     private static boolean hasPathDfs(int[][] paths, int start, int end) {
-        Map<Integer, List<Integer>> adjList = buildGraph(paths);
+        Map<Integer, List<Integer>> adjList = GraphUtil.buildGraph(paths);
 
         Set<Integer> visited = new HashSet<>();
         return dfs(adjList, visited, start, end);
-    }
-
-    private static Map<Integer, List<Integer>> buildGraph(int[][] paths) {
-        Map<Integer, List<Integer>> adjList = new HashMap<>();
-        for(int i = 0; i < paths.length; i++) {
-            int[] currentEdge = paths[i];
-            if(!adjList.containsKey(currentEdge[0])) {
-                adjList.put(currentEdge[0], new ArrayList<>());
-            }
-            adjList.get(currentEdge[0]).add(currentEdge[1]);
-
-            if(!adjList.containsKey(currentEdge[1])) {
-                adjList.put(currentEdge[1], new ArrayList<>());
-            }
-            adjList.get(currentEdge[1]).add(currentEdge[0]);
-        }
-        return adjList;
     }
 
     public static void main(String[] args) {

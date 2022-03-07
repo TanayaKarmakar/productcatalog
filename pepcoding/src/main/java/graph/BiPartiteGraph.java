@@ -1,6 +1,7 @@
 package graph;
 
 import common.GraphUtil;
+import common.Pair;
 
 import java.util.*;
 
@@ -8,15 +9,6 @@ import java.util.*;
  * @author t0k02w6 on 06/03/22
  * @project ds-algo-2021
  */
-class Pair {
-    int node;
-    int level;
-
-    public Pair(int node, int level) {
-        this.node = node;
-        this.level = level;
-    }
-}
 
 public class BiPartiteGraph {
     private static boolean isBiPartite(int[][] paths, int nVertices) {
@@ -41,16 +33,16 @@ public class BiPartiteGraph {
 
         while(!queue.isEmpty()) {
             Pair removedNode = queue.poll();
-            if(visited[removedNode.node] != -1) {
-                if(visited[removedNode.node] != removedNode.level)
+            if(visited[removedNode.first] != -1) {
+                if(visited[removedNode.first] != removedNode.second)
                     return false;
             } else {
-                visited[removedNode.node] = removedNode.level;
+                visited[removedNode.first] = removedNode.second;
             }
-            List<Integer> neighbors = adjList.get(removedNode.node);
+            List<Integer> neighbors = adjList.get(removedNode.first);
             for(Integer el: neighbors) {
                 if(visited[el] == -1)
-                    queue.add(new Pair(el, removedNode.level + 1));
+                    queue.add(new Pair(el, removedNode.second + 1));
             }
         }
         return true;

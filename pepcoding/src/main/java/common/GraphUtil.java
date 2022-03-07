@@ -27,7 +27,7 @@ public class GraphUtil {
         return adjList;
     }
 
-    private static int[][] buildGraph(int[][] paths, int nVertices) {
+    public static int[][] buildGraph(int[][] paths, int nVertices) {
         int[][] adjMat = new int[nVertices][nVertices];
 
         for(int i = 0; i < paths.length; i++) {

@@ -10,6 +10,17 @@ import java.util.Map;
  * @project ds-algo-2021
  */
 public class GraphUtil {
+    public static Map<Integer, List<Integer>> buildDiGraph(int[][] paths) {
+        Map<Integer, List<Integer>> adjList = new HashMap<>();
+        for(int i = 0; i < paths.length; i++) {
+            int[] currentEdge = paths[i];
+            if(!adjList.containsKey(currentEdge[0]))
+                adjList.put(currentEdge[0], new ArrayList<>());
+            adjList.get(currentEdge[0]).add(currentEdge[1]);
+        }
+        return adjList;
+    }
+
     public static Map<Integer, List<Integer>> buildGraph(int[][] paths) {
         Map<Integer, List<Integer>> adjList = new HashMap<>();
         for(int i = 0; i < paths.length; i++) {

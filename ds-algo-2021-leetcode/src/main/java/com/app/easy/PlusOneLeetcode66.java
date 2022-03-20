@@ -1,52 +1,40 @@
 package com.app.easy;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
- * @author t0k02w6 on 26/07/21
+ * @author t0k02w6 on 20/03/22
  * @project ds-algo-2021
  */
 public class PlusOneLeetcode66 {
     private static int[] plusOne(int[] digits) {
-        List<Integer> result = new ArrayList<>();
-
-        int carry = 0;
         int n = digits.length;
-
+        int[] result = new int[n + 1];
         int sum = digits[n - 1] + 1;
-        if(sum > 9) {
-            carry = sum / 10;
-            sum = sum % 10;
-        }
-        result.add(sum);
+        int carry = sum / 10;
+        sum = sum % 10;
+
+        result[n] = sum;
 
         for(int i = n - 2; i >= 0; i--) {
             sum = digits[i] + carry;
-            if(sum > 9) {
-                carry = sum / 10;
-                sum = sum % 10;
-            } else {
-                carry = 0;
+            carry = sum / 10;
+            sum = sum % 10;
+            result[i + 1] = sum;
+        }
+        if(carry != 0) {
+            result[0] = carry;
+        } else {
+            int i = 0;
+            while(i < result.length - 1 && result[i] == 0) {
+                i++;
             }
-            result.add(0, sum);
+            result = Arrays.copyOfRange(result, i, result.length);
         }
-        if(carry > 0)
-            result.add(0, carry);
-
-        int[] resArr = new int[result.size()];
-        int i = 0;
-        for(Integer el: result) {
-            resArr[i++] = el;
-        }
-        return resArr;
+        return result;
     }
 
     public static void main(String[] args) {
-        int[] nums = {8,9,9,9};
 
-        int[] output = plusOne(nums);
-        System.out.println(Arrays.toString(output));
     }
 }

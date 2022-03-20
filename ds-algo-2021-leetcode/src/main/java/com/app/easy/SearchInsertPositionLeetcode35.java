@@ -1,7 +1,7 @@
 package com.app.easy;
 
 /**
- * @author t0k02w6 on 25/07/21
+ * @author t0k02w6 on 19/03/22
  * @project ds-algo-2021
  */
 public class SearchInsertPositionLeetcode35 {
@@ -22,9 +22,9 @@ public class SearchInsertPositionLeetcode35 {
 
     public static void main(String[] args) {
         int[] nums = {1,3,5,6};
+        int target = 2;
+        int ans = searchInsert(nums, target);
 
-        System.out.println(searchInsert(nums, 5));
-        System.out.println(searchInsert(nums, 2));
-        System.out.println(searchInsert(nums, 7));
+        System.out.println(ans);
     }
 }

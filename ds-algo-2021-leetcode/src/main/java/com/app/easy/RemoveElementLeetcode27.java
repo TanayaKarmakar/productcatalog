@@ -1,14 +1,13 @@
 package com.app.easy;
 
 /**
- * @author t0k02w6 on 25/07/21
+ * @author t0k02w6 on 21/03/22
  * @project ds-algo-2021
  */
 public class RemoveElementLeetcode27 {
     private static int removeElement(int[] nums, int val) {
-        int n = nums.length;
         int i = -1;
-        for(int j = 0; j < n; j++) {
+        for(int j = 0; j < nums.length; j++) {
             if(nums[j] != val) {
                 i++;
                 int tmp = nums[i];
@@ -16,17 +15,15 @@ public class RemoveElementLeetcode27 {
                 nums[j] = tmp;
             }
         }
-        return (i + 1);
+        return i + 1;
     }
 
     public static void main(String[] args) {
-        int []nums = {0,1,2,2,3,0,4,2};
-        int val = 2;
-        int len = removeElement(nums, val);
+        int[] nums = {3,2,2,3};
+        int val = 3;
 
-        for(int i = 0; i < len; i++) {
-            System.out.print(nums[i] + " ");
-        }
-        System.out.println();
+        int ans = removeElement(nums, val);
+
+        System.out.println(ans);
     }
 }

@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 07/10/21
+ * @author t0k02w6 on 22/03/22
  * @project ds-algo-2021
  */
 class RandomizedSet {
-    private Map<Integer, Integer> map;
-    private List<Integer> list;
+    Map<Integer, Integer> map;
+    List<Integer> list;
 
     public RandomizedSet() {
         map = new HashMap<>();
@@ -22,7 +22,8 @@ class RandomizedSet {
         if(map.containsKey(val))
             return false;
         list.add(val);
-        map.put(val, list.size() - 1);
+        int indx = list.size() - 1;
+        map.put(val, indx);
         return true;
     }
 
@@ -32,8 +33,8 @@ class RandomizedSet {
         int indx = map.get(val);
         int lastItem = list.get(list.size() - 1);
         list.set(indx, lastItem);
-        list.remove(list.size() - 1);
         map.put(lastItem, indx);
+        list.remove(list.size() - 1);
         map.remove(val);
         return true;
     }
@@ -41,13 +42,12 @@ class RandomizedSet {
     public int getRandom() {
         int start = 0;
         int end = list.size() - 1;
-        int rIndx = (int)(Math.random() * (end - start + 1) + start);
-        return list.get(rIndx);
+        int indx = (int) ((Math.random() * (end - start)) + start);
+        return list.get(indx);
     }
 }
 
-
-public class InsertDeleteGetrandomLeetcode380 {
+public class InsertDeleteGetRandomLeetcode380 {
     public static void main(String[] args) {
 
     }

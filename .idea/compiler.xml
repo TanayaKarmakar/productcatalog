@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ds-algo-2021-leetcode" />
         <module name="pepcoding" />
+        <module name="ds-algo-gfg" />
       </profile>
     </annotationProcessing>
   </component>

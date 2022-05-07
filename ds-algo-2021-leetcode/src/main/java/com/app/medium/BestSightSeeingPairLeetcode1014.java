@@ -1,23 +1,22 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 19/03/22
+ * @author t0k02w6 on 03/05/22
  * @project ds-algo-2021
  */
 public class BestSightSeeingPairLeetcode1014 {
     private static int maxScoreSightseeingPair(int[] values) {
         int n = values.length;
-        int[] dp = new int[n];
-        dp[0] = values[0] + 0;
-        int old = dp[0];
-        int finalAns = Integer.MIN_VALUE;
+
+        int maxAi = values[0] + 0;
+
+        int ans = -1;
         for(int i = 1; i < n; i++) {
-            int current = old + values[i] - i;
-            dp[i] = current;
-            old = Integer.max(old, values[i] + i);
-            finalAns = Integer.max(finalAns, dp[i]);
+            ans = Integer.max(ans, maxAi + values[i] - i);
+            maxAi = Integer.max(maxAi, values[i] + i);
         }
-        return finalAns;
+        return ans;
+
     }
 
     public static void main(String[] args) {

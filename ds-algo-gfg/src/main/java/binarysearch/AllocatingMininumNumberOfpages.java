@@ -50,5 +50,10 @@ public class AllocatingMininumNumberOfpages {
         int ans = minPages(nums, k);
 
         System.out.println(ans);
+
+        nums = new int[] {31, 14, 19, 75};
+        k = 12;
+        ans = minPages(nums, k);
+        System.out.println(ans);
     }
 }

@@ -1,29 +1,28 @@
 package com.app.medium;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * @author t0k02w6 on 22/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 18/09/22
+ * @project ds-algo-2021-leetcode
  */
 class RandomizedSet {
-    Map<Integer, Integer> map;
-    List<Integer> list;
+    private Map<Integer, Integer> map;
+    private List<Integer> list;
+    private Random random;
 
     public RandomizedSet() {
         map = new HashMap<>();
         list = new ArrayList<>();
+        random = new Random();
     }
 
     public boolean insert(int val) {
         if(map.containsKey(val))
             return false;
         list.add(val);
-        int indx = list.size() - 1;
-        map.put(val, indx);
+        int size = list.size();
+        map.put(val, size - 1);
         return true;
     }
 
@@ -31,21 +30,22 @@ class RandomizedSet {
         if(!map.containsKey(val))
             return false;
         int indx = map.get(val);
-        int lastItem = list.get(list.size() - 1);
-        list.set(indx, lastItem);
-        map.put(lastItem, indx);
+        int lastValue = list.get(list.size() - 1);
+        list.set(list.size() - 1, val);
+        list.set(indx, lastValue);
         list.remove(list.size() - 1);
+        map.put(lastValue, indx);
         map.remove(val);
         return true;
     }
 
     public int getRandom() {
-        int start = 0;
-        int end = list.size() - 1;
-        int indx = (int) ((Math.random() * (end - start)) + start);
+        int size = list.size();
+        int indx = random.nextInt(size);
         return list.get(indx);
     }
 }
+
 
 public class InsertDeleteGetRandomLeetcode380 {
     public static void main(String[] args) {

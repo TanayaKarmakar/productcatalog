@@ -3,17 +3,16 @@ package com.app.medium;
 import java.util.Stack;
 
 /**
- * @author t0k02w6 on 24/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 20/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class DecodeStringLeetcode394 {
     private static String decodeString(String s) {
-        Stack<Integer> numStack = new Stack<>();
+        Stack<Integer> integerStack = new Stack<>();
         Stack<String> charStack = new Stack<>();
-
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < s.length(); ) {
+        for (int i = 0; i < s.length(); ) {
             int num = 0;
             char ch = s.charAt(i);
             while(Character.isDigit(ch)) {
@@ -22,15 +21,15 @@ public class DecodeStringLeetcode394 {
                 ch = s.charAt(i);
             }
             if(num != 0)
-                numStack.push(num);
+                integerStack.push(num);
             if(ch == ']') {
                 String str = "";
                 while(!charStack.isEmpty() && !charStack.peek().equals("[")) {
                     str = charStack.pop() + str;
                 }
                 charStack.pop();
-                if(!numStack.isEmpty()) {
-                    num = numStack.pop();
+                if(!integerStack.isEmpty()) {
+                    num = integerStack.pop();
                 }
                 sb = new StringBuilder();
                 if(num != 0) {
@@ -44,18 +43,17 @@ public class DecodeStringLeetcode394 {
                 charStack.push(ch + "");
             }
             i++;
+
         }
         sb = new StringBuilder();
         while(!charStack.isEmpty()) {
             sb.insert(0, charStack.pop());
         }
-
         return sb.toString();
     }
 
     public static void main(String[] args) {
-        String str = "3[a2[c]]";
-
+        String str = "2[abc]3[cd]ef";
         String ans = decodeString(str);
 
         System.out.println(ans);

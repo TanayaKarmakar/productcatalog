@@ -5,39 +5,40 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 22/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 17/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class MergeIntervalsLeetcode56 {
     private static int[][] merge(int[][] intervals) {
+        if(intervals.length <= 1)
+            return intervals;
         Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
+        List<int[]> intervalList = new ArrayList<>();
+        int start = intervals[0][0];
+        int end = intervals[0][1];
 
-        List<int[]> result = new ArrayList<>();
-        int prevStart = -1;
-        int prevEnd = -1;
-        for(int i = 0; i < intervals.length; i++) {
-            if(prevStart == -1) {
-                prevStart = intervals[i][0];
-                prevEnd = intervals[i][1];
+        for(int i = 1; i < intervals.length; i++) {
+            int currentStart = intervals[i][0];
+            int currentEnd = intervals[i][1];
+            if(currentStart < end) {
+                start = Integer.min(currentStart, start);
+                end = Integer.max(currentEnd, end);
             } else {
-                if(intervals[i][0] <= prevEnd) {
-                    prevStart = Integer.min(prevStart, intervals[i][0]);
-                    prevEnd = Integer.max(prevEnd, intervals[i][1]);
-                } else {
-                    result.add(new int[]{prevStart, prevEnd});
-                    prevStart = intervals[i][0];
-                    prevEnd = intervals[i][1];
-                }
+                intervalList.add(new int[]{start, end});
+                start = currentStart;
+                end = currentEnd;
             }
         }
-        result.add(new int[]{prevStart, prevEnd});
-        int[][] finalResult = new int[result.size()][2];
 
+        intervalList.add(new int[]{start, end});
+
+
+        int[][] result = new int[intervalList.size()][];
         int i = 0;
-        for(int[] currPair: result) {
-            finalResult[i++] = currPair;
+        for(int[] currentInterval: intervalList) {
+            result[i++] = currentInterval;
         }
-        return finalResult;
+        return result;
     }
 
     public static void main(String[] args) {

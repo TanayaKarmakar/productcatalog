@@ -2,53 +2,58 @@ package com.app.medium;
 
 import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
-import com.app.common.Pair;
 
 import java.util.*;
 
 /**
- * @author t0k02w6 on 22/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 18/09/22
+ * @project ds-algo-2021-leetcode
  */
-class VNode {
-    TreeNode node;
-    int pos;
-    int level;
-
-    public VNode(TreeNode node, int pos, int level) {
-        this.node = node;
-        this.pos = pos;
-        this.level = level;
-    }
-}
-
-
 public class BinaryTreeVerticalOrderTraversalLeetcode314 {
+    static class TreeItem {
+        TreeNode node;
+        int level;
+
+        public TreeItem(TreeNode node, int level) {
+            this.node = node;
+            this.level = level;
+        }
+    }
+
     private static List<List<Integer>> verticalOrder(TreeNode root) {
         if(root == null)
             return new ArrayList<>();
-        Queue<VNode> q = new LinkedList<>();
-        TreeMap<Integer, List<Integer>> tMap = new TreeMap<>();
-        q.add(new VNode(root, 0, 0));
-        List<List<Integer>> list = new ArrayList<>();
+        TreeMap<Integer, List<Integer>> map = new TreeMap<>();
+        //populateTree(root, 0, map);
+
+        Queue<TreeItem> q = new LinkedList<>();
+        q.add(new TreeItem(root, 0));
 
         while(!q.isEmpty()) {
-            VNode curr = q.poll();
+            int size = q.size();
+            for(int i = 0; i < size; i++) {
+                TreeItem item = q.poll();
+                int level = item.level;
+                if(!map.containsKey(level)) {
+                    map.put(level, new ArrayList<>());
+                }
+                map.get(level).add(item.node.val);
 
-            if(!tMap.containsKey(curr.pos)) {
-                tMap.put(curr.pos, new ArrayList<>());
+                if(item.node.left != null) {
+                    q.add(new TreeItem(item.node.left, level - 1));
+                }
+                if(item.node.right != null) {
+                    q.add(new TreeItem(item.node.right, level + 1));
+                }
             }
-            tMap.get(curr.pos).add(curr.node.val);
-            if(curr.node.left != null)
-                q.add(new VNode(curr.node.left, curr.pos - 1, curr.level + 1));
-            if(curr.node.right != null)
-                q.add(new VNode(curr.node.right, curr.pos + 1, curr.level + 1));
         }
 
-        for(Map.Entry<Integer, List<Integer>> entry: tMap.entrySet()) {
-            list.add(entry.getValue());
+
+        List<List<Integer>> result = new ArrayList<>();
+        for(Map.Entry<Integer, List<Integer>> entry: map.entrySet()) {
+            result.add(entry.getValue());
         }
-        return list;
+        return result;
     }
 
     public static void main(String[] args) {

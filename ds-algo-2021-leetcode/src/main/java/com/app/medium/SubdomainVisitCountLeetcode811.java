@@ -6,37 +6,46 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 23/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 17/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class SubdomainVisitCountLeetcode811 {
     private static List<String> subdomainVisits(String[] cpdomains) {
         Map<String, Integer> map = new HashMap<>();
+        for(String cpDomain: cpdomains) {
+            String[] token = cpDomain.split("\\s+");
 
-        for(String cpdomain: cpdomains) {
-            String[] domainToken = cpdomain.split("\\s+");
-            Integer count = Integer.parseInt(domainToken[0]);
+            Integer count = Integer.parseInt(token[0].trim());
+            String domainToken = token[1];
 
-            String[] fqdnToken = domainToken[1].split("\\.");
-            String ss = fqdnToken[fqdnToken.length - 1];
-            map.put(ss, map.getOrDefault(ss, 0) + count);
-            for(int i = fqdnToken.length - 2; i >= 0; i--) {
-                ss = fqdnToken[i] + "." + ss;
-                map.put(ss, map.getOrDefault(ss, 0) + count);
+           // map.put(domainToken, map.getOrDefault(domainToken, 0) + count);
+            String[] domainTokens = domainToken.split("\\.");
+            int size = domainTokens.length;
+            StringBuilder sb = new StringBuilder();
+            sb.append(domainTokens[size - 1]);
+            String str = sb.toString();
+            map.put(str, map.getOrDefault(str, 0) + count);
+            for(int i = size - 2; i >= 0; i--) {
+                str = domainTokens[i] + "." + str;
+                map.put(str, map.getOrDefault(str, 0) + count);
             }
         }
-
-        List<String> list = new ArrayList<>();
+        List<String> finalResult = new ArrayList<>();
         for(Map.Entry<String, Integer> entry: map.entrySet()) {
-            list.add(entry.getValue() + " " + entry.getKey());
+            finalResult.add(entry.getValue() + " " + entry.getKey());
         }
-        return list;
+        return finalResult;
     }
 
     public static void main(String[] args) {
-        String[] str = {"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"};
-        List<String> list = subdomainVisits(str);
+        String[] domains = {"9001 discuss.leetcode.com"};
+        List<String> finalResult = subdomainVisits(domains);
 
-        System.out.println(list);
+        System.out.println(finalResult);
+
+        domains = new String[]{"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"};
+        finalResult = subdomainVisits(domains);
+
+        System.out.println(finalResult);
     }
 }

@@ -4,11 +4,11 @@ import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 24/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 21/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class LowestCommonAncestorLeetcode236 {
-    private static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if(root == null)
             return null;
         if(root == p || root == q)

@@ -1,56 +1,53 @@
 package com.app.medium;
 
-import com.app.common.Triplet;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
- * @author t0k02w6 on 25/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 17/09/22
+ * @project ds-algo-2021-leetcode
  */
-
 public class GenerateParenthesisLeetcode22 {
+    static class Item {
+        String curr;
+        int open;
+        int close;
+
+        public Item(String curr, int open, int close) {
+            this.curr = curr;
+            this.open = open;
+            this.close = close;
+        }
+    }
     private static List<String> generateParenthesis(int n) {
-        Set<String> set = new HashSet<>();
-
-        Triplet<String, Integer, Integer> triplet = new Triplet<>("(", 1, 0);
-        Queue<Triplet<String, Integer, Integer>> queue = new LinkedList<>();
-        queue.add(triplet);
-
-        while(!queue.isEmpty()) {
-            Triplet<String, Integer, Integer> remItem = queue.poll();
-            if(remItem.getSecond() == remItem.getThird() && remItem.getSecond() == n) {
-                System.out.println(remItem.getFirst());
-                set.add(remItem.getFirst());
+        List<String> finalResult = new ArrayList<>();
+        Queue<Item> q = new LinkedList<>();
+        q.add(new Item("", 0, 0));
+        while(!q.isEmpty()) {
+            Item item = q.poll();
+            if(item.close == item.open && item.open == n) {
+                finalResult.add(item.curr);
                 continue;
             }
-            if(remItem.getSecond() == n) {
-                Triplet<String, Integer, Integer> newItem = new Triplet<>(remItem.getFirst() + ")",
-                        remItem.getSecond(), remItem.getThird() + 1);
-                queue.add(newItem);
-            } else {
-                if(remItem.getSecond() == remItem.getThird()) {
-                    Triplet<String, Integer, Integer> newItem = new Triplet<>(remItem.getFirst() + "(",
-                            remItem.getSecond() + 1, remItem.getThird());
-                    queue.add(newItem);
-                } else {
-                    Triplet<String, Integer, Integer> newItem1 = new Triplet<>(remItem.getFirst() + "(",
-                            remItem.getSecond() + 1, remItem.getThird());
-                    Triplet<String, Integer, Integer> newItem2 = new Triplet<>(remItem.getFirst() + ")",
-                            remItem.getSecond(), remItem.getThird() + 1);
-                    queue.add(newItem1);
-                    queue.add(newItem2);
-                }
+
+            if(item.open > item.close) {
+                Item item2 = new Item(item.curr + ")", item.open, item.close + 1);
+                q.add(item2);
+            }
+            if(item.open < n){
+                Item item1 = new Item( item.curr + "(", item.open + 1, item.close);
+                q.add(item1);
             }
         }
-        return new ArrayList<>(set);
+        return finalResult;
     }
 
     public static void main(String[] args) {
         int n = 3;
+        List<String> finalResult = generateParenthesis(n);
 
-        List<String> result = generateParenthesis(n);
-
-        System.out.println(result);
+        System.out.println(finalResult);
     }
 }

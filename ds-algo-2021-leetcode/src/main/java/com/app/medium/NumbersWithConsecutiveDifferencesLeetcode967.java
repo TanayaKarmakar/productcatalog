@@ -3,13 +3,12 @@ package com.app.medium;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
 /**
- * @author t0k02w6 on 25/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 24/09/22
+ * @project ds-algo-2021-leetcode
  */
-public class NumbersWithSameConsecutiveDifferencesLeetcode967 {
+public class NumbersWithConsecutiveDifferencesLeetcode967 {
     private static int[] numsSameConsecDiff(int n, int k) {
         Queue<String> q = new LinkedList<>();
 
@@ -47,15 +46,11 @@ public class NumbersWithSameConsecutiveDifferencesLeetcode967 {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        int n = 3;
+        int k = 7;
 
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int[] res = numsSameConsecDiff(n, k);
 
-        int[] ans = numsSameConsecDiff(n, k);
-
-        System.out.println(Arrays.toString(ans));
-
-        scanner.close();
+        System.out.println(Arrays.toString(res));
     }
 }

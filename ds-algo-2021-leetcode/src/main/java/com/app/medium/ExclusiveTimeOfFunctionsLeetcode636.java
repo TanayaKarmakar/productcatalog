@@ -1,53 +1,63 @@
 package com.app.medium;
 
-import com.app.common.Triplet;
-
 import java.util.*;
 
 /**
- * @author t0k02w6 on 02/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 24/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class ExclusiveTimeOfFunctionsLeetcode636 {
+    static class Item {
+        int id;
+        String type;
+        int ts;
+
+        public Item(int id, String type, int ts) {
+            this.id = id;
+            this.type = type;
+            this.ts = ts;
+        }
+    }
     private static int[] exclusiveTime(int n, List<String> logs) {
-        Stack<Triplet<Integer, String, Integer>> stack = new Stack<>();
+        Stack<Item> stack = new Stack<>();
         Map<Integer, Integer> map = new HashMap<>();
-
-        int[] res = new int[n];
-        int prev = 0;
-        int timeElapsed = 0;
-        for(String log: logs){
-           String[] logToken = log.split(":");
-           int id = Integer.parseInt(logToken[0]);
-           String type = logToken[1];
-           int timeStamp = Integer.parseInt(logToken[2]);
-           if(type.equals("end")) {
-               timeStamp++;
-               stack.pop();
-               timeElapsed = (timeStamp - prev);
-               map.put(id, map.getOrDefault(id, 0) + timeElapsed);
-           } else {
-               if(!stack.isEmpty()) {
-                   timeElapsed = (timeStamp - prev);
-                   int key = stack.peek().getFirst();
-                   map.put(key, map.getOrDefault(key, 0) + timeElapsed);
-               }
-               stack.push(new Triplet<>(id, type, timeStamp));
-           }
-           prev = timeStamp;
+        for(String currentLog: logs) {
+            String[] frag = currentLog.split(":");
+            Item item = new Item(Integer.parseInt(frag[0]), frag[1], Integer.parseInt(frag[2]));
+            if(item.type.equals("start")) {
+                if(!stack.isEmpty()) {
+                    Item peekItem = stack.peek();
+                    int value = map.getOrDefault(peekItem.id, 0);
+                    value += (item.ts - peekItem.ts);
+                    map.put(peekItem.id, value);
+                }
+                stack.push(item);
+            } else {
+                Item popItem = stack.pop();
+                int diff = item.ts - popItem.ts + 1;
+                map.put(popItem.id, map.getOrDefault(popItem.id, 0) + diff);
+                if(!stack.isEmpty()) {
+                    stack.peek().ts = item.ts + 1;
+                }
+            }
         }
-
-        for(int i = 0; i < n; i++) {
-            res[i] = map.get(i);
+        int size = map.size();
+        int[] result = new int[size];
+        for(int i = 0; i < size; i++) {
+            result[i] = map.getOrDefault(i, 0);
         }
-        return res;
+        return result;
     }
 
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("0:start:0","1:start:2","1:end:5","0:end:6");
+        List<String> logs = new ArrayList<>();
+        logs.add("0:start:0");
+        logs.add("1:start:2");
+        logs.add("1:end:5");
+        logs.add("0:end:6");
 
-        int[] res = exclusiveTime(2, list);
+        int[] ans = exclusiveTime(2, logs);
 
-        System.out.println(Arrays.toString(res));
+        System.out.println(Arrays.toString(ans));
     }
 }

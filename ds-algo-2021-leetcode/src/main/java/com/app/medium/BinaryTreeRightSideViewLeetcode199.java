@@ -8,30 +8,29 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 28/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 24/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class BinaryTreeRightSideViewLeetcode199 {
     private static List<Integer> rightSideView(TreeNode root) {
-        if(root == null)
-            return new ArrayList<>();
+        List<Integer> res = new ArrayList<>();
         Queue<TreeNode> q = new LinkedList<>();
         q.add(root);
 
-        List<Integer> result = new ArrayList<>();
         while(!q.isEmpty()) {
             int size = q.size();
             for(int i = 0; i < size; i++) {
-                TreeNode node = q.poll();
-                if(i == size - 1)
-                    result.add(node.val);
-                if(node.left != null)
-                    q.add(node.left);
-                if(node.right != null)
-                    q.add(node.right);
+                TreeNode currNode = q.poll();
+                if(i == size - 1) {
+                    res.add(currNode.val);
+                }
+                if(currNode.left != null)
+                    q.add(currNode.left);
+                if(currNode.right != null)
+                    q.add(currNode.right);
             }
         }
-        return result;
+        return res;
     }
 
     public static void main(String[] args) {

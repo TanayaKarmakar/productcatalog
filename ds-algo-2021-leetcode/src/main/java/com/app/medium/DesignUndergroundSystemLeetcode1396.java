@@ -1,77 +1,99 @@
 package com.app.medium;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 25/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 21/09/22
+ * @project ds-algo-2021-leetcode
  */
-class Passenger {
-    public int id;
-    public String startStation;
-    public int time;
-    public String endStation;
+class TravelInfo {
+    private String stationName;
+    private int time;
 
-    public Passenger(int id, String startStation, int time) {
-        this.id = id;
-        this.startStation = startStation;
+    public TravelInfo(String stationName, int time) {
+        this.stationName = stationName;
         this.time = time;
     }
 
-    public String getEndStation() {
-        return endStation;
+    public String getStationName() {
+        return stationName;
     }
 
-    public void setEndStation(String endStation) {
-        this.endStation = endStation;
+    public int getTime() {
+        return time;
+    }
+}
+
+class PassengerInfo {
+    private int id;
+    private TravelInfo checkIn;
+    private TravelInfo checkout;
+
+    public PassengerInfo(int id) {
+        this.id = id;
+    }
+
+    public TravelInfo getCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(TravelInfo checkIn) {
+        this.checkIn = checkIn;
+    }
+
+    public TravelInfo getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(TravelInfo checkout) {
+        this.checkout = checkout;
     }
 }
 
 class UndergroundSystem {
-    private Map<Integer, List<Passenger>> passengerMap;
-    private Map<String, List<Integer>> stationMap;
+    Map<Integer, List<PassengerInfo>> passengerInfoMap;
+    Map<String, List<Integer>> stationMap;
 
     public UndergroundSystem() {
-        passengerMap = new HashMap<>();
+        passengerInfoMap = new HashMap<>();
         stationMap = new HashMap<>();
     }
 
     public void checkIn(int id, String stationName, int t) {
-        Passenger passenger = new Passenger(id, stationName, t);
-        if(!passengerMap.containsKey(id)) {
-            passengerMap.put(id, new ArrayList<>());
-        }
-        passengerMap.get(id).add(passenger);
+        if(!passengerInfoMap.containsKey(id))
+            passengerInfoMap.put(id, new ArrayList<>());
+        TravelInfo travelInfo = new TravelInfo(stationName, t);
+        PassengerInfo passengerInfo = new PassengerInfo(id);
+        passengerInfo.setCheckIn(travelInfo);
+        passengerInfoMap.get(id).add(passengerInfo);
     }
 
     public void checkOut(int id, String stationName, int t) {
-        List<Passenger> passengers = passengerMap.get(id);
-        Passenger lastTravel = passengers.get(passengers.size() - 1);
-        lastTravel.setEndStation(stationName);
-        lastTravel.time = (t - lastTravel.time);
-
-        String path = lastTravel.startStation + ":" + lastTravel.endStation;
-        if(!stationMap.containsKey(path))
-            stationMap.put(path, new ArrayList<>());
-        int prevSum = 0;
-        if(!stationMap.get(path).isEmpty()) {
-            prevSum = stationMap.get(path).get(stationMap.get(path).size() - 1);
-        }
-        prevSum += lastTravel.time;
-        stationMap.get(path).add(prevSum);
+        TravelInfo checkoutInfo = new TravelInfo(stationName, t);
+        int size = passengerInfoMap.get(id).size();
+        PassengerInfo lastInfo = passengerInfoMap.get(id).get(size - 1);
+        lastInfo.setCheckout(checkoutInfo);
+        String station = lastInfo.getCheckIn().getStationName() + ":"
+                + lastInfo.getCheckout().getStationName();
+        int diff = lastInfo.getCheckout().getTime() - lastInfo.getCheckIn().getTime();
+        if(!stationMap.containsKey(station))
+            stationMap.put(station, new ArrayList<>());
+        stationMap.get(station).add(diff);
     }
 
     public double getAverageTime(String startStation, String endStation) {
         String key = startStation + ":" + endStation;
-        List<Integer> travelTimes = stationMap.get(key);
-        return travelTimes.get(travelTimes.size() - 1) / (double)travelTimes.size();
+        List<Integer> history = stationMap.get(key);
+        int sum = 0;
+        for(Integer el: history) {
+            sum += el;
+        }
+        return sum / (double) history.size();
     }
 }
-
 
 
 public class DesignUndergroundSystemLeetcode1396 {

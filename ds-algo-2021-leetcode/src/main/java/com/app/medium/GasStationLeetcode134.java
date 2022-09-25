@@ -1,13 +1,13 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 25/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 23/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class GasStationLeetcode134 {
     private static int canCompleteCircuit(int[] gas, int[] cost) {
-        int startIndx = -1;
         int n = gas.length;
+        int startIndx = -1;
         int currentDelta = 0;
         int failureCount = 0;
         for(int i = 0; i < n;) {
@@ -19,10 +19,11 @@ public class GasStationLeetcode134 {
                 if(failureCount == n)
                     break;
             } else {
-                if(startIndx == -1)
-                    startIndx = i;
-                else if(startIndx == i)
+                if(startIndx == i)
                     break;
+                else if(startIndx == -1) {
+                    startIndx = i;
+                }
             }
             i = (i + 1) % n;
         }
@@ -37,11 +38,6 @@ public class GasStationLeetcode134 {
 
         System.out.println(ans);
 
-        gas = new int[] {2,3,4};
-        cost = new int[] {3,4,3};
 
-        ans = canCompleteCircuit(gas, cost);
-
-        System.out.println(ans);
     }
 }

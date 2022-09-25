@@ -1,52 +1,45 @@
 package com.app.medium;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * @author t0k02w6 on 30/03/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 22/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class WordBreakLeetcode139 {
     private static boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> wordSet = new HashSet<>();
+        for(String word: wordDict) {
+            wordSet.add(word);
+        }
         int n = s.length();
-        int[] dp = new int[n];
-
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j <= i; j++) {
-                String currentWord = s.substring(j, i + 1);
-                if(wordDict.contains(currentWord)) {
-                    if(j > 0) {
-                        dp[i] += dp[j - 1];
-                    } else {
-                        dp[i]++;
-                    }
+        boolean[] isBreak = new boolean[n + 1];
+        for(int i = 0; i <= n; i++) {
+            for(int j = 0; j < i; j++) {
+                if(!isBreak[j])
+                    continue;
+                String str = s.substring(j, i);
+                if(wordSet.contains(str)) {
+                    isBreak[i] = true;
+                    break;
                 }
             }
         }
-        return dp[n - 1] > 0;
+
+        return isBreak[n];
     }
 
     public static void main(String[] args) {
-        String s = "leetcode";
+        String str = "leetcode";
         List<String> wordDict = new ArrayList<>();
         wordDict.add("leet");
         wordDict.add("code");
 
-        boolean ans = wordBreak(s, wordDict);
+        System.out.println(wordBreak(str, wordDict));
 
-        System.out.println(ans);
 
-        s = "catsandog";
-        wordDict = new ArrayList<>();
-        wordDict.add("cats");
-        wordDict.add("dog");
-        wordDict.add("sand");
-        wordDict.add("and");
-        wordDict.add("cat");
-
-        ans = wordBreak(s, wordDict);
-
-        System.out.println(ans);
     }
 }

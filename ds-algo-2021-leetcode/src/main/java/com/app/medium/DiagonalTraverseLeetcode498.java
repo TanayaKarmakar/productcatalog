@@ -3,43 +3,41 @@ package com.app.medium;
 import java.util.*;
 
 /**
- * @author t0k02w6 on 09/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 25/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class DiagonalTraverseLeetcode498 {
     private static int[] findDiagonalOrder(int[][] mat) {
+        TreeMap<Integer, List<Integer>> map = new TreeMap<>();
         int m = mat.length;
         int n = mat[0].length;
-        int[] res = new int[m * n];
-
-        Map<Integer, List<Integer>> map = new HashMap<>();
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < n; j++) {
-                if(!map.containsKey(i + j))
-                    map.put(i + j, new ArrayList<>());
-                map.get(i + j).add(mat[i][j]);
+                int current = (i + j);
+                if(!map.containsKey(current)) {
+                    map.put(current, new ArrayList<>());
+                }
+                map.get(current).add(mat[i][j]);
             }
         }
 
-        int j = 0;
-        boolean rev = true;
+        int total = m * n;
+        int[] result = new int[total];
+        boolean reverse = true;
+        int k = 0;
         for(Map.Entry<Integer, List<Integer>> entry: map.entrySet()) {
-            List<Integer> values = entry.getValue();
-            if(rev) {
-                Collections.reverse(values);
+            if(reverse) {
+                Collections.reverse(entry.getValue());
             }
-            for(Integer el: values) {
-                res[j++] = el;
+            for(Integer el: entry.getValue()) {
+                result[k++] = el;
             }
-            rev = !rev;
+            reverse = !reverse;
         }
-        return res;
+        return result;
     }
 
     public static void main(String[] args) {
-        int[][] mat = {{1,2,3},{4,5,6},{7,8,9}};
-        int[] ans = findDiagonalOrder(mat);
 
-        System.out.println(Arrays.toString(ans));
     }
 }

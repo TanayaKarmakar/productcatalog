@@ -1,76 +1,95 @@
 package com.app.medium;
 
-import com.app.common.LinkedList;
 import com.app.common.LinkedList.ListNode;
 
-
 /**
- * @author t0k02w6 on 10/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 01/10/22
+ * @project ds-algo-2021-leetcode
  */
 public class ReorderListLeetcode143 {
+  private static void reorderList(ListNode head) {
+    if(head == null)
+      return;
+    ListNode mid = findMid(head);
+    ListNode midNext = mid.next;
+    mid.next = null;
 
-    private static void reorderList(ListNode head) {
-        if(head == null || head.next == null)
-            return;
-        ListNode slow = head;
-        ListNode fast = head;
-        while(fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
+    midNext = reverse(midNext);
 
-        ListNode part1 = head;
-        ListNode part2 = slow.next;
+    ListNode tmp1 = head;
+    ListNode tmp2 = midNext;
 
-        slow.next = null;
+    ListNode result = new ListNode(Integer.MAX_VALUE);
+    ListNode tmp3 = result;
 
-        ListNode prev = null;
-        ListNode curr = part2;
-        ListNode next = null;
-        while(curr != null) {
-            next = curr.next;
-            curr.next = prev;
+    while(tmp1 != null && tmp2 != null) {
+      ListNode curr = tmp1;
+      tmp1 = tmp1.next;
+      curr.next = null;
 
-            prev = curr;
-            curr = next;
-        }
+      tmp3.next = curr;
+      tmp3 = tmp3.next;
 
-        part2 = prev;
+      curr = tmp2;
+      tmp2 = tmp2.next;
+      curr.next = null;
 
-        ListNode result = new ListNode(Integer.MAX_VALUE);
-        ListNode temp = result;
-
-        while (part1 != null && part2 != null) {
-            temp.next = new ListNode(part1.val);
-            temp = temp.next;
-            temp.next = new ListNode(part2.val);
-            temp = temp.next;
-            part1 = part1.next;
-            part2 = part2.next;
-        }
-
-        if(part1 != null)
-            temp.next = part1;
-        result = result.next;
-        head = result;
-
+      tmp3.next = curr;
+      tmp3 = tmp3.next;
     }
 
-    public static void main(String[] args) {
-        ListNode head = new ListNode(1);
-        head.next = new ListNode(2);
-        head.next.next = new ListNode(3);
-        head.next.next.next = new ListNode(4);
-        head.next.next.next.next = new ListNode(5);
-
-        reorderList(head);
-
-        ListNode temp = head;
-
-        while(temp != null) {
-            System.out.print(temp.val + " ");
-            temp = temp.next;
-        }
+    if(tmp1 != null) {
+      tmp3.next = new ListNode(tmp1.val);
+      tmp3 = tmp3.next;
+      tmp3.next = null;
     }
+
+    result = result.next;
+    head = result;
+  }
+
+  private static ListNode reverse(ListNode node) {
+    ListNode prev = null;
+    ListNode curr = node;
+    ListNode next = null;
+
+    while(curr != null) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
+    }
+
+    return prev;
+  }
+
+  private static ListNode findMid(ListNode head) {
+    if(head == null)
+      return null;
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while(fast.next != null && fast.next.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    return slow;
+  }
+
+  public static void main(String[] args) {
+    ListNode head = new ListNode(1);
+    head.next = new ListNode(2);
+    head.next.next = new ListNode(3);
+    head.next.next.next = new ListNode(4);
+
+    reorderList(head);
+
+    ListNode tmp = head;
+
+    while(tmp != null) {
+      System.out.print(tmp.val + " ");
+      tmp = tmp.next;
+    }
+    System.out.println();
+  }
 }

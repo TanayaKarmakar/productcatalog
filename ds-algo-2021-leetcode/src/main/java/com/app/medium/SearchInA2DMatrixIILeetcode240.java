@@ -1,8 +1,8 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 13/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 25/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class SearchInA2DMatrixIILeetcode240 {
     private static boolean searchMatrix(int[][] matrix, int target) {
@@ -11,6 +11,7 @@ public class SearchInA2DMatrixIILeetcode240 {
 
         int i = 0;
         int j = n - 1;
+
         while(i < m && j >= 0) {
             if(matrix[i][j] == target)
                 return true;

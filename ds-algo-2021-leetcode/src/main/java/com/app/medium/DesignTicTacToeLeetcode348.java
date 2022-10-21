@@ -1,63 +1,68 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 09/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 29/09/22
+ * @project ds-algo-2021-leetcode
  */
+
 class TicTacToe {
     char[][] board;
-    int n;
+    int size;
 
     public TicTacToe(int n) {
-        this.n = n;
+        this.size = n;
         board = new char[n][n];
     }
 
     public int move(int row, int col, int player) {
-        board[row][col] = player == 1 ? 'X': 'O';
-        boolean hasWon = hasWonGame(row, col, 'X');
+        boolean hasWon = hasWon(row, col, player);
         if(hasWon)
             return player;
         return 0;
     }
 
-    private boolean hasWonGame(int row, int col, char sign) {
+    private boolean hasWon(int row, int col, int player) {
+        char sign = player == 1 ? 'X':'0';
+        this.board[row][col] = sign;
         boolean hasWon = true;
-
-        for(int j = 0; j < n; j++) {
+        for(int j = 0; j < size; j++) {
             if(board[row][j] != sign) {
                 hasWon = false;
                 break;
             }
-
         }
+
         if(hasWon)
             return true;
 
         hasWon = true;
-        for(int i = 0; i < n; i++) {
-            if (board[i][col] != sign) {
+        for(int i = 0; i < size; i++) {
+            if(board[i][col] != sign) {
                 hasWon = false;
                 break;
             }
         }
+
         if(hasWon)
             return true;
 
         hasWon = true;
-        for(int i = 0, j = 0; i < n && j < n; i++, j++) {
-            if (board[i][j] != sign) {
-                hasWon = false;
-                break;
-            }
-        }
-        if(hasWon)
-            return true;
-
         int i = 0;
-        int j = n - 1;
+        while(i < size) {
+            if(board[i][i] != sign) {
+                hasWon = false;
+                break;
+            }
+            i++;
+        }
+
+        if(hasWon)
+            return true;
+
         hasWon = true;
-        while(i < n && j >= 0) {
+        i = 0;
+        int j = size - 1;
+        while(i < size && j >= 0) {
             if(board[i][j] != sign) {
                 hasWon = false;
                 break;
@@ -65,7 +70,11 @@ class TicTacToe {
             i++;
             j--;
         }
-        return hasWon;
+
+        if(hasWon)
+            return true;
+        return false;
+
     }
 }
 

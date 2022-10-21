@@ -1,70 +1,67 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 14/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 17/10/22
+ * @project ds-algo-2021-leetcode
  */
-class TrieNode {
-    TrieNode[] nodes;
-    boolean flag;
-
-    public TrieNode() {
-        nodes = new TrieNode[26];
-    }
-}
 
 class Trie {
-    TrieNode root;
+  static class TrieNode208 {
+    boolean isEnd;
+    TrieNode208[] children;
 
-    public Trie() {
-        root = new TrieNode();
+    public TrieNode208() {
+      this.children = new TrieNode208[26];
     }
+  }
 
-    public void insert(String word) {
-        TrieNode curr = root;
-        for(int i = 0; i < word.length(); i++) {
-            char ch = word.charAt(i);
-            if(curr.nodes[ch - 'a'] == null)
-                curr.nodes[ch - 'a'] = new TrieNode();
-            curr = curr.nodes[ch - 'a'];
-        }
+  private TrieNode208 root;
 
-        curr.flag = true;
+  public Trie() {
+    root = new TrieNode208();
+  }
+
+  public void insert(String word) {
+    TrieNode208 current = root;
+    for(int i = 0; i < word.length(); i++) {
+      int indx = word.charAt(i) - 'a';
+      if(current.children[indx] == null) {
+        current.children[indx] = new TrieNode208();
+      }
+      current = current.children[indx];
     }
+    current.isEnd = true;
+  }
 
-    public boolean search(String word) {
-        TrieNode curr = root;
-        for(int i = 0; i < word.length(); i++) {
-            char ch = word.charAt(i);
-            if(curr.nodes[ch - 'a'] == null)
-                return false;
-            curr = curr.nodes[ch - 'a'];
-        }
-        return curr.flag;
+  public boolean search(String word) {
+    TrieNode208 current = root;
+    for(int i = 0; i < word.length(); i++) {
+      int indx = word.charAt(i) - 'a';
+      if(current.children[indx] == null)
+        return false;
+      current = current.children[indx];
     }
+    return current.isEnd;
+  }
 
-    public boolean startsWith(String prefix) {
-        TrieNode curr = root;
-        for(int i = 0; i < prefix.length(); i++) {
-            char ch = prefix.charAt(i);
-            if(curr.nodes[ch - 'a'] == null)
-                return false;
-            curr = curr.nodes[ch - 'a'];
-        }
-        return curr != null;
+  public boolean startsWith(String prefix) {
+    TrieNode208 current = root;
+    for(int i = 0; i < prefix.length(); i++) {
+      int indx = prefix.charAt(i) - 'a';
+      if(current.children[indx] == null)
+        return false;
+      current = current.children[indx];
     }
+    return true;
+  }
 }
 
-
-
 public class ImplementTrieLeetcode208 {
-    public static void main(String[] args) {
-        Trie trie = new Trie();
-        trie.insert("apple");
-        System.out.println(trie.search("apple"));
-        System.out.println(trie.search("app"));
-        System.out.println(trie.startsWith("app"));
-        trie.insert("app");
-        System.out.println(trie.search("app"));
-    }
+
+
+
+
+  public static void main(String[] args) {
+
+  }
 }

@@ -1,15 +1,26 @@
 package com.app.medium;
 
-import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
 
 import java.util.*;
 
 /**
- * @author t0k02w6 on 16/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 29/09/22
+ * @project ds-algo-2021-leetcode
  */
 public class BoundaryOfBinaryTreeLeetcode545 {
+    public static List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+
+        res.add(root.val);
+
+        populateLeft(root.left, res);
+        populateLeaves(root.left, res);
+        populateLeaves(root.right, res);
+        populateRight(root.right, res);
+        return res;
+    }
+
     private static void populateLeft(TreeNode root, List<Integer> res) {
         if(root == null)
             return;
@@ -70,32 +81,13 @@ public class BoundaryOfBinaryTreeLeetcode545 {
         res.addAll(temp);
     }
 
-    private static List<Integer> boundaryOfBinaryTree(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
-
-        res.add(root.val);
-
-        populateLeft(root.left, res);
-        populateLeaves(root.left, res);
-        populateLeaves(root.right, res);
-        populateRight(root.right, res);
-        return res;
-    }
-
     public static void main(String[] args) {
-        BinaryTree bt = new BinaryTree();
-        bt.root = new TreeNode(1);
-        bt.root.left = new TreeNode(2);
-        bt.root.right = new TreeNode(3);
-        bt.root.left.left = new TreeNode(4);
-        bt.root.left.right = new TreeNode(5);
-        bt.root.left.right.left = new TreeNode(7);
-        bt.root.left.right.right = new TreeNode(8);
-        bt.root.right.left = new TreeNode(6);
-        bt.root.right.left.left = new TreeNode(9);
-        bt.root.right.left.right = new TreeNode(10);
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(2);
+        root.right.left = new TreeNode(3);
+        root.right.right = new TreeNode(4);
 
-        List<Integer> result = boundaryOfBinaryTree(bt.root);
+        List<Integer> result = boundaryOfBinaryTree(root);
 
         System.out.println(result);
     }

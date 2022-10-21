@@ -4,53 +4,55 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 17/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 17/10/22
+ * @project ds-algo-2021-leetcode
  */
 public class PopulatingNextRightPointerLeetcode116 {
-    private static Node connect(Node root) {
-        if(root == null || (root.left == null && root.right == null))
-            return root;
-        Queue<Node> q = new LinkedList<>();
-        q.add(root);
+  class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
 
-        while(!q.isEmpty()) {
-            int size = q.size();
+    public Node() {}
 
-            for(int i = 0; i < size; i++) {
-                Node remNode = q.poll();
-                if(i != size - 1)
-                    remNode.next = q.peek();
-                if(remNode.left != null)
-                    q.add(remNode.left);
-                if(remNode.right != null)
-                    q.add(remNode.right);
-            }
-        }
-        return root;
+    public Node(int _val) {
+      val = _val;
     }
 
-    public static void main(String[] args) {
-
+    public Node(int _val, Node _left, Node _right, Node _next) {
+      val = _val;
+      left = _left;
+      right = _right;
+      next = _next;
     }
+  }
 
-    static class Node {
-        public int val;
-        public Node left;
-        public Node right;
-        public Node next;
+  private static Node connect(Node root) {
+    if(root == null)
+      return root;
+    Queue<Node> q = new LinkedList<>();
+    q.add(root);
+    q.add(null);
 
-        public Node() {}
+    while(q.size() > 1) {
+      Node remNode = q.poll();
+      if(remNode == null) {
+        q.add(null);
+        continue;
+      }
 
-        public Node(int _val) {
-            val = _val;
-        }
+      if(q.peek() != null)
+        remNode.next = q.peek();
+      if(remNode.left != null)
+        q.add(remNode.left);
+      if(remNode.right != null)
+        q.add(remNode.right);
+    }
+    return root;
+  }
 
-        public Node(int _val, Node _left, Node _right, Node _next) {
-            val = _val;
-            left = _left;
-            right = _right;
-            next = _next;
-        }
-    };
+  public static void main(String[] args) {
+
+  }
 }

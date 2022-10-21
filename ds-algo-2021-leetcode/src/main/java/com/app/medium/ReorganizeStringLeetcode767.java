@@ -1,60 +1,62 @@
 package com.app.medium;
 
-import com.app.common.Pair;
-
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
- * @author t0k02w6 on 02/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 25/09/22
+ * @project ds-algo-2021-leetcode
  */
-class ValueComparator6 implements Comparator<Pair<Character, Integer>> {
-
-    @Override
-    public int compare(Pair<Character, Integer> o1, Pair<Character, Integer> o2) {
-        if(o1.second == o2.second)
-            return o1.first.compareTo(o2.first);
-        return o2.second - o1.second;
-    }
-}
-
 public class ReorganizeStringLeetcode767 {
+    static class Item implements Comparable<Item> {
+        char ch;
+        int freq;
+
+        public Item(char ch, int freq) {
+            this.ch = ch;
+            this.freq = freq;
+        }
+
+
+        @Override
+        public int compareTo(Item o) {
+            return o.freq - this.freq;
+        }
+    }
+
     private static String reorganizeString(String s) {
         Map<Character, Integer> map = new HashMap<>();
-        for(char ch: s.toCharArray()) {
+
+        for(int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
             map.put(ch, map.getOrDefault(ch, 0) + 1);
         }
 
-        PriorityQueue<Pair<Character, Integer>> pQ = new PriorityQueue<>(new ValueComparator6());
+        PriorityQueue<Item> pQ = new PriorityQueue<>();
         for(Map.Entry<Character, Integer> entry: map.entrySet()) {
-            pQ.add(new Pair<>(entry.getKey(), entry.getValue()));
+            Item item = new Item(entry.getKey(), entry.getValue());
+            pQ.add(item);
         }
 
         StringBuilder sb = new StringBuilder();
         while(!pQ.isEmpty()) {
-            Pair<Character, Integer> pair = pQ.poll();
-            if(sb.length() == 0 || sb.charAt(sb.length() - 1) != pair.first) {
-                sb.append(pair.first);
-                pair.second = pair.second - 1;
-                if(pair.second > 0)
-                    pQ.add(pair);
+            Item item = pQ.poll();
+            if(sb.toString().isEmpty() || sb.charAt(sb.length() - 1) != item.ch) {
+                sb.append(item.ch);
+                item.freq = item.freq - 1;
+                if(item.freq > 0)
+                    pQ.add(item);
             } else {
                 if(pQ.isEmpty())
                     return "";
-                Pair<Character, Integer> pair1 = pQ.poll();
-                sb.append(pair1.first);
-                sb.append(pair.first);
-                pair1.second = pair1.second - 1;
-                if(pair1.second > 0)
-                    pQ.add(pair1);
-                pair.second = pair.second - 1;
-                if(pair.second > 0)
-                    pQ.add(pair);
+                Item anotherItem = pQ.poll();
+                sb.append(anotherItem.ch);
+                anotherItem.freq = anotherItem.freq - 1;
+                if(anotherItem.freq > 0)
+                    pQ.add(anotherItem);
+                pQ.add(item);
             }
-
         }
         return sb.toString();
     }

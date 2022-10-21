@@ -6,19 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 02/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 26/09/22
+ * @project ds-algo-2021-leetcode
  */
 class SnapshotArray {
+    List<Map<Integer, Integer>> list;
     Map<Integer, Integer> map;
-    int size;
-    List<Map<Integer, Integer>> snapList;
-
-
+    int spanCount;
     public SnapshotArray(int length) {
+        list = new ArrayList<>();
         map = new HashMap<>();
-        snapList = new ArrayList<>();
-        //currentSnap = 0;
     }
 
     public void set(int index, int val) {
@@ -26,13 +23,13 @@ class SnapshotArray {
     }
 
     public int snap() {
-        Map<Integer, Integer> newMap = new HashMap<>(map);
-        snapList.add(newMap);
-        return snapList.size() - 1;
+        Map<Integer, Integer> newHashMap = new HashMap<>(map);
+        list.add(newHashMap);
+        return list.size() - 1;
     }
 
     public int get(int index, int snap_id) {
-        return snapList.get(snap_id).getOrDefault(index, 0);
+        return list.get(snap_id).getOrDefault(index, 0);
     }
 }
 

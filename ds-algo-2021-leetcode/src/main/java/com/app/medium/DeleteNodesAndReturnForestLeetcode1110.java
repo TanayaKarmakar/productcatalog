@@ -1,51 +1,47 @@
 package com.app.medium;
 
-import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
-import com.app.common.LinkedList;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * @author t0k02w6 on 17/04/22
+ * @author t0k02w6 on 05/12/22
  * @project ds-algo-2021
  */
 public class DeleteNodesAndReturnForestLeetcode1110 {
-    private static List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
-        Set<Integer> set = new HashSet<>();
-        for(int el: to_delete) {
-            set.add(el);
-        }
+  private static TreeNode delRec(TreeNode root, Set<Integer> delSet, List<TreeNode> nodes) {
+    if(root == null)
+      return null;
+    root.left = delRec(root.left, delSet, nodes);
+    root.right = delRec(root.right, delSet, nodes);
 
-        List<TreeNode> result = new ArrayList<>();
-        delNodesRec(root, set, result);
+    if(delSet.contains(root.val)) {
+      if(root.left != null)
+        nodes.add(root.left);
+      if(root.right != null)
+        nodes.add(root.right);
+      return null;
+    }
+    return root;
+  }
 
-        if(!set.contains(root.val)) {
-            result.add(root);
-        }
-        return result;
+  private static List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
+    Set<Integer> delSet = new HashSet<>();
+    for(int el: to_delete) {
+      delSet.add(el);
     }
 
-    private static TreeNode delNodesRec(TreeNode root, Set<Integer> set, List<TreeNode> result) {
-        if(root == null)
-            return null;
-        root.left = delNodesRec(root.left, set, result);
-        root.right = delNodesRec(root.right, set, result);
-
-        if(set.contains(root.val)) {
-            if(root.left != null)
-                result.add(root.left);
-            if(root.right != null)
-                result.add(root.right);
-            return null;
-        }
-        return root;
+    List<TreeNode> treeNodes = new ArrayList<>();
+    delRec(root, delSet, treeNodes);
+    if(!delSet.contains(root.val)) {
+      treeNodes.add(root);
     }
+    return treeNodes;
+  }
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-    }
+  }
 }

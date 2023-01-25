@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 17/10/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 05/12/22
+ * @project ds-algo-2021
  */
-public class PopulatingNextRightPointerLeetcode116 {
-  class Node {
+public class PopulatingNextRightPointersInEachNodeII {
+  static class Node {
     public int val;
     public Node left;
     public Node right;
@@ -26,33 +26,43 @@ public class PopulatingNextRightPointerLeetcode116 {
       right = _right;
       next = _next;
     }
-  }
+  };
 
   private static Node connect(Node root) {
     if(root == null)
-      return root;
+      return null;
     Queue<Node> q = new LinkedList<>();
     q.add(root);
     q.add(null);
 
-    while(q.size() > 1) {
-      Node remNode = q.poll();
-      if(remNode == null) {
-        q.add(null);
+
+    while(!q.isEmpty()) {
+      Node item = q.poll();
+      if(item == null) {
+        if(q.size() > 0)
+          q.add(null);
         continue;
       }
-
       if(q.peek() != null)
-        remNode.next = q.peek();
-      if(remNode.left != null)
-        q.add(remNode.left);
-      if(remNode.right != null)
-        q.add(remNode.right);
+        item.next = q.peek();
+
+      if(item.left != null)
+        q.add(item.left);
+      if(item.right != null)
+        q.add(item.right);
     }
+
     return root;
   }
 
   public static void main(String[] args) {
+    Node root = new Node(1);
+    root.left = new Node(2);
+    root.right = new Node(3);
+    root.left.left = new Node(4);
+    root.left.right = new Node(5);
+    root.right.right = new Node(7);
 
+    root = connect(root);
   }
 }

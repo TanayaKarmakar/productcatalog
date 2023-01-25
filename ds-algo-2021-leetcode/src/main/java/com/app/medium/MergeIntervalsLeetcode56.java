@@ -2,46 +2,49 @@ package com.app.medium;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 17/09/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 25/01/23
+ * @project ds-algo-2021
  */
 public class MergeIntervalsLeetcode56 {
-    private static int[][] merge(int[][] intervals) {
-        if(intervals.length <= 1)
-            return intervals;
-        Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
-        List<int[]> intervalList = new ArrayList<>();
-        int start = intervals[0][0];
-        int end = intervals[0][1];
+  private static int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(e -> e[0]));
 
-        for(int i = 1; i < intervals.length; i++) {
-            int currentStart = intervals[i][0];
-            int currentEnd = intervals[i][1];
-            if(currentStart < end) {
-                start = Integer.min(currentStart, start);
-                end = Integer.max(currentEnd, end);
-            } else {
-                intervalList.add(new int[]{start, end});
-                start = currentStart;
-                end = currentEnd;
-            }
-        }
+    List<int[]> intermediateResult = new ArrayList<>();
+    int start = intervals[0][0];
+    int end = intervals[0][1];
 
-        intervalList.add(new int[]{start, end});
+    for(int i = 1; i < intervals.length; i++) {
+      int currentStart = intervals[i][0];
+      int currentEnd = intervals[i][1];
 
-
-        int[][] result = new int[intervalList.size()][];
-        int i = 0;
-        for(int[] currentInterval: intervalList) {
-            result[i++] = currentInterval;
-        }
-        return result;
+      if(currentStart <= end) {
+        start = Integer.min(start, currentStart);
+        end = Integer.max(end, currentEnd);
+      } else {
+        intermediateResult.add(new int[] {start, end});
+        start = currentStart;
+        end = currentEnd;
+      }
     }
-
-    public static void main(String[] args) {
-
+    intermediateResult.add(new int[]{start, end});
+    int[][] result = new int[intermediateResult.size()][];
+    int i = 0;
+    for(int[] current: intermediateResult) {
+      result[i++] = current;
     }
+    return result;
+  }
+
+  public static void main(String[] args) {
+    int[][] intervals = {{1,3},{2,6},{8,10},{15,18}};
+    int[][] result = merge(intervals);
+
+    for(int[] curr: result) {
+      System.out.println(Arrays.toString(curr));
+    }
+  }
 }

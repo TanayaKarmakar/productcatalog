@@ -1,83 +1,71 @@
 package com.app.medium;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * @author t0k02w6 on 25/04/22
+ * @author t0k02w6 on 06/12/22
  * @project ds-algo-2021
  */
 public class GraphValidTreeLeetcode261 {
-    private static Map<Integer, List<Integer>> buildAdjList(int[][] edges) {
-        Map<Integer, List<Integer>> adjList = new HashMap<>();
-
-        for(int i = 0; i < edges.length; i++) {
-            int n1 = edges[i][0];
-            int n2 = edges[i][1];
-            if(!adjList.containsKey(n1))
-                adjList.put(n1, new ArrayList<>());
-            adjList.get(n1).add(n2);
-            if(!adjList.containsKey(n2))
-                adjList.put(n2, new ArrayList<>());
-            adjList.get(n2).add(n1);
-        }
-        return adjList;
+  public static boolean validTree(int n, int[][] edges) {
+    Map<Integer, List<Integer>> adjList = new HashMap<>();
+    for(int[] current: edges) {
+      int s = current[0];
+      int t = current[1];
+      if(!adjList.containsKey(s))
+        adjList.put(s, new ArrayList<>());
+      adjList.get(s).add(t);
+      if(!adjList.containsKey(t))
+        adjList.put(t, new ArrayList<>());
+      adjList.get(t).add(s);
     }
 
-    private static void dfs(Map<Integer, List<Integer>> adjList, int node, boolean[] visited) {
-        visited[node] = true;
-        List<Integer> neighbors = adjList.getOrDefault(node, new ArrayList<>());
-
-        for(Integer nei: neighbors) {
-            if(!visited[nei])
-                dfs(adjList, nei, visited);
-        }
+    Set<Integer> visited = new HashSet<>();
+    int count = 0;
+    for(int i = 0; i < n; i++) {
+      if(!visited.contains(i)) {
+        dfs(adjList, visited, i);
+        count++;
+      }
     }
+    if(count != 1)
+      return false;
 
-    private static boolean isCycle(Map<Integer, List<Integer>> adjList, int node, int parent, boolean[] visited) {
-        visited[node] = true;
-        List<Integer> neighbors = adjList.get(node);
-        for(Integer nei: neighbors) {
-            if(!visited[nei]) {
-                if(isCycle(adjList, nei, node, visited))
-                    return true;
-            } else if(nei != parent)
-                return true;
-        }
-        return false;
+    visited.clear();
+    return !hasCycle(adjList, visited, 0, -1);
+  }
+
+  private static boolean hasCycle(Map<Integer, List<Integer>> adjList, Set<Integer> visited, int current, int parent) {
+    visited.add(current);
+    List<Integer> neighbors = adjList.getOrDefault(current, new ArrayList<>());
+    if(!neighbors.isEmpty()) {
+      for(Integer el: neighbors) {
+        if(visited.contains(el) && el != parent)
+          return true;
+        if(!visited.contains(el) && hasCycle(adjList, visited, el, current))
+          return true;
+      }
     }
+    return false;
+  }
 
-    private static boolean validTree(int n, int[][] edges) {
-        if(edges.length == 0) {
-            if(n == 1)
-                return true;
-            return false;
-        }
-        Map<Integer, List<Integer>> adjList = buildAdjList(edges);
-
-        boolean[] visited = new boolean[n];
-        int count = 0;
-
-        for(int i = 0; i < n; i++) {
-            if(!visited[i]) {
-                count++;
-                dfs(adjList, i, visited);
-            }
-        }
-
-        if(count > 1)
-            return false;
-        Arrays.fill(visited, false);
-        boolean isCycle = isCycle(adjList, 0, -1, visited);
-        if(isCycle)
-            return false;
-        return true;
+  private static void dfs(Map<Integer, List<Integer>> adjList, Set<Integer> visited, int current) {
+    visited.add(current);
+    List<Integer> neighbors = adjList.getOrDefault(current, new ArrayList<>());
+    if(!neighbors.isEmpty()) {
+      for(Integer nei: neighbors) {
+        if(!visited.contains(nei))
+          dfs(adjList, visited, nei);
+      }
     }
+  }
 
+  public static void main(String[] args) {
 
-    public static void main(String[] args) {
-        int[][] edges = {{0,1},{0,2},{0,3},{1,4}};
-        int n = 5;
-
-        System.out.println(validTree(n, edges));
-    }
+  }
 }

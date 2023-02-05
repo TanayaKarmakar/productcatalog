@@ -6,48 +6,50 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 17/09/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 27/01/23
+ * @project ds-algo-2021
  */
 public class GenerateParenthesisLeetcode22 {
-    static class Item {
-        String curr;
-        int open;
-        int close;
+  static class Item {
+    String str;
+    int open;
+    int close;
 
-        public Item(String curr, int open, int close) {
-            this.curr = curr;
-            this.open = open;
-            this.close = close;
-        }
+    public Item(String str, int open, int close) {
+      this.str = str;
+      this.open = open;
+      this.close = close;
     }
-    private static List<String> generateParenthesis(int n) {
-        List<String> finalResult = new ArrayList<>();
-        Queue<Item> q = new LinkedList<>();
-        q.add(new Item("", 0, 0));
-        while(!q.isEmpty()) {
-            Item item = q.poll();
-            if(item.close == item.open && item.open == n) {
-                finalResult.add(item.curr);
-                continue;
-            }
+  }
 
-            if(item.open > item.close) {
-                Item item2 = new Item(item.curr + ")", item.open, item.close + 1);
-                q.add(item2);
-            }
-            if(item.open < n){
-                Item item1 = new Item( item.curr + "(", item.open + 1, item.close);
-                q.add(item1);
-            }
-        }
-        return finalResult;
+  private static List<String> generateParenthesis(int n) {
+    Queue<Item> queue = new LinkedList<>();
+    queue.add(new Item("(", 1, 0));
+
+    List<String> result = new ArrayList<>();
+
+    while(!queue.isEmpty()) {
+      Item polledItem = queue.poll();
+
+      if(polledItem.open == polledItem.close && polledItem.open == n) {
+        result.add(polledItem.str);
+        continue;
+      }
+
+      if(polledItem.open < n) {
+        queue.add(new Item(polledItem.str + "(", polledItem.open + 1, polledItem.close));
+      }
+      if(polledItem.open > polledItem.close) {
+        queue.add(new Item(polledItem.str + ")", polledItem.open, polledItem.close+ 1));
+      }
     }
+    return result;
+  }
 
-    public static void main(String[] args) {
-        int n = 3;
-        List<String> finalResult = generateParenthesis(n);
+  public static void main(String[] args) {
+    int n = 3;
+    List<String> res = generateParenthesis(n);
 
-        System.out.println(finalResult);
-    }
+    System.out.println(res);
+  }
 }

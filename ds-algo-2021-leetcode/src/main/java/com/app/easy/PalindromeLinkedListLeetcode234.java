@@ -1,61 +1,54 @@
 package com.app.easy;
 
-import com.app.common.LinkedList;
 import com.app.common.LinkedList.ListNode;
 
 /**
- * @author t0k02w6 on 17/03/22
+ * @author t0k02w6 on 27/01/23
  * @project ds-algo-2021
  */
 public class PalindromeLinkedListLeetcode234 {
-    private static boolean isPalindrome(ListNode head) {
-        if(head == null || head.next == null)
-            return true;
-        ListNode slow = head;
-        ListNode fast = head;
+  private static boolean isPalindrome(ListNode head) {
+    ListNode mid = findMid(head);
+    ListNode midNext = mid.next;
+    mid.next = null;
 
-        while(fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
+    ListNode temp1 = head;
+    ListNode temp2 = reverse(midNext);
 
-        ListNode part1 = head;
-        ListNode part2 = slow.next;
-        slow.next = null;
-
-        ListNode prev = null;
-        ListNode curr = part2;
-        ListNode next = null;
-        while(curr != null) {
-            next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-
-        part2 = prev;
-
-        ListNode tmp1 = part1;
-        ListNode tmp2 = part2;
-
-        while(tmp1 != null && tmp2 != null) {
-            if(tmp1.val != tmp2.val)
-                return false;
-            tmp1 = tmp1.next;
-            tmp2 = tmp2.next;
-        }
-        return (tmp1 == null || tmp1.next == null);
+    while(temp1 != null && temp2 != null) {
+      if(temp1.val != temp2.val)
+        return false;
+      temp1 = temp1.next;
+      temp2 = temp2.next;
     }
+    return (temp1 == null || temp1.next == null);
+  }
 
-    public static void main(String[] args) {
-        ListNode node = new ListNode(1);
-        node.next = new ListNode(2);
-        node.next.next = new ListNode(2);
-        node.next.next.next = new ListNode(1);
+  private static ListNode reverse(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+    ListNode next = null;
 
-
-        boolean ans = isPalindrome(node);
-
-        System.out.println(ans);
+    while(curr != null) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
     }
+    return prev;
+  }
+
+  private static ListNode findMid(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+    while(fast.next != null && fast.next.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+    return slow;
+  }
+
+  public static void main(String[] args) {
+
+  }
 }

@@ -1,25 +1,22 @@
 package com.app.easy;
 
 /**
- * @author t0k02w6 on 15/03/22
+ * @author t0k02w6 on 27/01/23
  * @project ds-algo-2021
  */
 public class BestTimeToBuyAndSellStockLeetcode121 {
-    private static int maxProfit(int[] prices) {
-        int maxProfit = Integer.MIN_VALUE;
-        int minPrices = Integer.MAX_VALUE;
-
-        for(int i = 0; i < prices.length; i++) {
-            minPrices = Integer.min(minPrices, prices[i]);
-            maxProfit = Integer.max(prices[i] - minPrices, maxProfit);
-        }
-        return maxProfit;
+  private static int maxProfit(int[] prices) {
+    int minPrice = prices[0];
+    int maxProfit = Integer.MIN_VALUE;
+    for(int i = 0; i < prices.length; i++) {
+      minPrice = Integer.min(prices[i], minPrice);
+      maxProfit = Integer.max(maxProfit, prices[i] - minPrice);
     }
 
-    public static void main(String[] args) {
-        int[] nums = {7,1,5,3,6,4};
-        int ans = maxProfit(nums);
+    return maxProfit;
+  }
 
-        System.out.println(ans);
-    }
+  public static void main(String[] args) {
+
+  }
 }

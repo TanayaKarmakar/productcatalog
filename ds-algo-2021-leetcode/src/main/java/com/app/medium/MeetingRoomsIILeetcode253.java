@@ -5,38 +5,42 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * @author t0k02w6 on 18/09/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 27/01/23
+ * @project ds-algo-2021
  */
+
+class FinishTimeComparator implements Comparator<int[]> {
+
+  @Override
+  public int compare(int[] o1, int[] o2) {
+    return o1[1] - o2[1];
+  }
+}
+
 public class MeetingRoomsIILeetcode253 {
-    static class FinishTimeComparator implements Comparator<int[]> {
+  private static int minMeetingRooms(int[][] intervals) {
+    Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
 
-        @Override
-        public int compare(int[] o1, int[] o2) {
-            return o1[1] - o2[1];
-        }
+    PriorityQueue<int[]> pQ = new PriorityQueue<>(new FinishTimeComparator());
+
+    for(int[] interval: intervals) {
+      if(pQ.isEmpty() || pQ.peek()[1] > interval[0]) {
+        pQ.add(interval);
+      } else {
+        int[] topInterval = pQ.poll();
+        topInterval[1] = interval[1];
+        pQ.add(topInterval);
+      }
     }
 
+    return pQ.size();
+  }
 
-    private static int minMeetingRooms(int[][] intervals) {
-        Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
-        PriorityQueue<int[]> pQ = new PriorityQueue<>(new FinishTimeComparator());
-        pQ.add(intervals[0]);
+  public static void main(String[] args) {
+    int[][] intervals = {{0,30},{5,10},{15, 20}};
 
-        for(int i = 1; i < intervals.length; i++) {
-            int[] currentInterval = intervals[i];
-            if(currentInterval[0] >= pQ.peek()[1]) {
-                int[] item = pQ.poll();
-                item[1] = currentInterval[1];
-                pQ.add(item);
-            } else {
-                pQ.add(currentInterval);
-            }
-        }
-        return pQ.size();
-    }
+    int ans = minMeetingRooms(intervals);
 
-    public static void main(String[] args) {
-
-    }
+    System.out.println(ans);
+  }
 }

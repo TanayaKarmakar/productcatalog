@@ -1,30 +1,37 @@
 package com.app.easy;
 
 /**
- * @author t0k02w6 on 18/03/22
+ * @author t0k02w6 on 29/01/23
  * @project ds-algo-2021
  */
 public class RemoveDuplicatesFromSortedArrayLeetcode26 {
-    private static int removeDuplicates(int[] nums) {
-        int len = 1;
-        int i = 0;
-        while(i < nums.length) {
-            int j = i + 1;
-            while(j < nums.length && nums[i] == nums[j]) {
-                j++;
-            }
-            if(j < nums.length) {
-                nums[len++] = nums[j];
-            }
-            i = j;
-        }
-        return len;
-    }
+  private static int removeDuplicates(int[] nums) {
+    if(nums.length <= 1)
+      return nums.length;
+    int n = nums.length;
+    int len = 1;
 
-    public static void main(String[] args) {
-        int[] nums = {1,1,2};
-        int ans = removeDuplicates(nums);
+    int i = 0;
+    while(i < n) {
+      int j = i + 1;
+      while(j < n && nums[i] == nums[j]) {
+        j++;
+      }
+      if(j < n) {
+        nums[len] = nums[j];
+        len++;
+      }
+      i = j;
 
-        System.out.println(ans);
     }
+    return len;
+  }
+
+
+  public static void main(String[] args) {
+    int[] nums = {1,1,2};
+    int len = removeDuplicates(nums);
+
+    System.out.println(len);
+  }
 }

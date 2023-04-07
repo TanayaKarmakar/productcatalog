@@ -1,35 +1,26 @@
 package com.app.medium;
 
-import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 14/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 16/02/23
+ * @project ds-algo-2021-leetcode
  */
 public class ValidateBinarySearchTreeLeetcode98 {
-    private static boolean isValidBSTRec(TreeNode root, long min, long max) {
-        if(root == null)
-            return true;
-        if(root.val > min && root.val < max) {
-            boolean l = true;
-            boolean r = true;
-            if(root.left != null)
-                l = isValidBSTRec(root.left, min, root.val);
-            if(root.right != null)
-                r = isValidBSTRec(root.right, root.val, max);
-            return (l && r);
-        }
-        return false;
-    }
+  private static boolean isValidBST(TreeNode root) {
+    return validate(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+  }
 
-    private static boolean isValidBST(TreeNode root) {
-        if(root == null || (root.left == null && root.right == null))
-            return true;
-        return  isValidBSTRec(root, (2L *Integer.MIN_VALUE), (2L *Integer.MAX_VALUE));
-    }
+  private static boolean validate(TreeNode root, int minValue, int maxValue) {
+    if(root == null)
+      return true;
+    if(root.val > maxValue || root.val < minValue)
+      return false;
+    return validate(root.left, minValue, root.val)
+        && validate(root.right, root.val, maxValue);
+  }
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-    }
+  }
 }

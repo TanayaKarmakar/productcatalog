@@ -1,71 +1,83 @@
 package com.app.medium;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * @author t0k02w6 on 06/12/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 07/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class GraphValidTreeLeetcode261 {
-  public static boolean validTree(int n, int[][] edges) {
-    Map<Integer, List<Integer>> adjList = new HashMap<>();
-    for(int[] current: edges) {
-      int s = current[0];
-      int t = current[1];
-      if(!adjList.containsKey(s))
-        adjList.put(s, new ArrayList<>());
-      adjList.get(s).add(t);
-      if(!adjList.containsKey(t))
-        adjList.put(t, new ArrayList<>());
-      adjList.get(t).add(s);
+
+  private static boolean validTree(int n, int[][] edges) {
+    Map<Integer, List<Integer>> map = new HashMap<>();
+
+    for(int i = 0; i < edges.length; i++) {
+      int s = edges[i][0];
+      int t = edges[i][1];
+      if(!map.containsKey(s))
+        map.put(s, new ArrayList<>());
+      map.get(s).add(t);
+
+      if(!map.containsKey(t))
+        map.put(t, new ArrayList<>());
+      map.get(t).add(s);
     }
 
-    Set<Integer> visited = new HashSet<>();
+    boolean[] visited = new boolean[n];
     int count = 0;
     for(int i = 0; i < n; i++) {
-      if(!visited.contains(i)) {
-        dfs(adjList, visited, i);
+      if(!visited[i]) {
         count++;
+        dfs(i, map, visited);
       }
     }
-    if(count != 1)
+
+    if(count > 1)
       return false;
 
-    visited.clear();
-    return !hasCycle(adjList, visited, 0, -1);
+    Arrays.fill(visited, false);
+    return !hasCycle(0, -1, map, visited);
   }
 
-  private static boolean hasCycle(Map<Integer, List<Integer>> adjList, Set<Integer> visited, int current, int parent) {
-    visited.add(current);
-    List<Integer> neighbors = adjList.getOrDefault(current, new ArrayList<>());
-    if(!neighbors.isEmpty()) {
-      for(Integer el: neighbors) {
-        if(visited.contains(el) && el != parent)
+  private static boolean hasCycle(int node, int parent, Map<Integer, List<Integer>> map, boolean[] visited) {
+    List<Integer> neighbors = map.getOrDefault(node, new ArrayList<>());
+    visited[node] = true;
+    for(Integer nei: neighbors) {
+      if(!visited[nei]) {
+        if(hasCycle(nei, node, map, visited)) {
           return true;
-        if(!visited.contains(el) && hasCycle(adjList, visited, el, current))
+        }
+      } else {
+        if(nei != parent)
           return true;
       }
     }
     return false;
   }
 
-  private static void dfs(Map<Integer, List<Integer>> adjList, Set<Integer> visited, int current) {
-    visited.add(current);
-    List<Integer> neighbors = adjList.getOrDefault(current, new ArrayList<>());
-    if(!neighbors.isEmpty()) {
-      for(Integer nei: neighbors) {
-        if(!visited.contains(nei))
-          dfs(adjList, visited, nei);
-      }
+  private static void dfs(int node, Map<Integer, List<Integer>> map, boolean[] visited) {
+    List<Integer> neighbors = map.getOrDefault(node, new ArrayList<>());
+
+    visited[node] = true;
+    for(Integer nei: neighbors) {
+      if(!visited[nei])
+        dfs(nei, map, visited);
     }
   }
 
   public static void main(String[] args) {
+    int n = 5;
+    int[][] edges = {{0,1},{1,2},{2,3},{1,3},{1,4}};
 
+    System.out.println(validTree(n, edges));
+
+    n = 5;
+    edges = new int[][]{{0,1},{0,2},{0,3},{1,4}};
+
+    System.out.println(validTree(n, edges));
   }
 }

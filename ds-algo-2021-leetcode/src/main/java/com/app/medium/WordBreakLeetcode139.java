@@ -6,40 +6,57 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author t0k02w6 on 22/09/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 05/02/23
+ * @project ds-algo-2021
  */
 public class WordBreakLeetcode139 {
-    private static boolean wordBreak(String s, List<String> wordDict) {
-        Set<String> wordSet = new HashSet<>();
-        for(String word: wordDict) {
-            wordSet.add(word);
+  private static boolean wordBreak(String s, List<String> wordDict) {
+    int n = s.length();
+    boolean[] isPresent = new boolean[n + 1];
+
+    Set<String> wordSet = new HashSet<>();
+    wordSet.addAll(wordDict);
+
+    isPresent[0] = true;
+
+    for(int i = 1; i <= n; i++) {
+      for(int j = 0; j < i; j++) {
+        if(!isPresent[j])
+          continue;
+        if(wordSet.contains(s.substring(j, i))) {
+          isPresent[i] = true;
+          break;
         }
-        int n = s.length();
-        boolean[] isBreak = new boolean[n + 1];
-        for(int i = 0; i <= n; i++) {
-            for(int j = 0; j < i; j++) {
-                if(!isBreak[j])
-                    continue;
-                String str = s.substring(j, i);
-                if(wordSet.contains(str)) {
-                    isBreak[i] = true;
-                    break;
-                }
-            }
-        }
-
-        return isBreak[n];
+      }
     }
+    return isPresent[n];
+  }
 
-    public static void main(String[] args) {
-        String str = "leetcode";
-        List<String> wordDict = new ArrayList<>();
-        wordDict.add("leet");
-        wordDict.add("code");
+  public static void main(String[] args) {
+    List<String> wordDict = new ArrayList<>();
+    wordDict.add("leet");
+    wordDict.add("code");
 
-        System.out.println(wordBreak(str, wordDict));
+    String s = "leetcode";
 
+    System.out.println(wordBreak(s, wordDict));
 
-    }
+    wordDict.clear();
+    wordDict.add("apple");
+    wordDict.add("pen");
+
+    s = "applepenapple";
+    System.out.println(wordBreak(s, wordDict));
+
+    wordDict.clear();
+    wordDict.add("cats");
+    wordDict.add("dog");
+    wordDict.add("sand");
+    wordDict.add("and");
+    wordDict.add("cat");
+
+    s = "catsandog";
+
+    System.out.println(wordBreak(s, wordDict));
+  }
 }

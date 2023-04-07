@@ -1,31 +1,28 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 15/10/22
+ * @author t0k02w6 on 07/04/23
  * @project ds-algo-2021-leetcode
  */
 public class MaximumSwapLeetcode670 {
   private static int maximumSwap(int num) {
-    String numStr = String.valueOf(num);
-    int n = numStr.length();
-    char[] nums = new char[n];
+    char[] numArr = String.valueOf(num).toCharArray();
 
-    for(int i = 0; i < numStr.length(); i++) {
-      nums[i] = numStr.charAt(i);
-    }
+    int maxNum = num;
+    int n = numArr.length;
 
-    Integer maxNumber = Integer.MIN_VALUE;
     for(int i = n - 2; i >= 0; i--) {
       for(int j = i + 1; j < n; j++) {
-        if(nums[i] < nums[j]) {
-          swap(nums, i, j);
-          Integer newNum = Integer.parseInt(new String(nums));
-          maxNumber = Integer.max(maxNumber, newNum);
-          swap(nums, i, j);
+        if(numArr[i] < numArr[j]) {
+          swap(numArr, i, j);
+          int currentNum = Integer.parseInt(new String(numArr));
+          maxNum = Integer.max(maxNum, currentNum);
+          swap(numArr, i, j);
         }
       }
     }
-    return maxNumber == Integer.MIN_VALUE ? num: maxNumber;
+
+    return maxNum;
   }
 
   private static void swap(char[] nums, int i, int j) {
@@ -35,6 +32,7 @@ public class MaximumSwapLeetcode670 {
   }
 
   public static void main(String[] args) {
-
+    System.out.println(maximumSwap(9973));
+    System.out.println(maximumSwap(2736));
   }
 }

@@ -3,37 +3,37 @@ package com.app.medium;
 import java.util.Stack;
 
 /**
- * @author t0k02w6 on 15/10/22
+ * @author t0k02w6 on 16/02/23
  * @project ds-algo-2021-leetcode
  */
 
 class MinStack {
-  private Stack<Integer> stack;
-  private Stack<Integer> minStack;
+  Stack<Integer> stack;
+  Stack<Integer> minimum;
 
   public MinStack() {
     stack = new Stack<>();
-    minStack = new Stack<>();
+    minimum = new Stack<>();
   }
 
   public void push(int val) {
     stack.push(val);
-    if(minStack.isEmpty() || val <= minStack.peek())
-      minStack.push(val);
+    if(minimum.isEmpty() || minimum.peek() > val)
+      minimum.push(val);
   }
 
   public void pop() {
-    int val = stack.pop();
-    if(minStack.peek() == val)
-      minStack.pop();
+    int value = stack.pop();
+    if(value == minimum.peek())
+      minimum.pop();
   }
 
   public int top() {
-    return stack.peek();
+    return stack.isEmpty() ? -1: stack.peek();
   }
 
   public int getMin() {
-    return minStack.isEmpty() ? 0:minStack.peek();
+    return minimum.isEmpty() ? -1: minimum.peek();
   }
 }
 

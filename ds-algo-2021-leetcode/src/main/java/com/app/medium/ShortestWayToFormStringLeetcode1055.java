@@ -4,41 +4,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author t0k02w6 on 20/10/22
+ * @author t0k02w6 on 07/04/23
  * @project ds-algo-2021-leetcode
  */
 public class ShortestWayToFormStringLeetcode1055 {
+
   private static int shortestWay(String source, String target) {
+    int count = 0;
     Set<Character> sourceSet = new HashSet<>();
+
     for(int i = 0; i < source.length(); i++) {
       sourceSet.add(source.charAt(i));
     }
 
-    for(int i = 0; i < target.length(); i++) {
-      if(!sourceSet.contains(target.charAt(i)))
-        return -1;
-    }
-
-    int m = source.length();
-    int n = target.length();
     int i = 0;
     int j = 0;
-    int count = 0;
+    int m = source.length();
+    int n = target.length();
 
     while(j < n) {
-      if(i == m) {
-        i = 0;
-        count++;
+      i = 0;
+      while(i < m && j < n) {
+        char t = target.charAt(j);
+        if(!sourceSet.contains(t))
+          return -1;
+        if(source.charAt(i) == target.charAt(j)) {
+          j++;
+        }
+        i++;
       }
-      if(source.charAt(i) == target.charAt(j)) {
-        j++;
-      }
-      i++;
+      count++;
     }
-    return count + 1;
+
+    return count;
   }
 
   public static void main(String[] args) {
-
+    System.out.println(shortestWay("abc", "abcbc"));
+    System.out.println(shortestWay("abc", "acdbc"));
+    System.out.println(shortestWay("xyz", "xzyxz"));
   }
 }

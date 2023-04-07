@@ -1,29 +1,41 @@
 package com.app.medium;
 
-import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 21/09/22
- * @project ds-algo-2021-leetcode
+ * @author t0k02w6 on 05/02/23
+ * @project ds-algo-2021
  */
 public class LowestCommonAncestorLeetcode236 {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null)
-            return null;
-        if(root == p || root == q)
-            return root;
-        TreeNode left = lowestCommonAncestor(root.left, p, q);
-        TreeNode right = lowestCommonAncestor(root.right, p, q);
-        if(left != null && right != null)
-            return root;
-        else if(left != null)
-            return left;
-        else
-            return right;
-    }
+  private static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if(root == null)
+      return null;
+    if(root == p || root == q)
+      return root;
+    TreeNode left = lowestCommonAncestor(root.left, p, q);
+    TreeNode right = lowestCommonAncestor(root.right, p, q);
+    if(left != null && right != null)
+      return root;
+    else if(left != null)
+      return left;
+    else
+      return right;
+  }
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
+    TreeNode root = new TreeNode(3);
+    root.left = new TreeNode(5);
+    root.right = new TreeNode(1);
+    root.left.left = new TreeNode(6);
+    root.left.right = new TreeNode(2);
+    root.left.right.left = new TreeNode(7);
+    root.left.right.right = new TreeNode(4);
+    root.right.left = new TreeNode(0);
+    root.right.right = new TreeNode(8);
 
-    }
+    TreeNode p = root.left;
+    TreeNode q = root.right;
+
+    System.out.println(lowestCommonAncestor(root, p, q).val);
+  }
 }

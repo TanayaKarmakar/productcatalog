@@ -1,40 +1,32 @@
 package com.app.medium;
 
-import java.util.Scanner;
-
 /**
- * @author t0k02w6 on 03/05/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 09/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class PaintFenceLeetcode276 {
-    private static int numWays(int n, int k) {
-        if(n == 1)
-            return k;
-        if(n == 2)
-            return (k * k);
-        int prevSame = k;
-        int prevDiff = k * (k - 1);
-        int total = 0;
-        for(int i = 3; i <= n; i++) {
-            total = prevSame + prevDiff;
-            int currentSame = prevDiff;
-            int currentDiff = total * (k - 1);
-            prevSame = currentSame;
-            prevDiff = currentDiff;
-        }
+  private static int numWays(int n, int k) {
+    if(n <= 1)
+      return k;
 
-        total = prevDiff + prevSame;
-        return total;
+    int same = k;
+    int diff = k * (k - 1);
+    int total = same + diff;
+
+    for(int i = 3; i <= n; i++) {
+      int currentSame = diff;
+      int currentDiff = total * (k - 1);
+      int currentTotal = currentSame + currentDiff;
+      same = currentSame;
+      diff = currentDiff;
+      total = currentTotal;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+    return total;
+  }
 
-        int ans = numWays(n, k);
-        System.out.println(ans);
-
-        scanner.close();
-    }
+  public static void main(String[] args) {
+    System.out.println(numWays(3, 2));
+    System.out.println(numWays(5, 4));
+  }
 }

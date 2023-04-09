@@ -6,44 +6,64 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 06/12/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 08/04/23
+ * @project ds-algo-2021-leetcode
  */
 
 class FirstUnique {
-  Map<Integer, Integer> map;
-  Queue<Integer> queue;
+  Map<Integer, Item> map;
+  Queue<Item> q;
 
   public FirstUnique(int[] nums) {
     map = new HashMap<>();
-    queue = new LinkedList<>();
-    for(int el: nums) {
-      if(!map.containsKey(el)) {
-        map.put(el, 1);
-        queue.add(el);
+    q = new LinkedList<>();
+    for(int i = 0; i < nums.length; i++) {
+      if(!map.containsKey(nums[i])) {
+        Item newItem = new Item(nums[i], 1);
+        map.put(nums[i], newItem);
+        q.add(newItem);
       } else {
-        map.put(el, map.getOrDefault(el, 0) + 1);
-        queue.remove(el);
+        Item item = map.get(nums[i]);
+        q.remove(item);
+        item.value = item.value + 1;
+        map.put(nums[i], item);
       }
     }
   }
 
   public int showFirstUnique() {
-    if(queue.isEmpty())
-      return -1;
-    return queue.peek();
+    if(!q.isEmpty())
+      return q.peek().key;
+    return -1;
   }
 
   public void add(int value) {
     if(!map.containsKey(value)) {
-      map.put(value, 1);
-      queue.add(value);
+      Item newItem = new Item(value, 1);
+      map.put(value, newItem);
+      q.add(newItem);
     } else {
-      map.put(value, map.getOrDefault(value, 0) + 1);
-      queue.remove(value);
+      Item item = map.get(value);
+      q.remove(item);
+      item.value = item.value + 1;
+      map.put(value, item);
+    }
+  }
+
+  static class Item {
+    int key;
+    int value;
+
+    public Item(int key, int value) {
+      this.key = key;
+      this.value = value;
     }
   }
 }
 
 public class FirstUniqueNumberLeetcode1429 {
+
+  public static void main(String[] args) {
+
+  }
 }

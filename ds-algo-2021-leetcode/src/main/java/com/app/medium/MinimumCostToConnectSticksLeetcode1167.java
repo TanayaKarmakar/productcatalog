@@ -3,29 +3,37 @@ package com.app.medium;
 import java.util.PriorityQueue;
 
 /**
- * @author t0k02w6 on 21/11/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 09/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class MinimumCostToConnectSticksLeetcode1167 {
-  public static int connectSticks(int[] sticks) {
+  private static int connectSticks(int[] sticks) {
+    if(sticks.length <= 1)
+      return 0;
     PriorityQueue<Integer> pQ = new PriorityQueue<>();
-    for(int stick: sticks) {
-      pQ.add(stick);
+
+    for(int i = 0; i < sticks.length; i++) {
+      pQ.add(sticks[i]);
     }
 
     int totalCost = 0;
+    while(!pQ.isEmpty()) {
+      int val1 = pQ.poll();
+      int val2 = pQ.isEmpty() ? 0: pQ.poll();
 
-    while (pQ.size() > 1) {
-      int n1 = pQ.poll();
-      int n2 = pQ.poll();
-      totalCost += (n1 + n2);
-      pQ.add(n1 + n2);
+      totalCost += (val1 + val2);
+      if(!pQ.isEmpty())
+        pQ.add(val1 + val2);
     }
+
     return totalCost;
   }
 
   public static void main(String[] args) {
-    //System.out.println(connectSticks(new int[]{2,4,3}));
-    System.out.println(connectSticks(new int[]{1,8,3,5}));
+    int[] sticks = {1,8,3,5};
+
+    int totalCost = connectSticks(sticks);
+
+    System.out.println(totalCost);
   }
 }

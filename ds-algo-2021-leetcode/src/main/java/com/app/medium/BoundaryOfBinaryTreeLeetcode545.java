@@ -1,94 +1,102 @@
 package com.app.medium;
 
 import com.app.common.BinaryTree.TreeNode;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
- * @author t0k02w6 on 29/09/22
+ * @author t0k02w6 on 08/04/23
  * @project ds-algo-2021-leetcode
  */
 public class BoundaryOfBinaryTreeLeetcode545 {
-    public static List<Integer> boundaryOfBinaryTree(TreeNode root) {
-        List<Integer> res = new ArrayList<>();
+  private static List<Integer> boundaryOfBinaryTree(TreeNode root) {
+    if(root == null)
+      return new ArrayList<>();
 
-        res.add(root.val);
+    List<Integer> result = new ArrayList<>();
 
-        populateLeft(root.left, res);
-        populateLeaves(root.left, res);
-        populateLeaves(root.right, res);
-        populateRight(root.right, res);
-        return res;
+    result.add(root.val);
+    traverseLeft(root.left, result);
+    traverseBottom(root, result);
+    traverseRight(root.right, result);
+
+    return result;
+  }
+
+  private static void traverseBottom(TreeNode root, List<Integer> result) {
+    if(root == null)
+      return;
+    if(isLeaf(root)) {
+      result.add(root.val);
+      return;
     }
+    if(root.left != null)
+      traverseBottom(root.left, result);
+    if(root.right != null)
+      traverseBottom(root.right, result);
+  }
 
-    private static void populateLeft(TreeNode root, List<Integer> res) {
-        if(root == null)
-            return;
-        Queue<TreeNode> q = new LinkedList<>();
-        q.add(root);
+  private static void traverseLeft(TreeNode root, List<Integer> result) {
+    if(root == null)
+      return;
+    Queue<TreeNode> q = new LinkedList<>();
+    TreeNode temp = root;
+    q.add(temp);
+    while(!q.isEmpty()) {
+        TreeNode node = q.poll();
+        if(!isLeaf(node)) {
+          result.add(node.val);
+        }
 
-        while(!q.isEmpty()) {
-            TreeNode remNode = q.poll();
-            if(remNode.left == null && remNode.right == null)
-                continue;
-            res.add(remNode.val);
-            if(remNode.left != null)
-                q.add(remNode.left);
-            else if(remNode.right != null)
-                q.add(remNode.right);
+        if(node.left != null) {
+          q.add(node.left);
+        } else if(node.right != null) {
+          q.add(node.right);
+        }
+    }
+  }
+
+  private static void traverseRight(TreeNode root, List<Integer> result) {
+    if(root == null)
+      return;
+    Queue<TreeNode> q = new LinkedList<>();
+    TreeNode temp = root;
+    List<Integer> tempResult = new ArrayList<>();
+    q.add(temp);
+    while(!q.isEmpty()) {
+        TreeNode node = q.poll();
+        if(!isLeaf(node)) {
+          tempResult.add(node.val);
+        }
+
+        if(node.right != null) {
+          q.add(node.right);
+        } else if(node.left != null) {
+          q.add(node.left);
         }
     }
 
-    private static void populateLeaves(TreeNode root, List<Integer> res) {
-        if(root == null)
-            return;
-        Stack<TreeNode> q = new Stack<>();
-        q.add(root);
+    Collections.reverse(tempResult);
+    result.addAll(tempResult);
+  }
 
-        while(!q.isEmpty()) {
-            TreeNode rem = q.pop();
-            if(rem.left == null && rem.right == null) {
-                res.add(rem.val);
-                continue;
-            }
+  private static boolean isLeaf(TreeNode root) {
+    return root.left == null && root.right == null;
+  }
 
-            if(rem.right != null)
-                q.add(rem.right);
-            if(rem.left != null)
-                q.add(rem.left);
-        }
-    }
 
-    private static void populateRight(TreeNode root, List<Integer> res) {
-        if(root == null)
-            return;
-        List<Integer> temp = new ArrayList<>();
-        Queue<TreeNode> q = new LinkedList<>();
-        q.add(root);
 
-        while(!q.isEmpty()) {
-            TreeNode remNode = q.poll();
-            if(remNode.left == null && remNode.right == null)
-                continue;
-            temp.add(remNode.val);
+  public static void main(String[] args) {
+    TreeNode root = new TreeNode(1);
+    root.right = new TreeNode(2);
+    root.right.left = new TreeNode(3);
+    root.right.right = new TreeNode(4);
 
-            if(remNode.right != null)
-                q.add(remNode.right);
-            else if(remNode.left != null)
-                q.add(remNode.left);
-        }
-        Collections.reverse(temp);
-        res.addAll(temp);
-    }
+    List<Integer> ans = boundaryOfBinaryTree(root);
 
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(1);
-        root.right = new TreeNode(2);
-        root.right.left = new TreeNode(3);
-        root.right.right = new TreeNode(4);
-
-        List<Integer> result = boundaryOfBinaryTree(root);
-
-        System.out.println(result);
-    }
+    System.out.println(ans);
+  }
 }

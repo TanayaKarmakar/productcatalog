@@ -1,54 +1,41 @@
 package com.app.medium;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * @author t0k02w6 on 27/07/21
- * @project ds-algo-2021
+ * @author t0k02w6 on 07/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class CarFleetLeetcode853 {
-    static class Car {
-        int position;
-        double time;
+  private static int carFleet(int target, int[] position, int[] speed) {
+    int n = position.length;
+    double[][] carData = new double[n][2];
 
-        public Car(int position, double time) {
-            this.position = position;
-            this.time = time;
-        }
+    for(int i = 0; i < n;i++) {
+      carData[i][0] = position[i] * 1d;
+      carData[i][1] = ((target - position[i]) * 1d) / speed[i];
     }
 
-    private static int carFleet(int target, int[] position, int[] speed) {
-        if(position.length < 2)
-            return position.length;
-        int n = position.length;
-        Car[] cars = new Car[n];
+    Arrays.sort(carData, (a, b) -> (int) (a[0] - b[0]));
+    double timeTaken = carData[n - 1][1];
 
-        for(int i = 0; i < n; i++) {
-            double time = (double)(target - position[i]) / (double) speed[i];
-            cars[i] = new Car(position[i], time);
-        }
-
-        Arrays.sort(cars, (c1, c2) -> c2.position - c1.position);
-        int numFleets = 1;
-        int firstCarInFleet = 0;
-        for(int i = 1; i < n; i++) {
-            if(cars[i].time > cars[firstCarInFleet].time) {
-                numFleets++;
-                firstCarInFleet = i;
-            }
-        }
-        return numFleets;
+    int totalFleet = 1;
+    for(int i = n - 2; i >= 0; i--) {
+      if(carData[i][1] > timeTaken) {
+        totalFleet++;
+        timeTaken = carData[i][1];
+      }
     }
+    return totalFleet;
+  }
 
-    public static void main(String[] args) {
-        int target = 12;
-        int[] position = {10,8,0,5,3};
-        int[] speed = {2,4,1,1,3};
+  public static void main(String[] args) {
+    int target = 12;
+    int[] position = {10,8,0,5,3};
+    int[] speed = {2,4,1,1,3};
 
-        int ans = carFleet(target, position, speed);
+    int ans = carFleet(target, position, speed);
 
-        System.out.println(ans);
-     }
+    System.out.println(ans);
+  }
 }

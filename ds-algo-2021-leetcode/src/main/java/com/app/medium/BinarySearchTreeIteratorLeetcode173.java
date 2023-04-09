@@ -2,46 +2,43 @@ package com.app.medium;
 
 import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 /**
- * @author t0k02w6 on 10/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 09/04/23
+ * @project ds-algo-2021-leetcode
  */
+
 class BSTIterator {
-    List<Integer> result;
-    int indx;
+  private Stack<TreeNode> stack;
 
-    public BSTIterator(TreeNode root) {
-        result = new ArrayList<>();
-        indx = 0;
-        inorder(root);
-    }
+  public BSTIterator(TreeNode root) {
+    stack = new Stack<>();
+    leftMostTraversal(root);
+  }
 
-    public int next() {
-        int val = result.get(indx);
-        indx++;
-        return val;
-    }
+  public int next() {
+    TreeNode topNode = stack.pop();
 
-    public boolean hasNext() {
-        return indx < result.size();
-    }
+    if(topNode.right != null)
+      leftMostTraversal(topNode.right);
+    return topNode.val;
+  }
 
-    private void inorder(TreeNode root) {
-        if(root == null)
-            return;
-        inorder(root.left);
-        result.add(root.val);
-        inorder(root.right);
+  public boolean hasNext() {
+    return stack.size() > 0;
+  }
+
+  private void leftMostTraversal(TreeNode root) {
+    while(root != null) {
+      stack.push(root);
+      root = root.left;
     }
+  }
 }
 
-
 public class BinarySearchTreeIteratorLeetcode173 {
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-    }
+  }
 }

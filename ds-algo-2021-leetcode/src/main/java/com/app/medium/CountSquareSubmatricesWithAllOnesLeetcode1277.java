@@ -1,27 +1,43 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 15/10/22
+ * @author t0k02w6 on 09/04/23
  * @project ds-algo-2021-leetcode
  */
 public class CountSquareSubmatricesWithAllOnesLeetcode1277 {
   private static int countSquares(int[][] matrix) {
     int m = matrix.length;
     int n = matrix[0].length;
-    int[][] dp  = new int[m][n];
+
+    int[][] dp = new int[m][n];
+
     int count = 0;
-    for(int i = 0; i < m; i++) {
-      for(int j = 0; j < n; j++) {
+    for(int i = 0; i < n; i++) {
+      dp[0][i] = matrix[0][i];
+      if(dp[0][i] == 1)
+        count++;
+    }
+
+    for(int i = 1; i < m; i++) {
+      dp[i][0] = matrix[i][0];
+      if(dp[i][0] == 1)
+        count++;
+    }
+
+    for(int i = 1; i < m; i++) {
+      for(int j = 1; j < n; j++) {
         if(matrix[i][j] == 1) {
-          if(i == 0 || j == 0) {
-            dp[i][j] = 1;
-          } else {
-            dp[i][j] = 1 + Integer.min(dp[i - 1][j], Integer.min(dp[i][j - 1], dp[i - 1][j - 1]));
-          }
-          count += dp[i][j];
+          int option1 = dp[i - 1][j];
+          int option2 = dp[i][j - 1];
+          int option3 = dp[i - 1][j - 1];
+          int value = 1 + Integer.min(option1, Integer.min(option2, option3));
+
+          dp[i][j] = value;
+          count += value;
         }
       }
     }
+
     return count;
   }
 

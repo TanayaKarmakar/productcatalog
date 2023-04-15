@@ -3,59 +3,52 @@ package com.app.medium;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * @author t0k02w6 on 07/05/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 13/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class PathInZigzagLabelledBinaryTreeLeetcode1104 {
-    private static List<Integer> pathInZigZagTree(int label) {
-        int height = (int)(Math.log10(label) / Math.log10(2)) + 1;
-        //int totalNodes = (int)Math.pow(2, height) - 1;
-
-        List<Integer> nodes = new ArrayList<>();
-
-        int val = 1;
-        boolean reverse = false;
-        nodes.add(Integer.MAX_VALUE);
-        for(int h = 1; h <= height; h++) {
-            int nodesAtLevel = (int)Math.pow(2, h) - (int)Math.pow(2, h - 1);
-            if(reverse) {
-                List<Integer> temp = new ArrayList<>();
-                for(int i = 0; i < nodesAtLevel; i++) {
-                    temp.add(val++);
-                }
-                Collections.reverse(temp);
-                nodes.addAll(temp);
-            } else {
-                for(int i = 0; i < nodesAtLevel; i++) {
-                    nodes.add(val++);
-                }
-            }
-            reverse = !reverse;
-        }
-
-        List<Integer> result = new ArrayList<>();
-        int i = nodes.size() - 1;
-        while(i >= 1 && nodes.get(i) != label) {
-            i--;
-        }
-        result.add(label);
-
-        while(i > 1) {
-            i = i / 2;
-            result.add(0, nodes.get(i));
-        }
-        return result;
+  private static List<Integer> pathInZigZagTree(int label) {
+    int height = (int)(Math.log(label) / Math.log(2))+ 1;
+    int value = 1;
+    boolean reverse = false;
+    List<Integer> intermediateResult = new ArrayList<>();
+    for(int i = 0; i <= height; i++) {
+      int numElements = (int)Math.pow(2, i);
+      List<Integer> currentLevel = new ArrayList<>();
+      int lastItem = value + numElements;
+      while(value < lastItem) {
+        currentLevel.add(value);
+        value++;
+      }
+      if(reverse)
+        Collections.reverse(currentLevel);
+      intermediateResult.addAll(currentLevel);
+      reverse = !reverse;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-
-        List<Integer> result = pathInZigZagTree(n);
-
-        System.out.println(result);
+    List<Integer> finalResult = new ArrayList<>();
+    int i = 0;
+    for(i = intermediateResult.size() - 1; i >= 0; i--) {
+      if(intermediateResult.get(i) == label) {
+        break;
+      }
     }
+
+    while(i > 0) {
+      finalResult.add(0,intermediateResult.get(i));
+      i = (i - 1)/2;
+    }
+
+    finalResult.add(0,intermediateResult.get(0));
+
+    //System.out.println(finalResult);
+
+    return finalResult;
+  }
+
+  public static void main(String[] args) {
+    pathInZigZagTree(15);
+  }
 }

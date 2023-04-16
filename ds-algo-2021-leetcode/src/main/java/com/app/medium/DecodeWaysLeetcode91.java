@@ -1,8 +1,8 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 28/01/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 16/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class DecodeWaysLeetcode91 {
   private static int numDecodings(String s) {
@@ -12,9 +12,12 @@ public class DecodeWaysLeetcode91 {
     dp[1] = s.charAt(0) == '0' ? 0: 1;
 
     for(int i = 2; i <= n; i++) {
-      if(s.charAt(i - 1) != '0')
+      if(s.charAt(i - 1) != '0') {
         dp[i] = dp[i - 1];
-      int num = (s.charAt(i - 2) - '0') * 10 + (s.charAt(i - 1) - '0');
+      }
+      int prev = s.charAt(i - 2) - '0';
+      int curr = s.charAt(i - 1) - '0';
+      int num = prev * 10 + curr;
       if(num >= 1 && num <= 26 && s.charAt(i - 2) != '0') {
         dp[i] += dp[i - 2];
       }
@@ -23,7 +26,7 @@ public class DecodeWaysLeetcode91 {
   }
 
   public static void main(String[] args) {
+    System.out.println(numDecodings("226"));
     System.out.println(numDecodings("12"));
-    System.out.println(numDecodings("06"));
   }
 }

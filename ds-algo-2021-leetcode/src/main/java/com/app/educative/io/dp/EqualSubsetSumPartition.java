@@ -1,13 +1,15 @@
-package com.app.medium;
+package com.app.educative.io.dp;
 
 /**
  * @author t0k02w6 on 16/04/23
  * @project ds-algo-2021-leetcode
  */
-public class PartitionEqualSubsetSumLeetcode416 {
+public class EqualSubsetSumPartition {
   private static boolean canPartition(int[] nums) {
     int totalSum = 0;
-    for(int i = 0; i < nums.length; i++) {
+    int n = nums.length;
+
+    for(int i = 0; i < n; i++) {
       totalSum += nums[i];
     }
 
@@ -15,16 +17,11 @@ public class PartitionEqualSubsetSumLeetcode416 {
       return false;
 
     int sum = totalSum / 2;
-    int n = nums.length;
     boolean[][] dp = new boolean[n][sum + 1];
 
-    for(int i = 0; i < n; i++) {
-      dp[i][0] = true;
-    }
-
-    for(int j = 1; j <= sum; j++) {
-      if(j == nums[0]) {
-        dp[0][j] = true;
+    for(int i = 0; i <= sum; i++) {
+      if(i == nums[0]) {
+        dp[0][i] = true;
       }
     }
 
@@ -33,7 +30,7 @@ public class PartitionEqualSubsetSumLeetcode416 {
         dp[i][j] = dp[i - 1][j];
 
         if(j >= nums[i]) {
-          dp[i][j] = dp[i][j] | dp[i - 1][j - nums[i]];
+          dp[i][j] |= dp[i - 1][j - nums[i]];
         }
       }
     }
@@ -42,8 +39,15 @@ public class PartitionEqualSubsetSumLeetcode416 {
   }
 
   public static void main(String[] args) {
-    int[] nums = {1,5,11,5};
+    int[] nums = {1,2,3,4};
+
     boolean ans = canPartition(nums);
+
+    System.out.println(ans);
+
+    nums = new int[]{1,2,3,5};
+
+    ans = canPartition(nums);
 
     System.out.println(ans);
   }

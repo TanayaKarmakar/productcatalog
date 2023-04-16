@@ -1,7 +1,7 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 16/02/23
+ * @author t0k02w6 on 16/04/23
  * @project ds-algo-2021-leetcode
  */
 public class SearchInA2DMatrixIILeetcode240 {
@@ -9,13 +9,13 @@ public class SearchInA2DMatrixIILeetcode240 {
     int m = matrix.length;
     int n = matrix[0].length;
 
-    int j = n - 1;
     int i = 0;
+    int j = n - 1;
+
     while(i < m && j >= 0) {
-      int item = matrix[i][j];
-      if(item == target)
+      if(matrix[i][j] == target)
         return true;
-      else if(item > target)
+      else if(matrix[i][j] > target)
         j--;
       else
         i++;

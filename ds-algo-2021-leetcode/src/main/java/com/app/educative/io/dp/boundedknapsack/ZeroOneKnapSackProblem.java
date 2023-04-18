@@ -1,4 +1,4 @@
-package com.app.educative.io.dp;
+package com.app.educative.io.dp.boundedknapsack;
 
 /**
  * @author t0k02w6 on 16/04/23

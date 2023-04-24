@@ -1,46 +1,58 @@
 package com.app.medium;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
- * @author t0k02w6 on 18/09/22
+ * @author t0k02w6 on 20/04/23
  * @project ds-algo-2021-leetcode
  */
 public class LongestStringChainLeetcode1048 {
-    private static int longestStrChain(String[] words) {
-        Arrays.sort(words, (i1, i2) -> i1.length() - i2.length());
-        int n = words.length;
-        int[] dp = new int[n];
-        //dp[n - 1] = 1;
+  private static int longestStrChain(String[] words) {
+    Arrays.sort(words, Comparator.comparingInt(String::length));
 
-        Arrays.fill(dp, 1);
+    int n = words.length;
+    int[] dp = new int[n];
+    Arrays.fill(dp, 1);
 
-        int maxValue = 1;
-        for(int i = n - 1; i >= 0; i--) {
-            String word = words[i];
-            for(int j = 0; j < word.length(); j++) {
-                String newWord = word.substring(0, j) + word.substring(j + 1);
-                int k = i;
-                while(k >= 0 && newWord.length() != words[k].length()) {
-                    k--;
-                }
-                while(k >= 0 && words[k].length() <= newWord.length()) {
-                    if(words[k].equals(newWord)) {
-                        dp[k] = Integer.max(dp[k], 1 + dp[i]);
-                        maxValue = Integer.max(maxValue, dp[k]);
-                    }
-                    k--;
-                }
-            }
+    for(int i = n - 1; i > 0; i--) {
+      for(int j = i - 1; j >= 0; j--) {
+        if(words[i].length() == words[j].length())
+          continue;
+        if(words[i].length() > words[j].length() + 1)
+          break;
+
+        if(numCharsInserted(words[i], words[j]))
+          dp[j] = Integer.max(dp[j], dp[i] + 1);
+      }
+    }
+
+    int maxLen = 1;
+    for(int i = 0; i <dp.length; i++) {
+      maxLen = Integer.max(maxLen, dp[i]);
+    }
+    return maxLen;
+  }
+
+  private static boolean numCharsInserted(String target, String source) {
+    int i = 0;
+    int j = 0;
+    int count = 0;
+      while (i < target.length() && j < source.length()) {
+        if (target.charAt(i) != source.charAt(j)) {
+          count++;
+          if (count > 1)
+            return false;
+        } else {
+          j++;
         }
-        //System.out.println(Arrays.toString(dp));
-        return maxValue;
-    }
+        i++;
+      }
+      return true;
+  }
 
-    public static void main(String[] args) {
-        String[] words = {"a","b","ba","bca","bda","bdca"};
-        int ans = longestStrChain(words);
-
-        System.out.println(ans);
-    }
+  public static void main(String[] args) {
+    System.out.println(longestStrChain(new String[]{"a","b","ba","bca","bda","bdca"}));
+    System.out.println(longestStrChain(new String[]{"xbc","pcxbcf","xb","cxbc","pcxbc"}));
+  }
 }

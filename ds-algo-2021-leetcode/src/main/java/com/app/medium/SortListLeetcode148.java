@@ -1,56 +1,62 @@
 package com.app.medium;
 
-import com.app.common.LinkedList;
 import com.app.common.LinkedList.ListNode;
 
 /**
- * @author t0k02w6 on 16/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 22/04/23
+ * @project ds-algo-2021-leetcode
  */
 public class SortListLeetcode148 {
-    private static ListNode findMid(ListNode head) {
-        ListNode slow = head;
-        ListNode fast = head;
-        while(fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-        }
-        return slow;
+  private static ListNode sortList(ListNode head) {
+    if(head == null || head.next == null)
+      return head;
+    ListNode mid = findMid(head);
+    ListNode midNext = mid.next;
+    mid.next = null;
+    ListNode part1 = sortList(head);
+    ListNode part2 = sortList(midNext);
+    return merge(part1, part2);
+  }
+
+  private static ListNode merge(ListNode part1, ListNode part2) {
+    if(part1 == null)
+      return part2;
+    if(part2 == null)
+      return part1;
+
+    ListNode result;
+    if(part1.val < part2.val) {
+      result = part1;
+      result.next = merge(part1.next, part2);
+    } else {
+      result = part2;
+      result.next = merge(part1, part2.next);
     }
+    return result;
+  }
 
-    private static ListNode merge(ListNode left, ListNode right) {
-        if(left == null)
-            return right;
-        if(right == null)
-            return left;
-        ListNode result;
-
-        if(left.val < right.val) {
-            result = left;
-            result.next = merge(left.next, right);
-        } else {
-            result = right;
-            result.next = merge(left, right.next);
-        }
-        return result;
+  private static ListNode findMid(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+    while(fast.next != null && fast.next.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
     }
+    return slow;
+  }
 
-    private static ListNode sortList(ListNode head) {
-        if(head == null || head.next == null)
-            return head;
+  public static void main(String[] args) {
+    ListNode head = new ListNode(4);
+    head.next = new ListNode(2);
+    head.next.next = new ListNode(1);
+    head.next.next.next = new ListNode(3);
 
-        ListNode mid = findMid(head);
-        ListNode midNext = mid.next;
-        mid.next = null;
+    head = sortList(head);
 
-        ListNode left = sortList(head);
-        ListNode right = sortList(midNext);
-        return merge(left, right);
+    ListNode temp = head;
+    while(temp != null) {
+      System.out.println(temp.val);
+      temp = temp.next;
     }
-
-
-
-    public static void main(String[] args) {
-
-    }
+  }
 }

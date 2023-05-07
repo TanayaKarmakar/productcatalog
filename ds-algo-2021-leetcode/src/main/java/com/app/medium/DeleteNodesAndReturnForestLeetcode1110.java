@@ -7,38 +7,41 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author t0k02w6 on 05/12/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 06/05/23
+ * @project ds-algo-2021-leetcode
  */
 public class DeleteNodesAndReturnForestLeetcode1110 {
-  private static TreeNode delRec(TreeNode root, Set<Integer> delSet, List<TreeNode> nodes) {
-    if(root == null)
-      return null;
-    root.left = delRec(root.left, delSet, nodes);
-    root.right = delRec(root.right, delSet, nodes);
-
-    if(delSet.contains(root.val)) {
-      if(root.left != null)
-        nodes.add(root.left);
-      if(root.right != null)
-        nodes.add(root.right);
-      return null;
-    }
-    return root;
-  }
-
   private static List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
     Set<Integer> delSet = new HashSet<>();
+
     for(int el: to_delete) {
       delSet.add(el);
     }
 
-    List<TreeNode> treeNodes = new ArrayList<>();
-    delRec(root, delSet, treeNodes);
+    List<TreeNode> result = new ArrayList<>();
+    delNodesRec(root, delSet, result);
+
     if(!delSet.contains(root.val)) {
-      treeNodes.add(root);
+      result.add(root);
     }
-    return treeNodes;
+
+    return result;
+  }
+
+  private static TreeNode delNodesRec(TreeNode root, Set<Integer> delSet, List<TreeNode> result) {
+    if(root == null)
+      return null;
+    root.left = delNodesRec(root.left, delSet, result);
+    root.right = delNodesRec(root.right, delSet, result);
+
+    if(delSet.contains(root.val)) {
+      if(root.left != null)
+        result.add(root.left);
+      if(root.right != null)
+        result.add(root.right);
+      return null;
+    }
+    return root;
   }
 
   public static void main(String[] args) {

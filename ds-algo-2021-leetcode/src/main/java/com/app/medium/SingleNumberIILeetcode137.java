@@ -1,22 +1,22 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 15/10/22
+ * @author t0k02w6 on 27/04/23
  * @project ds-algo-2021-leetcode
  */
 public class SingleNumberIILeetcode137 {
   private static int singleNumber(int[] nums) {
     int result = 0;
-    for(int i = 31; i >= 0; i--) {
-      int countOfOne = 0;
-      for(int j = 0; j < nums.length; j++) {
-        int mask = nums[j] >> i;
-        if((mask & 1) == 1) {
-          countOfOne++;
+
+    for(int j = 31; j >= 0; j--) {
+      int count = 0;
+      for(int i = 0; i < nums.length; i++) {
+        if(((nums[i] >> j) & 1) == 1) {
+          count++;
         }
       }
-      result = result << 1;
-      if(countOfOne % 3 != 0) {
+      result = (result << 1);
+      if(count % 3 != 0) {
         result += 1;
       }
     }
@@ -24,9 +24,7 @@ public class SingleNumberIILeetcode137 {
   }
 
   public static void main(String[] args) {
-    int[] nums = {2,2,3,2};
-    int ans = singleNumber(nums);
-
-    System.out.println(ans);
+    //System.out.println(singleNumber(new int[]{2,3,2,2}));
+    System.out.println(singleNumber(new int[]{0,1,0,1,0,1,99}));
   }
 }

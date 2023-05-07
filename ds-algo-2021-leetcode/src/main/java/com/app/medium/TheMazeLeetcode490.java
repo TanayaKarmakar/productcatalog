@@ -1,8 +1,7 @@
 package com.app.medium;
 
-
 /**
- * @author t0k02w6 on 20/10/22
+ * @author t0k02w6 on 27/04/23
  * @project ds-algo-2021-leetcode
  */
 public class TheMazeLeetcode490 {
@@ -15,32 +14,30 @@ public class TheMazeLeetcode490 {
     int sc = start[1];
     int dr = destination[0];
     int dc = destination[1];
-
     boolean[][] visited = new boolean[m][n];
     return hasPathRec(maze, visited, sr, sc, dr, dc, m, n);
   }
 
-  private static boolean hasPathRec(int[][] maze, boolean[][] visited, int r, int c, int dr, int dc, int m, int n) {
-    if(r == dr && c == dc)
+  private static boolean hasPathRec(int[][] maze, boolean[][] visited, int sr, int sc, int dr, int dc, int m, int n) {
+    if(sr == dr && sc == dc)
       return true;
-    if(visited[r][c] == true)
+    if(visited[sr][sc])
       return false;
-    visited[r][c] = true;
+    visited[sr][sc] = true;
+    int newRow = sr;
+    int newCol = sc;
     for(int i = 0; i < directions.length; i++) {
-      int newRow = r;
-      int newCol = c;
-
-      while(isValid(maze, newRow + directions[i][0], newCol + directions[i][1], m, n)) {
+      while(isValid(newRow + directions[i][0], newCol + directions[i][1], maze, m, n)) {
         newRow += directions[i][0];
         newCol += directions[i][1];
       }
-      if(hasPathRec(maze, visited, newRow, newCol, dr, dc, m, n))
+      if(hasPathRec(maze, visited, sr, sc, dr, dc, m, n))
         return true;
     }
     return false;
   }
 
-  private static boolean isValid(int[][] maze, int r, int c, int m, int n) {
+  private static boolean isValid(int r, int c, int[][] maze, int m, int n) {
     if(r < 0 || r >= m || c < 0 || c >= n)
       return false;
     else if(maze[r][c] == 1)
@@ -49,6 +46,11 @@ public class TheMazeLeetcode490 {
   }
 
   public static void main(String[] args) {
+    int[][] matrix = {{0,0,1,0,0},{0,0,0,0,0},{0,0,0,1,0},{1,1,0,1,1},{0,0,0,0,0}};
+    int[] start = {0,4};
+    int[] end = {4,4};
+    boolean ans = hasPath(matrix, start, end);
 
+    System.out.println(ans);
   }
 }

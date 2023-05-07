@@ -1,30 +1,37 @@
 package com.app.medium;
 
-//import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
-
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * @author t0k02w6 on 16/10/22
+ * @author t0k02w6 on 06/05/23
  * @project ds-algo-2021-leetcode
  */
 public class PathSumIIILeetcode437 {
+  private static int count = 0;
+  static Map<Integer, Integer> sumMap = new HashMap<>();
+
   private static int pathSum(TreeNode root, int targetSum) {
-    if(root == null)
-      return 0;
-    return pathSum(root.left, targetSum) + pathSum(root.right, targetSum)
-        + pathSum2(root, targetSum);
+    count = 0;
+    sumMap.clear();
+    sumMap.put(0, 1);
+    pathSumRec(root, targetSum, 0);
+    return count;
   }
 
-  private static int pathSum2(TreeNode root, int targetSum) {
+  private static void pathSumRec(TreeNode root, int targetSum, int previousSum) {
     if(root == null)
-      return 0;
-    int res = 0;
-    if(root.val == targetSum)
-      res++;
-    res += pathSum2(root.left, targetSum - root.val);
-    res += pathSum2(root.right, targetSum - root.val);
-    return res;
+      return;
+    int currentSum = root.val + previousSum;
+    if(sumMap.containsKey(currentSum - targetSum)) {
+      count += sumMap.get(currentSum - targetSum);
+    }
+    sumMap.put(currentSum, sumMap.getOrDefault(currentSum, 0) + 1);
+    pathSumRec(root.left, targetSum, currentSum);
+    pathSumRec(root.right, targetSum, currentSum);
+    int value = sumMap.get(currentSum);
+    sumMap.put(currentSum, value - 1);
   }
 
   public static void main(String[] args) {
@@ -38,8 +45,9 @@ public class PathSumIIILeetcode437 {
     root.left.right.right = new TreeNode(1);
     root.right.right = new TreeNode(11);
 
-    int target = 8;
-    int ans = pathSum(root, target);
+    int targetSum = 8;
+
+    int ans = pathSum(root, targetSum);
 
     System.out.println(ans);
   }

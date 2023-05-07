@@ -1,69 +1,72 @@
 package com.app.medium;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
- * @author t0k02w6 on 07/05/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 26/04/23
+ * @project ds-algo-2021-leetcode
  */
-
-
 public class SmallestCommonRegionLeetcode1257 {
-    private static String findSmallestRegion(List<List<String>> regions, String region1, String region2) {
-        Map<String, String> childParentMap = new HashMap<>();
-
-        for(List<String> currentRegion: regions) {
-            String container = currentRegion.get(0);
-            List<String> children = currentRegion.subList(1, currentRegion.size());
-
-            if(!childParentMap.containsKey(container))
-                childParentMap.put(container, null);
-            for(String currentChild: children)
-                childParentMap.put(currentChild, container);
-        }
-
-        String copyRegion1 = region1;
-        String copyRegion2 = region2;
-        while(!Objects.equals(region1, region2)) {
-            region1 = (region1 == null) ? copyRegion2: childParentMap.get(region1);
-            region2 = (region2 == null) ? copyRegion1: childParentMap.get(region2);
-        }
-        return region1;
+  private static String findSmallestRegion(List<List<String>> regions, String region1, String region2) {
+    Map<String, String> regionMap = new HashMap<>();
+    for(List<String> currentRegion: regions) {
+      List<String> smallerRegions = currentRegion.subList(1, currentRegion.size());
+      String parentRegion = currentRegion.get(0);
+      if(!regionMap.containsKey(parentRegion)) {
+        regionMap.put(parentRegion, null);
+      }
+      for(String currentSmallerRegion: smallerRegions) {
+        regionMap.put(currentSmallerRegion, parentRegion);
+      }
     }
 
-    public static void main(String[] args) {
-        List<List<String>> regions = new ArrayList<>();
-        List<String> region1 = new ArrayList<>();
-        region1.add("Earth");
-        region1.add("North America");
-        region1.add("South America");
-        regions.add(region1);
-
-        List<String> region2 = new ArrayList<>();
-        region2.add("North America");
-        region2.add("United States");
-        region2.add("Canada");
-        regions.add(region2);
-
-        List<String> region3 = new ArrayList<>();
-        region3.add("United States");
-        region3.add("New York");
-        region3.add("Boston");
-        regions.add(region3);
-
-        List<String> region4 = new ArrayList<>();
-        region4.add("Canada");
-        region4.add("Ontario");
-        region4.add("Quebec");
-        regions.add(region4);
-
-        List<String> region5 = new ArrayList<>();
-        region5.add("South America");
-        region5.add("Brazil");
-        regions.add(region5);
-
-        System.out.println(findSmallestRegion(regions, "Quebec", "New York"));
-        System.out.println(findSmallestRegion(regions, "Canada", "Quebec"));
-
+    String copyRegion1 = region1;
+    String copyRegion2 = region2;
+    while(!Objects.equals(region1, region2)) {
+      region1 = (region1 == null) ? copyRegion1: regionMap.get(region1);
+      region2 = (region2 == null) ? copyRegion2: regionMap.get(region2);
+      System.out.println("Region1 - " + region1 + ": Region2 - " + region2);
     }
+    return region1;
+  }
+
+  public static void main(String[] args) {
+    List<List<String>> regions = new ArrayList<>();
+    List<String> region = new ArrayList<>();
+    region.add("Earth");
+    region.add("North America");
+    region.add("South America");
+    regions.add(region);
+
+    region = new ArrayList<>();
+    region.add("North America");
+    region.add("United States");
+    region.add("Canada");
+    regions.add(region);
+
+    region = new ArrayList<>();
+    region.add("United States");
+    region.add("New York");
+    region.add("Boston");
+    regions.add(region);
+
+    region = new ArrayList<>();
+    region.add("Canada");
+    region.add("Ontario");
+    region.add("Quebec");
+    regions.add(region);
+
+    region = new ArrayList<>();
+    region.add("South America");
+    region.add("Brazil");
+    regions.add(region);
+
+    String ans = findSmallestRegion(regions, "Canada", "South America");
+
+    System.out.println(ans);
+  }
 }

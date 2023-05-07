@@ -3,48 +3,49 @@ package com.app.medium;
 import java.util.Arrays;
 
 /**
- * @author t0k02w6 on 18/10/22
+ * @author t0k02w6 on 26/04/23
  * @project ds-algo-2021-leetcode
  */
 public class SpiralMatrixIILeetcode59 {
   private static int[][] generateMatrix(int n) {
-    int[][] result = new int[n][n];
+    int value = 1;
+    int[][] matrix = new int[n][n];
+
     int startRow = 0;
     int endRow = n - 1;
     int startCol = 0;
     int endCol = n - 1;
 
-    int value = 1;
     while(startRow <= endRow && startCol <= endCol) {
       for(int j = startCol; j <= endCol; j++) {
-        result[startRow][j] = value++;
+        matrix[startRow][j] = value++;
       }
-      startRow++;
 
+      startRow++;
       for(int j = startRow; j <= endRow; j++) {
-        result[j][endCol] = value++;
+        matrix[j][endCol] = value++;
       }
       endCol--;
 
       for(int j = endCol; j >= startCol; j--) {
-        result[endRow][j] = value++;
+        matrix[endRow][j] = value++;
       }
       endRow--;
 
-      for(int j = endRow; j>= startRow; j--) {
-        result[j][startCol] = value++;
+      for(int j = endRow; j >= startRow; j--) {
+        matrix[j][startCol] = value++;
       }
       startCol++;
     }
-    return result;
+
+    return matrix;
+
   }
 
   public static void main(String[] args) {
-    int n = 3;
-    int[][] result = generateMatrix(n);
-
-    for(int i = 0; i < n; i++) {
-      System.out.println(Arrays.toString(result[i]));
+    int[][] matrix = generateMatrix(3);
+    for(int i = 0; i < 3; i++) {
+      System.out.println(Arrays.toString(matrix[i]));
     }
   }
 }

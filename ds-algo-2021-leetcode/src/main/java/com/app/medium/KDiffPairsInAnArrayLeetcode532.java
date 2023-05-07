@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 17/10/22
+ * @author t0k02w6 on 26/04/23
  * @project ds-algo-2021-leetcode
  */
 public class KDiffPairsInAnArrayLeetcode532 {
@@ -27,6 +27,10 @@ public class KDiffPairsInAnArrayLeetcode532 {
   }
 
   public static void main(String[] args) {
+    int[] nums = {3,1,4,1,5};
+    int k = 2;
+    int ans = findPairs(nums, k);
 
+    System.out.println(ans);
   }
 }

@@ -1,26 +1,30 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 29/09/22
+ * @author t0k02w6 on 09/05/23
  * @project ds-algo-2021-leetcode
  */
 public class BattleShipOnBoardLeetcode419 {
-    private static int countBattleships(char[][] board) {
-        int count = 0;
-        for(int i = 0; i < board.length; i++) {
-            for(int j = 0; j < board[0].length; j++) {
-                if(board[i][j] == 'X') {
-                    if((i > 0 && board[i - 1][j] == 'X')
-                        || (j > 0 && board[i][j - 1] == 'X'))
-                        continue;
-                    count++;
-                }
-            }
+  private static int countBattleships(char[][] board) {
+    int m = board.length;
+    int n = board[0].length;
+
+    int count = 0;
+    for(int r = 0; r < m; r++) {
+      for(int c = 0; c < n; c++) {
+        if(board[r][c] == 'X') {
+          if((r > 0 && board[r - 1][c] == 'X') || (c > 0 && board[r][c - 1] == 'X'))
+            continue;
+          count++;
         }
-        return count;
+      }
     }
+    return count;
+  }
 
-    public static void main(String[] args) {
-
-    }
+  public static void main(String[] args) {
+    char[][] board = {{'X', '.', '.', 'X'},{'.','.','.','X'},{'.','.','.','X'},{'.','.','.','.'}};
+    int ans = countBattleships(board);
+    System.out.println(ans);
+  }
 }

@@ -5,67 +5,64 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
- * @author t0k02w6 on 25/09/22
+ * @author t0k02w6 on 09/05/23
  * @project ds-algo-2021-leetcode
  */
 public class ReorganizeStringLeetcode767 {
-    static class Item implements Comparable<Item> {
-        char ch;
-        int freq;
+  static class QueueItem implements Comparable<QueueItem> {
+    char ch;
+    int freq;
 
-        public Item(char ch, int freq) {
-            this.ch = ch;
-            this.freq = freq;
-        }
-
-
-        @Override
-        public int compareTo(Item o) {
-            return o.freq - this.freq;
-        }
+    public QueueItem(char ch, int freq) {
+      this.ch = ch;
+      this.freq = freq;
     }
 
-    private static String reorganizeString(String s) {
-        Map<Character, Integer> map = new HashMap<>();
+    @Override
+    public int compareTo(QueueItem o) {
+      if(this.freq == o.freq)
+        return this.ch - o.ch;
+      return o.freq - this.freq;
+    }
+  }
 
-        for(int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
-        }
+  private static String reorganizeString(String s) {
+    Map<Character, Integer> charMap = new HashMap<>();
 
-        PriorityQueue<Item> pQ = new PriorityQueue<>();
-        for(Map.Entry<Character, Integer> entry: map.entrySet()) {
-            Item item = new Item(entry.getKey(), entry.getValue());
-            pQ.add(item);
-        }
-
-        StringBuilder sb = new StringBuilder();
-        while(!pQ.isEmpty()) {
-            Item item = pQ.poll();
-            if(sb.toString().isEmpty() || sb.charAt(sb.length() - 1) != item.ch) {
-                sb.append(item.ch);
-                item.freq = item.freq - 1;
-                if(item.freq > 0)
-                    pQ.add(item);
-            } else {
-                if(pQ.isEmpty())
-                    return "";
-                Item anotherItem = pQ.poll();
-                sb.append(anotherItem.ch);
-                anotherItem.freq = anotherItem.freq - 1;
-                if(anotherItem.freq > 0)
-                    pQ.add(anotherItem);
-                pQ.add(item);
-            }
-        }
-        return sb.toString();
+    for(int i = 0; i < s.length(); i++) {
+      char ch = s.charAt(i);
+      charMap.put(ch, charMap.getOrDefault(ch, 0) + 1);
     }
 
-    public static void main(String[] args) {
-        String str = "aab";
-
-        String ans = reorganizeString(str);
-
-        System.out.println(ans);
+    PriorityQueue<QueueItem> pQ = new PriorityQueue<>();
+    for(Map.Entry<Character, Integer> entry: charMap.entrySet()) {
+      QueueItem qItem = new QueueItem(entry.getKey(), entry.getValue());
+      pQ.add(qItem);
     }
+
+    StringBuilder sb = new StringBuilder();
+    while(!pQ.isEmpty()) {
+      QueueItem qItem = pQ.poll();
+      if(sb.length() == 0 || sb.charAt(sb.length() - 1) != qItem.ch) {
+        sb.append(qItem.ch);
+        qItem.freq = qItem.freq - 1;
+      } else {
+        if(pQ.isEmpty())
+          return "";
+        QueueItem anotherItem = pQ.poll();
+        sb.append(anotherItem.ch);
+        anotherItem.freq = anotherItem.freq - 1;
+        if(anotherItem.freq > 0)
+          pQ.add(anotherItem);
+      }
+      if(qItem.freq > 0)
+        pQ.add(qItem);
+    }
+    return sb.toString();
+  }
+
+  public static void main(String[] args) {
+    System.out.println(reorganizeString("aab"));
+    System.out.println(reorganizeString("aaab"));
+  }
 }

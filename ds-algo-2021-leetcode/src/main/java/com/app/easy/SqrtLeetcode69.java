@@ -1,8 +1,8 @@
 package com.app.easy;
 
 /**
- * @author t0k02w6 on 05/02/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 13/05/23
+ * @project ds-algo-2021-leetcode
  */
 public class SqrtLeetcode69 {
   private static int mySqrt(int x) {
@@ -10,16 +10,14 @@ public class SqrtLeetcode69 {
       return x;
     long start = 1;
     long end = x;
-
     long finalAns = 1;
-    while(start < end) {
+    while(start <= end) {
       long mid = (start + end) >> 1;
-
-      if(mid * mid == x)
+      if((mid * mid) == x) {
         return (int)mid;
-      else if((mid * mid) > x)
+      } else if((mid * mid) > x) {
         end = mid - 1;
-      else {
+      } else {
         finalAns = mid;
         start = mid + 1;
       }
@@ -28,7 +26,6 @@ public class SqrtLeetcode69 {
   }
 
   public static void main(String[] args) {
-    System.out.println(mySqrt(2147395599));
     System.out.println(mySqrt(4));
     System.out.println(mySqrt(8));
   }

@@ -1,7 +1,7 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 15/10/22
+ * @author t0k02w6 on 23/05/23
  * @project ds-algo-2021-leetcode
  */
 public class MinimumPathSumLeetcode64 {
@@ -10,10 +10,11 @@ public class MinimumPathSumLeetcode64 {
     int n = grid[0].length;
 
     int[][] dp = new int[m][n];
+
     dp[0][0] = grid[0][0];
 
     for(int i = 1; i < n; i++) {
-      dp[0][i] = dp[0][i - 1] + grid[0][i];
+      dp[0][i] = grid[0][i] + dp[0][i - 1];
     }
 
     for(int i = 1; i < m; i++) {
@@ -25,6 +26,7 @@ public class MinimumPathSumLeetcode64 {
         dp[i][j] = grid[i][j] + Integer.min(dp[i - 1][j], dp[i][j - 1]);
       }
     }
+
     return dp[m - 1][n - 1];
   }
 

@@ -1,14 +1,18 @@
 package com.app.medium;
 
+import java.util.Arrays;
+
 /**
- * @author t0k02w6 on 27/01/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 01/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class RotateImageLeetcode48 {
   private static void rotate(int[][] matrix) {
-    int n = matrix.length;
+    int m = matrix.length;
     int start = 0;
-    int end = n - 1;
+    int end = m - 1;
+
+
     while(start < end) {
       int[] tmp = matrix[start];
       matrix[start] = matrix[end];
@@ -17,20 +21,25 @@ public class RotateImageLeetcode48 {
       end--;
     }
 
-    int row = 0;
-    int col = 0;
-    while(row < n) {
-      for(int j = col; j < n; j++) {
-        int tmp = matrix[row][j];
-        matrix[row][j] = matrix[j][row];
-        matrix[j][row] = tmp;
+    int i = 0;
+    while(i < m) {
+      int j = i + 1;
+      while(j < m) {
+        int tmp = matrix[i][j];
+        matrix[i][j] = matrix[j][i];
+        matrix[j][i] = tmp;
+        j++;
       }
-      row++;
-      col++;
+      i++;
     }
   }
 
   public static void main(String[] args) {
+    int[][] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+    rotate(matrix);
 
+    for(int i = 0; i < matrix.length; i++) {
+      System.out.println(Arrays.toString(matrix[i]));
+    }
   }
 }

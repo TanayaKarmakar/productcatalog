@@ -1,11 +1,10 @@
 package com.app.medium;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @author t0k02w6 on 06/04/23
+ * @author t0k02w6 on 31/05/23
  * @project ds-algo-2021-leetcode
  */
 public class MinimumRoundsToCompleteAllTasksLeetcode2244 {
@@ -21,7 +20,7 @@ public class MinimumRoundsToCompleteAllTasksLeetcode2244 {
       Map.Entry<Integer, Integer> entry = difficultyMap.firstEntry();
       if(entry.getValue() < 2)
         return -1;
-      else if(entry.getValue() == 2 || entry.getValue() == 3) {
+      if(entry.getValue() == 2 || entry.getValue() == 3) {
         count++;
         difficultyMap.remove(entry.getKey());
       } else {
@@ -32,15 +31,19 @@ public class MinimumRoundsToCompleteAllTasksLeetcode2244 {
         difficultyMap.put(entry.getKey(), value);
         count++;
       }
-
     }
     return count;
   }
 
   public static void main(String[] args) {
-    int[] tasks = {2,2,3,3,2,4,4,4,4,4};
-    int count = minimumRounds(tasks);
+    int[] nums = {2,2,3,3,2,4,4,4,4,4};
+    int ans = minimumRounds(nums);
 
-    System.out.println(count);
+    System.out.println(ans);
+
+    nums = new int[]{2,3,3};
+    ans = minimumRounds(nums);
+
+    System.out.println(ans);
   }
 }

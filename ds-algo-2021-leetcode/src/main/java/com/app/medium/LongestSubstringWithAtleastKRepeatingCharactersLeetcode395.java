@@ -1,11 +1,10 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 07/04/23
+ * @author t0k02w6 on 13/06/23
  * @project ds-algo-2021-leetcode
  */
-public class LongestSubstringAtleastKRepeatingCharsLeetcode395 {
-
+public class LongestSubstringWithAtleastKRepeatingCharactersLeetcode395 {
   private static int longestSubstring(String s, int k) {
     return helper(s, 0, s.length(), k);
   }
@@ -24,7 +23,6 @@ public class LongestSubstringAtleastKRepeatingCharsLeetcode395 {
         while(j < end && freq[s.charAt(j) - 'a'] < k) {
           j++;
         }
-
         return Integer.max(helper(s, start, i, k), helper(s, j, end, k));
       }
     }
@@ -33,5 +31,6 @@ public class LongestSubstringAtleastKRepeatingCharsLeetcode395 {
 
   public static void main(String[] args) {
     System.out.println(longestSubstring("aaabb", 3));
+    System.out.println(longestSubstring("ababbc", 2));
   }
 }

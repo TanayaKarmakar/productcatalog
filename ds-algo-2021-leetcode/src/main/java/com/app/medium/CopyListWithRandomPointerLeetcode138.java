@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 06/02/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 13/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class CopyListWithRandomPointerLeetcode138 {
   static class Node {
@@ -20,25 +20,21 @@ public class CopyListWithRandomPointerLeetcode138 {
     }
   }
 
-
   private static Node copyRandomList(Node head) {
     Map<Node, Node> nodeMap = new HashMap<>();
-
     Node temp = head;
     while(temp != null) {
-      nodeMap.put(temp, new Node(temp.val));
+      Node newNode = new Node(temp.val);
+      nodeMap.put(temp, newNode);
       temp = temp.next;
     }
 
     temp = head;
     while(temp != null) {
       nodeMap.get(temp).next = nodeMap.get(temp.next);
-
-      if(nodeMap.containsKey(temp.random))
-        nodeMap.get(temp).random = nodeMap.get(temp.random);
+      nodeMap.get(temp).random = nodeMap.get(temp.random);
       temp = temp.next;
     }
-
     return nodeMap.get(head);
   }
 

@@ -5,21 +5,21 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
- * @author t0k02w6 on 09/05/23
+ * @author t0k02w6 on 06/06/23
  * @project ds-algo-2021-leetcode
  */
 public class ReorganizeStringLeetcode767 {
-  static class QueueItem implements Comparable<QueueItem> {
+  static class Item implements Comparable<Item> {
     char ch;
     int freq;
 
-    public QueueItem(char ch, int freq) {
+    public Item(char ch, int freq) {
       this.ch = ch;
       this.freq = freq;
     }
 
     @Override
-    public int compareTo(QueueItem o) {
+    public int compareTo(Item o) {
       if(this.freq == o.freq)
         return this.ch - o.ch;
       return o.freq - this.freq;
@@ -27,36 +27,34 @@ public class ReorganizeStringLeetcode767 {
   }
 
   private static String reorganizeString(String s) {
-    Map<Character, Integer> charMap = new HashMap<>();
-
+    Map<Character, Integer> freqMap = new HashMap<>();
     for(int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
-      charMap.put(ch, charMap.getOrDefault(ch, 0) + 1);
+      freqMap.put(ch, freqMap.getOrDefault(ch, 0) + 1);
     }
 
-    PriorityQueue<QueueItem> pQ = new PriorityQueue<>();
-    for(Map.Entry<Character, Integer> entry: charMap.entrySet()) {
-      QueueItem qItem = new QueueItem(entry.getKey(), entry.getValue());
-      pQ.add(qItem);
+    PriorityQueue<Item> pQ = new PriorityQueue<>();
+    for(Map.Entry<Character, Integer> entry: freqMap.entrySet()) {
+      pQ.add(new Item(entry.getKey(), entry.getValue()));
     }
 
     StringBuilder sb = new StringBuilder();
     while(!pQ.isEmpty()) {
-      QueueItem qItem = pQ.poll();
-      if(sb.length() == 0 || sb.charAt(sb.length() - 1) != qItem.ch) {
-        sb.append(qItem.ch);
-        qItem.freq = qItem.freq - 1;
+      Item remItem1 = pQ.poll();
+      if(sb.length() == 0 || remItem1.ch != sb.charAt(sb.length() - 1)) {
+        sb.append(remItem1.ch);
+        remItem1.freq = remItem1.freq - 1;
       } else {
         if(pQ.isEmpty())
           return "";
-        QueueItem anotherItem = pQ.poll();
-        sb.append(anotherItem.ch);
-        anotherItem.freq = anotherItem.freq - 1;
-        if(anotherItem.freq > 0)
-          pQ.add(anotherItem);
+        Item remItem2 = pQ.poll();
+        sb.append(remItem2.ch);
+        remItem2.freq = remItem2.freq - 1;
+        if(remItem2.freq > 0)
+          pQ.add(remItem2);
       }
-      if(qItem.freq > 0)
-        pQ.add(qItem);
+      if(remItem1.freq > 0)
+        pQ.add(remItem1);
     }
     return sb.toString();
   }

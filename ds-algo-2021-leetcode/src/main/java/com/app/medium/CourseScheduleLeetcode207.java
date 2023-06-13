@@ -8,47 +8,43 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 31/01/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 13/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class CourseScheduleLeetcode207 {
   private static boolean canFinish(int numCourses, int[][] prerequisites) {
-    Map<Integer, List<Integer>> adjList = new HashMap<>();
     int[] inDeg = new int[numCourses];
-
-    for(int[] curr: prerequisites) {
-      int target = curr[0];
-      int source = curr[1];
-      if(!adjList.containsKey(source)) {
+    Map<Integer, List<Integer>> adjList = new HashMap<>();
+    for(int i = 0; i < prerequisites.length; i++) {
+      int source = prerequisites[i][1];
+      int dest = prerequisites[i][0];
+      if(!adjList.containsKey(source))
         adjList.put(source, new ArrayList<>());
-      }
-      adjList.get(source).add(target);
-      inDeg[target]++;
+      adjList.get(source).add(dest);
+      inDeg[dest]++;
     }
 
-    int count = 0;
     Queue<Integer> q = new LinkedList<>();
-    List<Integer> order = new ArrayList<>();
-
-    for(int i = 0; i < numCourses; i++) {
-      if(inDeg[i] == 0)
+    int count = 0;
+    for(int i = 0; i < inDeg.length; i++) {
+      if(inDeg[i] == 0) {
         q.add(i);
+        count++;
+      }
     }
 
     while(!q.isEmpty()) {
-      int rem = q.poll();
-      count++;
-
-      order.add(rem);
-      List<Integer> nei = adjList.getOrDefault(rem, new ArrayList<>());
-      if(!nei.isEmpty()) {
-        for(Integer el: nei) {
-          inDeg[el]--;
-          if(inDeg[el] == 0)
-            q.add(el);
+      Integer el = q.poll();
+      List<Integer> neighbors = adjList.getOrDefault(el, new ArrayList<>());
+      for(Integer nei: neighbors) {
+        inDeg[nei]--;
+        if(inDeg[nei] == 0) {
+          q.add(nei);
+          count++;
         }
       }
     }
+
     return count == numCourses;
   }
 

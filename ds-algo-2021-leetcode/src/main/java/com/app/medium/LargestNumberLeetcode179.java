@@ -7,49 +7,49 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 16/02/23
+ * @author t0k02w6 on 05/06/23
  * @project ds-algo-2021-leetcode
  */
-class NumberComparator implements Comparator<Integer> {
-
-  @Override
-  public int compare(Integer o1, Integer o2) {
-    String x = String.valueOf(o1);
-    String y = String.valueOf(o2);
-    return (y + x).compareTo(x + y);
-  }
-}
-
 public class LargestNumberLeetcode179 {
+  static class NumberComparator implements Comparator<Integer> {
+
+    @Override
+    public int compare(Integer o1, Integer o2) {
+      String x = o1 + "" + o2;
+      String y = o2 + "" + o1;
+      return y.compareTo(x);
+    }
+  }
+
   private static String largestNumber(int[] nums) {
     List<Integer> numList = new ArrayList<>();
-    for(int el: nums){
-      numList.add(el);
+
+    for(int num: nums) {
+      numList.add(num);
     }
 
     Collections.sort(numList, new NumberComparator());
-
     StringBuilder sb = new StringBuilder();
     for(Integer el: numList) {
-      sb.append(el);
+      sb.append(el + "");
     }
-    String str = sb.toString();
+
     int i = 0;
-    while(i < str.length() && str.charAt(i) == '0') {
+    while(i < sb.length() && sb.charAt(i) == '0') {
       i++;
     }
-    str = str.substring(i);
+
+    String str = sb.substring(i);
     if(str.isEmpty()) {
       str = "0";
     }
+
     return str;
   }
 
   public static void main(String[] args) {
-    int[] nums = {3,30,34,5,9};
-
-    String str = largestNumber(nums);
-
-    System.out.println(str);
+    System.out.println(largestNumber(new int[]{10, 2}));
+    System.out.println(largestNumber(new int[]{3,30,34,5,9}));
+    System.out.println(largestNumber(new int[]{0, 0}));
   }
 }

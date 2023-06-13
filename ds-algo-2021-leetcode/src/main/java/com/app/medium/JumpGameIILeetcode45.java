@@ -1,7 +1,7 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 23/05/23
+ * @author t0k02w6 on 03/06/23
  * @project ds-algo-2021-leetcode
  */
 public class JumpGameIILeetcode45 {
@@ -17,19 +17,13 @@ public class JumpGameIILeetcode45 {
         }
       }
       if(result != Integer.MAX_VALUE) {
-        dp[i] = result + 1;
+        dp[i] = 1 + result;
       }
     }
     return dp[n - 1];
   }
 
   public static void main(String[] args) {
-    int[] nums = {2,3,1,1,4};
 
-    System.out.println(jump(nums));
-
-    nums = new int[] {2,3,0,1,4};
-
-    System.out.println(jump(nums));
   }
 }

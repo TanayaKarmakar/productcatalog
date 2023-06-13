@@ -1,8 +1,8 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 06/02/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 08/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class FindTheDuplicateNumberLeetcode287 {
   private static int findDuplicate(int[] nums) {
@@ -13,17 +13,19 @@ public class FindTheDuplicateNumberLeetcode287 {
       fast = nums[nums[fast]];
     } while(slow != fast);
 
-
-    int ptr1 = 0;
-    int ptr2 = slow;
-    while(ptr1 != ptr2) {
-      ptr1 = nums[ptr1];
-      ptr2 = nums[ptr2];
+    slow = 0;
+    while(slow != fast) {
+      slow = nums[slow];
+      fast = nums[fast];
     }
-    return ptr1;
+    return slow;
   }
 
   public static void main(String[] args) {
+    int[] nums = {1,3,4,2,2};
 
+    int ans = findDuplicate(nums);
+
+    System.out.println(ans);
   }
 }

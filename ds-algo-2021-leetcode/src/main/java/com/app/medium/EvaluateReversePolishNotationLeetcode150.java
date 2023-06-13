@@ -3,29 +3,19 @@ package com.app.medium;
 import java.util.Stack;
 
 /**
- * @author t0k02w6 on 04/02/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 08/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class EvaluateReversePolishNotationLeetcode150 {
-  private static boolean isDigit(String str) {
-    try {
-      int num = Integer.parseInt(str);
-      return true;
-    } catch (NumberFormatException nfe) {
-      return false;
-    }
-  }
-
   private static int evalRPN(String[] tokens) {
     Stack<Integer> numStack = new Stack<>();
-
-    for(String token: tokens) {
-      if(isDigit(token)) {
-        numStack.push(Integer.parseInt(token));
+    for(int i = 0; i < tokens.length; i++) {
+      if(isDigit(tokens[i])) {
+        numStack.push(Integer.parseInt(tokens[i]));
       } else {
         int num2 = numStack.pop();
         int num1 = numStack.pop();
-        int result = performOperation(num1, num2, token);
+        int result = performOperation(num1, num2, tokens[i]);
         numStack.push(result);
       }
     }
@@ -34,12 +24,26 @@ public class EvaluateReversePolishNotationLeetcode150 {
 
   private static int performOperation(int num1, int num2, String token) {
     switch (token) {
-      case "+": return num1 + num2;
-      case "-": return num1 - num2;
-      case "*": return num1 * num2;
-      case "/": return num1 / num2;
+      case "+":
+        return num1 + num2;
+      case "-":
+        return num1 - num2;
+      case "*":
+        return num1 * num2;
+      case "/":
+        return num1 / num2;
+      default:
+        throw new RuntimeException("Invalid Operation");
     }
-    return 0;
+  }
+
+  private static boolean isDigit(String token) {
+    try {
+      int val = Integer.parseInt(token);
+      return true;
+    } catch (NumberFormatException nfe) {
+      return false;
+    }
   }
 
   public static void main(String[] args) {

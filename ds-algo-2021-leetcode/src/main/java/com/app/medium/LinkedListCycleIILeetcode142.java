@@ -3,7 +3,7 @@ package com.app.medium;
 import com.app.common.LinkedList.ListNode;
 
 /**
- * @author t0k02w6 on 16/04/23
+ * @author t0k02w6 on 08/06/23
  * @project ds-algo-2021-leetcode
  */
 public class LinkedListCycleIILeetcode142 {
@@ -13,12 +13,10 @@ public class LinkedListCycleIILeetcode142 {
     ListNode slow = head;
     ListNode fast = head;
 
-    while(fast != null && fast.next != null) {
+    do {
       slow = slow.next;
       fast = fast.next.next;
-      if(slow == fast)
-        break;
-    }
+    } while(fast != null && fast.next != null && slow != fast);
 
     if(slow != fast)
       return null;

@@ -1,42 +1,30 @@
 package com.app.medium;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 23/09/22
+ * @author t0k02w6 on 08/06/23
  * @project ds-algo-2021-leetcode
  */
 public class FindAllDuplicatesInAnArrayLeetcode442 {
-    private static void swap(int[] nums, int i, int j) {
-        int tmp = nums[i];
-        nums[i]= nums[j];
-        nums[j] = tmp;
+  private static List<Integer> findDuplicates(int[] nums) {
+    List<Integer> result = new ArrayList<>();
+    for(int i = 0; i < nums.length; i++) {
+      int val = Math.abs(nums[i]);
+      if(nums[val - 1] < 0) {
+        result.add(val);
+      } else {
+        nums[val - 1] = -nums[val - 1];
+      }
     }
+    return result;
+  }
 
-    private static List<Integer> findDuplicates(int[] nums) {
-        int n = nums.length;
-        for(int i = 0; i < n; i++) {
-            while(i != nums[i] - 1) {
-                int tmp = nums[i];
-                if(nums[tmp - 1] == tmp)
-                    break;
-                swap(nums, i, tmp - 1);
-            }
-        }
+  public static void main(String[] args) {
+    int[] nums = {4,3,2,7,8,2,3,1};
+    List<Integer> result = findDuplicates(nums);
 
-        List<Integer> res = new ArrayList<>();
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] != i + 1) {
-                res.add(nums[i]);
-            }
-        }
-        Collections.sort(res);
-        return res;
-    }
-
-    public static void main(String[] args) {
-
-    }
+    System.out.println(result);
+  }
 }

@@ -1,7 +1,7 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 23/05/23
+ * @author t0k02w6 on 05/06/23
  * @project ds-algo-2021-leetcode
  */
 public class LongestCommonSubsequenceLeetcode1143 {
@@ -9,7 +9,6 @@ public class LongestCommonSubsequenceLeetcode1143 {
     int m = text1.length();
     int n = text2.length();
     int[][] dp = new int[m + 1][n + 1];
-
     for(int i = 1; i <= m; i++) {
       for(int j = 1; j <= n; j++) {
         if(text1.charAt(i - 1) == text2.charAt(j - 1)) {
@@ -23,11 +22,6 @@ public class LongestCommonSubsequenceLeetcode1143 {
   }
 
   public static void main(String[] args) {
-    String text1 = "abcde";
-    String text2 = "ace";
-
-    int ans = longestCommonSubsequence(text1, text2);
-
-    System.out.println(ans);
+    System.out.println(longestCommonSubsequence("abcde", "ace"));
   }
 }

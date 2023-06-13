@@ -4,53 +4,52 @@ import com.app.common.BinaryTree.TreeNode;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
 /**
- * @author t0k02w6 on 26/04/23
+ * @author t0k02w6 on 13/06/23
  * @project ds-algo-2021-leetcode
  */
 public class MaximumWidthOfBinaryTreeLeetcode662 {
-  static class TreeItem {
+  static class QueueItem {
     TreeNode node;
     int nodeIndx;
 
-    public TreeItem(TreeNode node, int nodeIndx) {
+    public QueueItem(TreeNode node, int nodeIndx) {
       this.node = node;
       this.nodeIndx = nodeIndx;
     }
   }
 
   private static int widthOfBinaryTree(TreeNode root) {
-    Queue<TreeItem> q = new LinkedList<>();
-    q.add(new TreeItem(root, 0));
-    int minWidth = 0;
+    if(root == null)
+      return 0;
+    Queue<QueueItem> queue = new LinkedList<>();
+    queue.add(new QueueItem(root, 0));
 
-    while(!q.isEmpty()) {
-      int size = q.size();
-      int start = -1;
-      int end = -1;
+    int maxWidth = 1;
+    while(!queue.isEmpty()) {
+      int size = queue.size();
+      int startIndx = -1;
+      int endIndx = -1;
       for(int i = 0; i < size; i++) {
-        TreeItem remItem = q.poll();
+        QueueItem remItem = queue.poll();
         if(i == 0) {
-          start = remItem.nodeIndx;
+          startIndx = remItem.nodeIndx;
         }
-
         if(i == size - 1) {
-          end = remItem.nodeIndx;
+          endIndx = remItem.nodeIndx;
         }
-
-        minWidth = Integer.max(minWidth, end - start + 1);
 
         if(remItem.node.left != null) {
-          q.add(new TreeItem(remItem.node.left, 2 * remItem.nodeIndx));
+          queue.add(new QueueItem(remItem.node.left, 2 * remItem.nodeIndx + 1));
         }
 
         if(remItem.node.right != null) {
-          q.add(new TreeItem(remItem.node.left, 2 * remItem.nodeIndx + 1));
+          queue.add(new QueueItem(remItem.node.right, 2 * remItem.nodeIndx + 2));
         }
       }
+      maxWidth = Integer.max(maxWidth, (endIndx - startIndx + 1));
     }
-    return minWidth;
+    return maxWidth;
   }
 
   public static void main(String[] args) {

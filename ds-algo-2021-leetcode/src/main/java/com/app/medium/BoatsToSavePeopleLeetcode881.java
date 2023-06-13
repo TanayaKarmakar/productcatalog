@@ -3,17 +3,16 @@ package com.app.medium;
 import java.util.Arrays;
 
 /**
- * @author t0k02w6 on 09/05/23
+ * @author t0k02w6 on 03/06/23
  * @project ds-algo-2021-leetcode
  */
 public class BoatsToSavePeopleLeetcode881 {
   private static int numRescueBoats(int[] people, int limit) {
     Arrays.sort(people);
 
-    int n = people.length;
-    int start = 0;
-    int end = (n - 1);
     int count = 0;
+    int start = 0;
+    int end = people.length - 1;
 
     while(start <= end) {
       if(people[start] + people[end] <= limit) {
@@ -27,11 +26,14 @@ public class BoatsToSavePeopleLeetcode881 {
   }
 
   public static void main(String[] args) {
-    int[] people = {3,2,2,1};
+    int[] nums = {3,2,2,1};
     int limit = 3;
 
-    int ans = numRescueBoats(people, limit);
+    System.out.println(numRescueBoats(nums, limit));
 
-    System.out.println(ans);
+    nums = new int[]{3,5,3,4};
+    limit = 5;
+
+    System.out.println(numRescueBoats(nums, limit));
   }
 }

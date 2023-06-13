@@ -3,18 +3,21 @@ package com.app.medium;
 import com.app.common.LinkedList.ListNode;
 
 /**
- * @author t0k02w6 on 17/04/23
+ * @author t0k02w6 on 08/06/23
  * @project ds-algo-2021-leetcode
  */
-public class RemoveNthNodeFromEndOfLinkedList19 {
+public class RemoveNthNodeFromTheListLeetcode19 {
   private static ListNode removeNthFromEnd(ListNode head, int n) {
+    if(head == null || (head.next == null && n == 1))
+      return null;
+    if(head.next == null && n > 1)
+      return head;
     ListNode slow = head;
     ListNode fast = head;
 
-    int count = 0;
-    while(fast != null && count < n) {
+    while(fast != null && n-- > 0) {
       fast = fast.next;
-      count++;
+      n--;
     }
 
     ListNode slowPrev = head;
@@ -30,7 +33,9 @@ public class RemoveNthNodeFromEndOfLinkedList19 {
     } else {
       slowPrev.next = slow.next;
     }
+
     return head;
+
   }
 
   public static void main(String[] args) {

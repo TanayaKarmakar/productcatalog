@@ -1,8 +1,8 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 29/01/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 05/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class ValidSudokuLeetcode36 {
   private static boolean isValidSudoku(char[][] board) {
@@ -12,9 +12,8 @@ public class ValidSudokuLeetcode36 {
         if(board[i][j] != '.') {
           char num = board[i][j];
           board[i][j] = '$';
-          if(!isValid(board, i, j, n, num)) {
+          if(!isValid(board, i, j, num))
             return false;
-          }
           board[i][j] = num;
         }
       }
@@ -22,29 +21,28 @@ public class ValidSudokuLeetcode36 {
     return true;
   }
 
-  private static boolean isValid(char[][] board, int i, int j, int n, char num) {
-    for(int col = 0; col < n; col++) {
-      if(board[i][col] == num)
-        return false;
-    }
-
-    for(int row = 0; row < n; row++) {
+  private static boolean isValid(char[][] board, int i, int j, char num) {
+    for(int row = 0; row < board.length; row++) {
       if(board[row][j] == num)
         return false;
     }
 
-    int sqrt = (int)Math.sqrt(n);
-    int startRow = i - (i % sqrt);
-    int startCol = j - (j % sqrt);
+    for(int col = 0; col < board[0].length; col++) {
+      if(board[i][col] == num)
+        return false;
+    }
 
-    for(int i1 = startRow; i1 < (startRow + sqrt); i1++) {
-      for(int j1 = startCol; j1 < (startCol + sqrt); j1++) {
-        if(board[i1][j1] == num)
+    int startRow = i - (i % 3);
+    int startCol = j - (j % 3);
+    for(int row = startRow; row < startRow + 3; row++) {
+      for(int col = startCol; col < startCol + 3; col++) {
+        if(board[row][col] == num)
           return false;
       }
     }
     return true;
   }
+
 
   public static void main(String[] args) {
 

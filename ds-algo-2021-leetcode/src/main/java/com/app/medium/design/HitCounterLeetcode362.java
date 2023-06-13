@@ -4,11 +4,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 13/05/23
+ * @author t0k02w6 on 05/06/23
  * @project ds-algo-2021-leetcode
  */
+
 class HitCounter {
-  Queue<Integer> q;
+  private Queue<Integer> q;
 
   public HitCounter() {
     q = new LinkedList<>();
@@ -28,13 +29,13 @@ class HitCounter {
 
 public class HitCounterLeetcode362 {
   public static void main(String[] args) {
-    HitCounter hc = new HitCounter();
-    hc.hit(1);
-    hc.hit(2);
-    hc.hit(3);
-    System.out.println(hc.getHits(4));
-    hc.hit(300);
-    System.out.println(hc.getHits(300));
-    System.out.println(hc.getHits(301));
+    HitCounter hitCounter = new HitCounter();
+    hitCounter.hit(1);
+    hitCounter.hit(2);
+    hitCounter.hit(3);
+    System.out.println(hitCounter.getHits(4));
+    hitCounter.hit(300);
+    System.out.println(hitCounter.getHits(300));
+    System.out.println(hitCounter.getHits(301));
   }
 }

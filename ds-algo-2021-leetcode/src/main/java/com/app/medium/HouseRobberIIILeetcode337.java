@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 08/05/23
+ * @author t0k02w6 on 04/07/23
  * @project ds-algo-2021-leetcode
  */
 public class HouseRobberIIILeetcode337 {
@@ -25,29 +25,21 @@ public class HouseRobberIIILeetcode337 {
       return 0;
     if(canRob) {
       if(!robMap.containsKey(root)) {
-        int val = root.val + robRec(root.left, !canRob) + robRec(root.right, !canRob);
-        robMap.put(root, val);
+        int value = root.val + robRec(root.left, !canRob) + robRec(root.right, !canRob);
+        robMap.put(root, value);
       }
       return robMap.get(root);
     } else {
       if(!notRobMap.containsKey(root)) {
-        int option1 = Integer.max(robRec(root.left, canRob), robRec(root.left, !canRob));
-        int option2 = Integer.max(robRec(root.right, canRob), robRec(root.right, !canRob));
-        notRobMap.put(root, option1 + option2);
+        int value1 = Integer.max(robRec(root.left, canRob), robRec(root.left, !canRob));
+        int value2 = Integer.max(robRec(root.right, canRob), robRec(root.right, !canRob));
+        notRobMap.put(root, value1 + value2);
       }
       return notRobMap.get(root);
     }
   }
 
   public static void main(String[] args) {
-    TreeNode root = new TreeNode(3);
-    root.left = new TreeNode(2);
-    root.right = new TreeNode(3);
-    root.left.right = new TreeNode(3);
-    root.right.right = new TreeNode(1);
 
-    int ans = rob(root);
-
-    System.out.println(ans);
   }
 }

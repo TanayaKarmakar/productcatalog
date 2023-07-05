@@ -4,22 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 08/05/23
+ * @author t0k02w6 on 20/06/23
  * @project ds-algo-2021-leetcode
  */
 public class PartitionLabelsLeetcode763 {
   private static List<Integer> partitionLabels(String s) {
+    List<Integer> result = new ArrayList<>();
     int[] lastIndx = new int[26];
 
-    int n = s.length();
-    for(int i = 0; i < n; i++) {
+    for(int i = 0; i < s.length(); i++) {
       lastIndx[s.charAt(i) - 'a'] = (i + 1);
     }
 
-    List<Integer> result = new ArrayList<>();
+    int n = s.length();
     int start = 0;
     int finish = 1;
-
     while(finish <= n) {
       for(int i = start; i < finish; i++) {
         char ch = s.charAt(i);
@@ -34,14 +33,6 @@ public class PartitionLabelsLeetcode763 {
   }
 
   public static void main(String[] args) {
-    String s = "ababcbacadefegdehijhklij";
-    List<Integer> result = partitionLabels(s);
-
-    System.out.println(result);
-
-    s = "eccbbbbdec";
-    result = partitionLabels(s);
-
-    System.out.println(result);
+    System.out.println(partitionLabels("ababcbacadefegdehijhklij"));
   }
 }

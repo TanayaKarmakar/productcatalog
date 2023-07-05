@@ -3,7 +3,7 @@ package com.app.medium;
 import com.app.common.LinkedList.ListNode;
 
 /**
- * @author t0k02w6 on 22/04/23
+ * @author t0k02w6 on 15/06/23
  * @project ds-algo-2021-leetcode
  */
 public class SortListLeetcode148 {
@@ -13,24 +13,23 @@ public class SortListLeetcode148 {
     ListNode mid = findMid(head);
     ListNode midNext = mid.next;
     mid.next = null;
-    ListNode part1 = sortList(head);
-    ListNode part2 = sortList(midNext);
-    return merge(part1, part2);
+    head = sortList(head);
+    midNext = sortList(midNext);
+    return merge(head, midNext);
   }
 
-  private static ListNode merge(ListNode part1, ListNode part2) {
-    if(part1 == null)
-      return part2;
-    if(part2 == null)
-      return part1;
-
+  private static ListNode merge(ListNode a, ListNode b) {
+    if(a == null)
+      return b;
+    if(b == null)
+      return a;
     ListNode result;
-    if(part1.val < part2.val) {
-      result = part1;
-      result.next = merge(part1.next, part2);
+    if(a.val < b.val) {
+      result = a;
+      result.next = merge(a.next, b);
     } else {
-      result = part2;
-      result.next = merge(part1, part2.next);
+      result = b;
+      result.next = merge(a, b.next);
     }
     return result;
   }
@@ -42,6 +41,7 @@ public class SortListLeetcode148 {
       slow = slow.next;
       fast = fast.next.next;
     }
+
     return slow;
   }
 
@@ -51,9 +51,9 @@ public class SortListLeetcode148 {
     head.next.next = new ListNode(1);
     head.next.next.next = new ListNode(3);
 
-    head = sortList(head);
+    ListNode ans = sortList(head);
 
-    ListNode temp = head;
+    ListNode temp = ans;
     while(temp != null) {
       System.out.println(temp.val);
       temp = temp.next;

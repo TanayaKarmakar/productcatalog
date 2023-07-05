@@ -7,32 +7,30 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author t0k02w6 on 18/10/22
+ * @author t0k02w6 on 01/07/23
  * @project ds-algo-2021-leetcode
  */
 public class SubsetsIILeetcode90 {
   private static List<List<Integer>> subsetsWithDup(int[] nums) {
-    if(nums.length == 0)
-      return new ArrayList<>();
-    Arrays.sort(nums);
-    Set<List<Integer>> intermediateRes = new HashSet<>();
     int n = nums.length;
     int totalCombination = (int)Math.pow(2, n);
-
+    Arrays.sort(nums);
+    Set<List<Integer>> intermediateResult = new HashSet<>();
     for(int i = 0; i < totalCombination; i++) {
-      int current = i;
-      List<Integer> currentResult = new ArrayList<>();
+      List<Integer> current = new ArrayList<>();
+      int temp = i;
       int j = 0;
-      while(current != 0) {
-        if((current & 1) == 1) {
-          currentResult.add(nums[j]);
+      while(temp != 0) {
+        if((temp & 1) == 1) {
+          current.add(nums[j]);
         }
-        current = current >> 1;
         j++;
+        temp = temp >> 1;
       }
-      intermediateRes.add(currentResult);
+      intermediateResult.add(current);
     }
-    return new ArrayList<>(intermediateRes);
+
+    return new ArrayList<>(intermediateResult);
   }
 
   public static void main(String[] args) {

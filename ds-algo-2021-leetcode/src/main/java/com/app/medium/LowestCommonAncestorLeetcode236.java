@@ -3,8 +3,8 @@ package com.app.medium;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 05/02/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 25/06/23
+ * @project ds-algo-2021-leetcode
  */
 public class LowestCommonAncestorLeetcode236 {
   private static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -33,9 +33,8 @@ public class LowestCommonAncestorLeetcode236 {
     root.right.left = new TreeNode(0);
     root.right.right = new TreeNode(8);
 
-    TreeNode p = root.left;
-    TreeNode q = root.right;
+    TreeNode ans = lowestCommonAncestor(root, root.left, root.left.right.right);
 
-    System.out.println(lowestCommonAncestor(root, p, q).val);
+    System.out.println(ans.val);
   }
 }

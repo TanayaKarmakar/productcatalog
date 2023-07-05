@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 05/12/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 02/07/23
+ * @project ds-algo-2021-leetcode
  */
-public class PopulatingNextRightPointersInEachNodeII {
+public class PopulatingNextRightPointerInEachNodeLeetcode116 {
   static class Node {
     public int val;
     public Node left;
@@ -30,30 +30,30 @@ public class PopulatingNextRightPointersInEachNodeII {
 
   private static Node connect(Node root) {
     if(root == null)
-      return null;
+      return root;
     Queue<Node> q = new LinkedList<>();
     q.add(root);
     q.add(null);
 
-
-    while(!q.isEmpty()) {
-      Node item = q.poll();
-      if(item == null) {
-        if(q.size() > 0)
-          q.add(null);
+    while(q.size() > 1) {
+      Node remItem = q.poll();
+      if(remItem == null) {
+        q.add(null);
         continue;
       }
-      if(q.peek() != null)
-        item.next = q.peek();
 
-      if(item.left != null)
-        q.add(item.left);
-      if(item.right != null)
-        q.add(item.right);
+      if(q.peek() != null) {
+        remItem.next = q.peek();
+      }
+
+      if(remItem.left != null)
+        q.add(remItem.left);
+      if(remItem.right != null)
+        q.add(remItem.right);
     }
-
     return root;
   }
+
 
   public static void main(String[] args) {
     Node root = new Node(1);
@@ -61,6 +61,7 @@ public class PopulatingNextRightPointersInEachNodeII {
     root.right = new Node(3);
     root.left.left = new Node(4);
     root.left.right = new Node(5);
+    root.right.left = new Node(6);
     root.right.right = new Node(7);
 
     root = connect(root);

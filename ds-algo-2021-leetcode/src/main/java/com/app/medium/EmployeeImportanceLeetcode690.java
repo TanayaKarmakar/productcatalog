@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 
 /**
- * @author t0k02w6 on 08/05/23
+ * @author t0k02w6 on 03/07/23
  * @project ds-algo-2021-leetcode
  */
 public class EmployeeImportanceLeetcode690 {
@@ -15,7 +15,7 @@ public class EmployeeImportanceLeetcode690 {
     public int id;
     public int importance;
     public List<Integer> subordinates;
-  }
+  };
 
   private static int getImportance(List<Employee> employees, int id) {
     Map<Integer, Employee> employeeMap = new HashMap<>();
@@ -23,30 +23,29 @@ public class EmployeeImportanceLeetcode690 {
       employeeMap.put(employee.id, employee);
     }
 
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(id);
+
     int totalImportance = 0;
-    Queue<Integer> q = new LinkedList<>();
-
-    q.add(id);
-
-    while(!q.isEmpty()) {
-      int size = q.size();
-      int importanceAtCurrentLevel = 0;
+    while(!queue.isEmpty()) {
+      int size = queue.size();
+      int currentImportance = 0;
       for(int i = 0; i < size; i++) {
-        int currentId = q.poll();
-        Employee employee = employeeMap.get(currentId);
-        importanceAtCurrentLevel += employee.importance;
+        int empId = queue.poll();
+        Employee employee = employeeMap.get(empId);
+        currentImportance += employee.importance;
+
         List<Integer> subordinates = employee.subordinates;
         if(!subordinates.isEmpty()) {
-          q.addAll(subordinates);
+          for(Integer subordinate: subordinates) {
+            queue.add(subordinate);
+          }
         }
       }
-      totalImportance += importanceAtCurrentLevel;
+      totalImportance += currentImportance;
     }
-
     return totalImportance;
   }
-
-
 
   public static void main(String[] args) {
 

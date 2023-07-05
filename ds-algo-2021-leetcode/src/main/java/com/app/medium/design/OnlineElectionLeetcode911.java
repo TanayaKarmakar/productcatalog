@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 17/05/23
+ * @author t0k02w6 on 04/07/23
  * @project ds-algo-2021-leetcode
  */
-class TopVotedCandidate {
 
+class TopVotedCandidate {
   static class VoteItem {
     int timestamp;
     Map<Integer, VoteValueItem> resultSoFar;
@@ -34,35 +34,39 @@ class TopVotedCandidate {
   public TopVotedCandidate(int[] persons, int[] times) {
     int n = persons.length;
     this.voteItems = new VoteItem[n];
-    preprocessResult(persons, times, n);
+    preprocessResult(persons, times);
   }
 
   public int q(int t) {
-    int indx = findGreatestIndexLessthanT(t);
-    Map<Integer, VoteValueItem> map = voteItems[indx].resultSoFar;
+    int indx = findGreatestIndxLessThant(t);
+    VoteItem voteItem = voteItems[indx];
+
+    Map<Integer, VoteValueItem> map = voteItem.resultSoFar;
+    int winningCandidate = 0;
     int maxVote = Integer.MIN_VALUE;
-    int maxVoteCandidate = 0;
-    int recentTs = 0;
+    int maxTs = 0;
+
     for(Map.Entry<Integer, VoteValueItem> entry: map.entrySet()) {
       if(entry.getValue().freq > maxVote) {
         maxVote = entry.getValue().freq;
-        maxVoteCandidate = entry.getKey();
-        recentTs = entry.getValue().recentTs;
+        winningCandidate = entry.getKey();
+        maxTs = entry.getValue().recentTs;
       } else if(entry.getValue().freq == maxVote) {
-        if(entry.getValue().recentTs > recentTs) {
-          recentTs = entry.getValue().recentTs;
-          maxVoteCandidate = entry.getKey();
+        if(entry.getValue().recentTs > maxTs) {
+          winningCandidate = entry.getKey();
+          maxTs = entry.getValue().recentTs;
         }
       }
     }
-    return maxVoteCandidate;
+    return winningCandidate;
   }
 
-  private int findGreatestIndexLessthanT(int t) {
+  private int findGreatestIndxLessThant(int t) {
+    int n = this.voteItems.length;
     int start = 0;
-    int end = voteItems.length - 1;
-    int finalAns = 0;
-    while (start <= end) {
+    int end = n - 1;
+    int finalAns = -1;
+    while(start <= end) {
       int mid = (start + end) >> 1;
       if(voteItems[mid].timestamp == t)
         return mid;
@@ -76,41 +80,33 @@ class TopVotedCandidate {
     return finalAns;
   }
 
-  private void preprocessResult(int[] persons, int[] times, int n) {
-    Map<Integer, VoteValueItem> map = new HashMap<>();
-    map.put(persons[0], new VoteValueItem(1, times[0]));
-    VoteItem voteItem = new VoteItem(times[0], map);
+  private void preprocessResult(int[] persons, int[] times) {
+    VoteValueItem voteValueItem = new VoteValueItem(1, times[0]);
+    Map<Integer, VoteValueItem> resultSoFar = new HashMap<>();
+    resultSoFar.put(persons[0], voteValueItem);
+    VoteItem voteItem = new VoteItem(times[0], resultSoFar);
     voteItems[0] = voteItem;
 
-    for(int i = 1; i < n; i++) {
-      Map<Integer, VoteValueItem> currentMap = new HashMap<>(map);
-      VoteValueItem voteValueItem = null;
+    for(int i = 1; i < persons.length; i++) {
+      Map<Integer, VoteValueItem> currentMap = new HashMap<>(resultSoFar);
+      VoteValueItem newVoteValueItem = null;
       if(!currentMap.containsKey(persons[i])) {
-        voteValueItem = new VoteValueItem(1, times[i]);
+        newVoteValueItem = new VoteValueItem(1, times[i]);
       } else {
-        voteValueItem = new VoteValueItem(currentMap.get(persons[i]).freq, currentMap.get(persons[i]).recentTs);
-        voteValueItem.freq = voteValueItem.freq + 1;
-        voteValueItem.recentTs = times[i];
+        VoteValueItem existingVoteValueItem = currentMap.get(persons[i]);
+        newVoteValueItem = new VoteValueItem(existingVoteValueItem.freq, existingVoteValueItem.recentTs);
+        newVoteValueItem.freq = newVoteValueItem.freq + 1;
+        newVoteValueItem.recentTs = times[i];
       }
-      currentMap.put(persons[i], voteValueItem);
-
-      voteItem = new VoteItem(times[i], currentMap);
-      voteItems[i] = voteItem;
-      map = new HashMap<>(currentMap);
+      currentMap.put(persons[i], newVoteValueItem);
+      voteItems[i] = new VoteItem(times[i], currentMap);
+      resultSoFar = currentMap;
     }
   }
 }
 
 public class OnlineElectionLeetcode911 {
   public static void main(String[] args) {
-    TopVotedCandidate tc = new TopVotedCandidate(new int[]{0, 1, 1, 0, 0, 1, 0},
-        new int[]{0, 5, 10, 15, 20, 25, 30});
 
-    System.out.println(tc.q(3));
-    System.out.println(tc.q(12));
-    System.out.println(tc.q(25));
-    System.out.println(tc.q(15));
-    System.out.println(tc.q(24));
-    System.out.println(tc.q(8));
   }
 }

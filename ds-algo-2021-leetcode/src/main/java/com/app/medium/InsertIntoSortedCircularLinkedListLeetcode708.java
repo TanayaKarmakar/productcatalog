@@ -1,69 +1,55 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 17/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 03/07/23
+ * @project ds-algo-2021-leetcode
  */
 public class InsertIntoSortedCircularLinkedListLeetcode708 {
-    static class Node {
-        public int val;
-        public Node next;
+  static class Node {
+    public int val;
+    public Node next;
 
-        public Node() {}
+    public Node() {}
 
-        public Node(int _val) {
-            val = _val;
-        }
-
-        public Node(int _val, Node _next) {
-            val = _val;
-            next = _next;
-        }
-    };
-
-    private static Node insert(Node head, int insertVal) {
-        if(head == null) {
-            head = new Node(insertVal);
-            head.next = head;
-            return head;
-        }
-        if(head.next == head) {
-            Node newNode = new Node(insertVal);
-            newNode.next = head;
-            head.next = newNode;
-            return head;
-        }
-
-        Node tmp = head;
-        while(true) {
-            if(canInsert(tmp, insertVal)) {
-                Node newNode = new Node(insertVal);
-                newNode.next = tmp.next;
-                tmp.next = newNode;
-                break;
-            }
-            if(tmp.next == head) {
-                Node newNode = new Node(insertVal);
-                newNode.next = head;
-                tmp.next = newNode;
-                break;
-            }
-            tmp = tmp.next;
-        }
-        return head;
+    public Node(int _val) {
+      val = _val;
     }
 
-    private static boolean canInsert(Node tmp, int insertVal) {
-        if(insertVal >= tmp.val && insertVal < tmp.next.val)
-            return true;
-        else if(insertVal >= tmp.val && tmp.val > tmp.next.val)
-            return true;
-        else if(insertVal < tmp.val && insertVal <tmp.next.val && tmp.val > tmp.next.val)
-            return true;
-        return false;
+    public Node(int _val, Node _next) {
+      val = _val;
+      next = _next;
+    }
+  };
+
+  private static Node insert(Node head, int insertVal) {
+    Node newNode = new Node(insertVal);
+    if(head == null) {
+      newNode.next = newNode;
+      return newNode;
     }
 
-    public static void main(String[] args) {
-
+    Node curr = head;
+    while(curr.next != head) {
+      int currentVal = curr.val;
+      int nextVal = curr.next.val;
+      if(insertVal >= currentVal && insertVal <= nextVal) {
+        break;
+      } else if(currentVal > nextVal) {
+        if(insertVal <= currentVal && insertVal <= nextVal)
+          break;
+        if(insertVal >= currentVal && insertVal >= nextVal)
+          break;
+      }
+      curr = curr.next;
     }
+    Node next = curr.next;
+    newNode.next = next;
+    curr.next = newNode;
+
+    return head;
+  }
+
+  public static void main(String[] args) {
+
+  }
 }

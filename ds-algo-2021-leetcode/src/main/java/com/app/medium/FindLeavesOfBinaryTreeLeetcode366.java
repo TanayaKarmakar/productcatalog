@@ -1,38 +1,36 @@
 package com.app.medium;
 
+
 import com.app.common.BinaryTree.TreeNode;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 17/04/23
+ * @author t0k02w6 on 01/07/23
  * @project ds-algo-2021-leetcode
  */
 public class FindLeavesOfBinaryTreeLeetcode366 {
   private static List<List<Integer>> findLeaves(TreeNode root) {
-    if(root == null)
-      return new ArrayList<>();
     List<List<Integer>> result = new ArrayList<>();
-    Map<TreeNode, TreeNode> parentMap = null;
-
-    List<Integer> current = null;
+    Map<TreeNode, TreeNode> nodeMap = new LinkedHashMap<>();
     while(root != null) {
-      current = new ArrayList<>();
-      parentMap = new HashMap<>();
-      populateParentMap(root, null, parentMap);
-      for(Map.Entry<TreeNode, TreeNode> entry: parentMap.entrySet()) {
+      nodeMap = new LinkedHashMap<>();
+      populateLeaves(root, null, nodeMap);
+      List<Integer> current = new ArrayList<>();
+      for(Map.Entry<TreeNode, TreeNode> entry: nodeMap.entrySet()) {
         TreeNode currentLeaf = entry.getKey();
-        TreeNode parentNode = entry.getValue();
-
-        if(parentNode != null) {
-          if(parentNode.left == currentLeaf)
-            parentNode.left = null;
-          else
-            parentNode.right = null;
-        } else
+        TreeNode parent = entry.getValue();
+        if(parent != null) {
+          if(parent.left == currentLeaf) {
+            parent.left = null;
+          } else {
+            parent.right = null;
+          }
+        } else {
           root = null;
+        }
         current.add(currentLeaf.val);
       }
       result.add(current);
@@ -40,14 +38,16 @@ public class FindLeavesOfBinaryTreeLeetcode366 {
     return result;
   }
 
-  private static void populateParentMap(TreeNode root, TreeNode parent, Map<TreeNode, TreeNode> parentMap) {
+  private static void populateLeaves(TreeNode root, TreeNode parent, Map<TreeNode, TreeNode> nodeMap) {
     if(root == null)
       return;
-    if(root.left == null && root.right == null)
-      parentMap.put(root, parent);
-    populateParentMap(root.left, root, parentMap);
-    populateParentMap(root.right, root, parentMap);
+    if(root.left == null && root.right == null) {
+      nodeMap.put(root, parent);
+    }
+    populateLeaves(root.left, root, nodeMap);
+    populateLeaves(root.right, root, nodeMap);
   }
+
 
   public static void main(String[] args) {
     TreeNode root = new TreeNode(1);

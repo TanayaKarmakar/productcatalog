@@ -1,27 +1,23 @@
 package com.app.medium;
 
-import com.app.common.BinaryTree;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 06/04/23
+ * @author t0k02w6 on 08/07/23
  * @project ds-algo-2021-leetcode
  */
-public class FlattenBinaryTreeLeetcode114 {
+public class FlattenBinaryTreeToLinkedListLeetcode114 {
   private static void flatten(TreeNode root) {
     if(root == null)
       return;
-
     flattenRec(root);
   }
 
   private static TreeNode flattenRec(TreeNode root) {
-    if(root == null) {
+    if(root == null)
       return null;
-    }
     TreeNode left = flattenRec(root.left);
     TreeNode right = flattenRec(root.right);
-
     root.left = null;
     root.right = left;
     TreeNode temp = root;
@@ -44,8 +40,9 @@ public class FlattenBinaryTreeLeetcode114 {
 
     TreeNode temp = root;
     while(temp != null) {
-      System.out.println(temp.val);
+      System.out.print(temp.val + " ");
       temp = temp.right;
     }
+    System.out.println();
   }
 }

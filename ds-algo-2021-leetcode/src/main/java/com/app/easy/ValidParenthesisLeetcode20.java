@@ -3,28 +3,30 @@ package com.app.easy;
 import java.util.Stack;
 
 /**
- * @author t0k02w6 on 25/01/23
- * @project ds-algo-2021
+ * @author t0k02w6 on 10/07/23
+ * @project ds-algo-2021-leetcode
  */
 public class ValidParenthesisLeetcode20 {
   private static final char OPEN_PAREN = '(';
-  private static final char CLOSE_PAREN = ')';
   private static final char OPEN_BRACES = '{';
-  private static final char CLOSE_BRACES = '}';
   private static final char OPEN_SQUARE = '[';
-  private static final char CLOSE_SQUARE = ']';
+  private static final char CLOSED_SQUARE = ']';
+  private static final char CLOSED_BRACES = '}';
+  private static final char CLOSED_PAREN = ')';
 
   private static boolean isValid(String s) {
     Stack<Character> stack = new Stack<>();
 
     for(int i = 0; i < s.length(); i++) {
       char ch = s.charAt(i);
-      if(ch == CLOSE_PAREN || ch == CLOSE_BRACES || ch == CLOSE_SQUARE) {
-        if(stack.isEmpty())
+      if(ch == CLOSED_BRACES || ch == CLOSED_SQUARE || ch == CLOSED_PAREN) {
+        if(!stack.isEmpty()) {
+          if(!isValid(ch, stack.peek()))
+            return false;
+          stack.pop();
+        } else {
           return false;
-        if(!isValidMatch(ch, stack.peek()))
-          return false;
-        stack.pop();
+        }
       } else {
         stack.push(ch);
       }
@@ -32,9 +34,10 @@ public class ValidParenthesisLeetcode20 {
     return stack.isEmpty();
   }
 
-  private static boolean isValidMatch(char ch, char peekChar) {
-    return (ch == CLOSE_PAREN && peekChar == OPEN_PAREN) || (ch == CLOSE_BRACES &&
-        peekChar == OPEN_BRACES) || (ch == CLOSE_SQUARE && peekChar == OPEN_SQUARE);
+  private static boolean isValid(char currentChar, char topChar) {
+    return (currentChar == CLOSED_PAREN && topChar == OPEN_PAREN)
+        || (currentChar == CLOSED_BRACES && topChar == OPEN_BRACES)
+        || (currentChar == CLOSED_SQUARE && topChar == OPEN_SQUARE);
   }
 
   public static void main(String[] args) {

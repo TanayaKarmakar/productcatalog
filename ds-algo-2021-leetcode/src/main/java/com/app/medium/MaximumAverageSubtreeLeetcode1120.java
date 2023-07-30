@@ -3,7 +3,7 @@ package com.app.medium;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 10/04/23
+ * @author t0k02w6 on 06/07/23
  * @project ds-algo-2021-leetcode
  */
 public class MaximumAverageSubtreeLeetcode1120 {
@@ -17,24 +17,25 @@ public class MaximumAverageSubtreeLeetcode1120 {
     }
   }
 
-  private static double maxAvg = 0;
+  private static double maxAvg;
 
   private static double maximumAverageSubtree(TreeNode root) {
-    if(root == null)
-      return 0;
     maxAvg = 0;
-    maxAvgRec(root);
+    maximumAverageRec(root);
     return maxAvg;
   }
 
-  private static AvgItem maxAvgRec(TreeNode root) {
-    if(root == null)
+  private static AvgItem maximumAverageRec(TreeNode root) {
+    if(root == null) {
       return new AvgItem(0.0, 0);
-    AvgItem lAvg =  maxAvgRec(root.left);
-    AvgItem rAvg = maxAvgRec(root.right);
+    }
+
+    AvgItem lAvg = maximumAverageRec(root.left);
+    AvgItem rAvg = maximumAverageRec(root.right);
 
     double total = lAvg.total + rAvg.total + root.val;
     int count = lAvg.count + rAvg.count + 1;
+    AvgItem currentAvgItem = new AvgItem(total, count);
 
     double option1 = 0;
     if(lAvg.total > 0) {
@@ -46,15 +47,16 @@ public class MaximumAverageSubtreeLeetcode1120 {
       option2 = rAvg.total / rAvg.count;
     }
 
-    double option3 = total / count;
+    double option3 = currentAvgItem.total / currentAvgItem.count;
     double currentAvg = Double.max(option1, Double.max(option2, option3));
-    maxAvg = Double.max(maxAvg, currentAvg);
-    return new AvgItem(total, count);
+    maxAvg = Double.max(currentAvg, maxAvg);
+    return currentAvgItem;
   }
 
+
   public static void main(String[] args) {
-    TreeNode root = new TreeNode(2);
-    //root.left = new TreeNode(6);
+    TreeNode root = new TreeNode(5);
+    root.left = new TreeNode(6);
     root.right = new TreeNode(1);
 
     double ans = maximumAverageSubtree(root);

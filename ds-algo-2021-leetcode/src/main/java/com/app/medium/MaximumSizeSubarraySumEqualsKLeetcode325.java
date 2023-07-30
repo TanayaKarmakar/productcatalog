@@ -4,33 +4,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 23/04/22
- * @project ds-algo-2021
+ * @author t0k02w6 on 07/07/23
+ * @project ds-algo-2021-leetcode
  */
 public class MaximumSizeSubarraySumEqualsKLeetcode325 {
-    private static int maxSubArrayLen(int[] nums, int k) {
-        Map<Integer, Integer> map = new HashMap<>();
-        int res = 0;
+  private static int maxSubArrayLen(int[] nums, int k) {
+    Map<Integer, Integer> sumMap = new HashMap<>();
+    int preSum = 0;
+    int maxLen = 0;
 
-        int prefixSum = 0;
-        for(int i = 0; i < nums.length; i++) {
-            prefixSum += nums[i];
-            if(prefixSum == k)
-                res = i + 1;
-            if(map.containsKey(prefixSum - k))
-                res = Integer.max(res, i - map.get(prefixSum - k));
-            if(!map.containsKey(prefixSum))
-                map.put(prefixSum, i);
-        }
-        return res;
+    sumMap.put(0, 1);
+
+    for(int i = 0; i < nums.length; i++) {
+      preSum += nums[i];
+      if(preSum == k)
+        maxLen = (i + 1);
+      if(sumMap.containsKey(preSum - k)) {
+        maxLen = Integer.max(maxLen, (i - sumMap.get(preSum - k)));
+      }
+      if(!sumMap.containsKey(preSum))
+        sumMap.put(preSum, i);
     }
+    return maxLen;
+  }
 
-    public static void main(String[] args) {
-        int[] nums = {1, 0, -1};
-        int k = -1;
+  public static void main(String[] args) {
+    int[] nums = {1,-1,5,-2,3};
+    int k = 3;
 
-        int ans = maxSubArrayLen(nums, k);
+    System.out.println(maxSubArrayLen(nums, k));
 
-        System.out.println(ans);
-    }
+    nums = new int[] {-2,-1,2,1};
+    k = 1;
+
+    System.out.println(maxSubArrayLen(nums, k));
+  }
 }

@@ -5,50 +5,57 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author t0k02w6 on 13/04/23
+ * @author t0k02w6 on 06/07/23
  * @project ds-algo-2021-leetcode
  */
 public class PathInZigzagLabelledBinaryTreeLeetcode1104 {
   private static List<Integer> pathInZigZagTree(int label) {
-    int height = (int)(Math.log(label) / Math.log(2))+ 1;
+    int height = (int)(Math.log(label) / Math.log(2));
+
+    List<Integer> treeNodes = new ArrayList<>();
+
     int value = 1;
     boolean reverse = false;
-    List<Integer> intermediateResult = new ArrayList<>();
     for(int i = 0; i <= height; i++) {
-      int numElements = (int)Math.pow(2, i);
-      List<Integer> currentLevel = new ArrayList<>();
-      int lastItem = value + numElements;
-      while(value < lastItem) {
-        currentLevel.add(value);
-        value++;
+      int nElements = (int)Math.pow(2, i);
+      List<Integer> elementsAtCurrLevel = new ArrayList<>();
+      int start = value;
+      int end = value + nElements;
+      for(int j = start; j < end; j++) {
+        elementsAtCurrLevel.add(j);
       }
-      if(reverse)
-        Collections.reverse(currentLevel);
-      intermediateResult.addAll(currentLevel);
+
+      value = end;
+      if(reverse) {
+        Collections.reverse(elementsAtCurrLevel);
+      }
+      treeNodes.addAll(elementsAtCurrLevel);
       reverse = !reverse;
     }
 
-    List<Integer> finalResult = new ArrayList<>();
-    int i = 0;
-    for(i = intermediateResult.size() - 1; i >= 0; i--) {
-      if(intermediateResult.get(i) == label) {
-        break;
-      }
+    List<Integer> result = new ArrayList<>();
+    int i = treeNodes.size() - 1;
+    while(i >= 0 && treeNodes.get(i) != label) {
+      i--;
     }
 
+    result.add(treeNodes.get(i));
     while(i > 0) {
-      finalResult.add(0,intermediateResult.get(i));
       i = (i - 1)/2;
+      result.add(0, treeNodes.get(i));
     }
 
-    finalResult.add(0,intermediateResult.get(0));
-
-    //System.out.println(finalResult);
-
-    return finalResult;
+    //result.add(treeNodes.get(0));
+    return result;
   }
 
   public static void main(String[] args) {
-    pathInZigZagTree(15);
+    List<Integer> result = pathInZigZagTree(14);
+
+    System.out.println(result);
+
+    result = pathInZigZagTree(26);
+
+    System.out.println(result);
   }
 }

@@ -3,7 +3,7 @@ package com.app.medium;
 import java.util.Arrays;
 
 /**
- * @author t0k02w6 on 07/04/23
+ * @author t0k02w6 on 06/07/23
  * @project ds-algo-2021-leetcode
  */
 public class SingleNumberIIILeetcode260 {
@@ -13,27 +13,28 @@ public class SingleNumberIIILeetcode260 {
       xor = xor ^ nums[i];
     }
 
+    int tmp = xor;
     int j = 0;
-    int temp = xor;
-    while(temp != 0) {
-      if((temp & 1) == 1) {
+    while(tmp != 0) {
+      if((tmp & 1) == 1) {
         break;
       }
-      temp = temp >> 1;
       j++;
+      tmp = tmp >> 1;
     }
 
-    int g1 = 0;
-    int g2 = 0;
+    int group1Xor = 0;
+    int group2Xor = 0;
+
     for(int i = 0; i < nums.length; i++) {
       if(((nums[i] >> j) & 1) == 1) {
-        g1 = g1 ^ nums[i];
+        group1Xor = group1Xor ^ nums[i];
       } else {
-        g2 = g2 ^ nums[i];
+        group2Xor = group2Xor ^ nums[i];
       }
     }
 
-    return new int[] {g1, g2};
+    return new int[] {group1Xor, group2Xor};
   }
 
   public static void main(String[] args) {

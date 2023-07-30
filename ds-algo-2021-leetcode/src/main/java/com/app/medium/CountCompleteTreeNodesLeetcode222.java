@@ -3,30 +3,31 @@ package com.app.medium;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 20/04/23
+ * @author t0k02w6 on 09/07/23
  * @project ds-algo-2021-leetcode
  */
-public class CountCompleteBinaryTreeNodesLeetcode222 {
+public class CountCompleteTreeNodesLeetcode222 {
   private static int countNodes(TreeNode root) {
     if(root == null)
       return 0;
-    int lCount = 0;
-    TreeNode left = root;
-    while(left != null) {
-      left = left.left;
-      lCount++;
+    int lHeight = 0;
+    TreeNode temp = root;
+    while(temp != null) {
+      temp = temp.left;
+      lHeight++;
     }
 
-    TreeNode right = root;
-    int rCount = 0;
-    while(right != null) {
-      right = right.right;
-      rCount++;
+    int rHeight = 0;
+    temp = root;
+    while(temp != null) {
+      temp = temp.right;
+      rHeight++;
     }
 
-    if(lCount == rCount)
-      return  (int)Math.pow(2, lCount) - 1;
-    return countNodes(root.left) + countNodes(root.right) + 1;
+    if(lHeight == rHeight) {
+      return (int)Math.pow(2, lHeight) - 1;
+    }
+    return 1 + countNodes(root.left) + countNodes(root.right);
   }
 
   public static void main(String[] args) {
@@ -36,11 +37,9 @@ public class CountCompleteBinaryTreeNodesLeetcode222 {
     root.left.left = new TreeNode(4);
     root.left.right = new TreeNode(5);
     root.right.left = new TreeNode(6);
-    root.right.right = new TreeNode(7);
 
     int ans = countNodes(root);
 
     System.out.println(ans);
-
   }
 }

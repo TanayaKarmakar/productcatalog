@@ -1,13 +1,14 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 23/05/23
+ * @author t0k02w6 on 09/07/23
  * @project ds-algo-2021-leetcode
  */
-public class CountSquareSubmatricesWithAllOneLeetcode1277 {
+public class CountSquareSubmatricesWithAllOnesLeetcode1277 {
   private static int countSquares(int[][] matrix) {
     int m = matrix.length;
     int n = matrix[0].length;
+
     int[][] dp = new int[m][n];
 
     int count = 0;
@@ -34,18 +35,14 @@ public class CountSquareSubmatricesWithAllOneLeetcode1277 {
         }
       }
     }
+
     return count;
   }
 
   public static void main(String[] args) {
     int[][] matrix = {{0,1,1,1},{1,1,1,1},{0,1,1,1}};
+
     int ans = countSquares(matrix);
-
-    System.out.println(ans);
-
-    matrix = new int[][] {{1,0,1},{1,1,0},{1,1,0}};
-
-    ans = countSquares(matrix);
 
     System.out.println(ans);
   }

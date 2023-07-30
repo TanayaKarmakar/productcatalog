@@ -1,24 +1,26 @@
 package com.app.medium;
 
 /**
- * @author t0k02w6 on 15/04/23
+ * @author t0k02w6 on 08/07/23
  * @project ds-algo-2021-leetcode
  */
 public class MinimumDominoRotationsForEqualRowLeetcode1007 {
   static class MajorityItem {
-    int indx;
     int count;
+    int majIndx;
 
-    public MajorityItem(int indx, int count) {
-      this.indx = indx;
+    public MajorityItem(int count, int majIndx) {
       this.count = count;
+      this.majIndx = majIndx;
     }
   }
 
-  private static MajorityItem findMajority(int[] nums) {
+  private static MajorityItem findMajorityElement(int[] nums) {
     int count = 1;
     int majIndx = 0;
-    for(int i = 1; i < nums.length; i++) {
+
+    int n = nums.length;
+    for(int i = 1; i < n; i++) {
       if(nums[i] == nums[majIndx]) {
         count++;
       } else {
@@ -31,54 +33,50 @@ public class MinimumDominoRotationsForEqualRowLeetcode1007 {
     }
 
     count = 0;
-    for(int i = 0; i < nums.length; i++) {
+    for(int i = 0; i < n; i++) {
       if(nums[i] == nums[majIndx]) {
         count++;
       }
     }
 
-    if(count >= nums.length / 2) {
-      return new MajorityItem(majIndx, count);
-    }
-    return new MajorityItem(-1, -1);
-  }
-
-  private static int findRotationCount(int[] majority, int[] nonMajority, MajorityItem majorityItem) {
-    int count = 0;
-
-    for(int i = 0; i < majority.length; i++) {
-      if(majority[i] != majority[majorityItem.indx] && nonMajority[i] != majority[majorityItem.indx])
-        continue;
-      else if(majority[i] != majority[majorityItem.indx] && nonMajority[i] == majority[majorityItem.indx]) {
-        count++;
-      }
-    }
-
-    return count;
+    if(count >= n/2)
+      return new MajorityItem(count, majIndx);
+    return new MajorityItem(0, -1);
   }
 
   private static int minDominoRotations(int[] tops, int[] bottoms) {
-      MajorityItem topItem = findMajority(tops);
-      MajorityItem bottomItem = findMajority(bottoms);
+    MajorityItem topM = findMajorityElement(tops);
+    MajorityItem bottomM = findMajorityElement(bottoms);
 
-      int count = 0;
-      int majorityCount = 0;
-      if(topItem.indx == -1 && bottomItem.indx == -1)
-        return -1;
-      else if(topItem.count > bottomItem.count) {
-        count = findRotationCount(tops, bottoms, topItem);
-        majorityCount = topItem.count;
-      } else  {
-        count = findRotationCount(bottoms, tops, bottomItem);
-        majorityCount = bottomItem.count;
-      }
-      if(majorityCount + count == tops.length)
-        return count;
+    int rotationCount = 0;
+    int majorityCount = 0;
+
+    if(topM.majIndx == -1 && bottomM.majIndx == -1)
       return -1;
+    else if(topM.count > bottomM.count) {
+      majorityCount = topM.count;
+      for(int i = 0; i < bottoms.length; i++) {
+        if(tops[i] != tops[topM.majIndx] && bottoms[i] == tops[topM.majIndx]) {
+          rotationCount++;
+        }
+      }
+    } else {
+      majorityCount = bottomM.count;
+      for(int i = 0; i < tops.length; i++) {
+        if(bottoms[i] != bottoms[bottomM.majIndx] && tops[i] == bottoms[bottomM.majIndx]) {
+          rotationCount++;
+        }
+      }
+    }
+    return majorityCount + rotationCount == tops.length ? rotationCount: -1;
   }
 
-
   public static void main(String[] args) {
+    int[] tops = {2,1,2,4,2,2};
+    int[] bottoms = {5,2,6,2,3,2};
 
+    int ans = minDominoRotations(tops, bottoms);
+
+    System.out.println(ans);
   }
 }

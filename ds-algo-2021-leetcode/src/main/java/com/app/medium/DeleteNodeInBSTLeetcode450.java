@@ -3,11 +3,10 @@ package com.app.medium;
 import com.app.common.BinaryTree.TreeNode;
 
 /**
- * @author t0k02w6 on 07/04/23
+ * @author t0k02w6 on 08/07/23
  * @project ds-algo-2021-leetcode
  */
 public class DeleteNodeInBSTLeetcode450 {
-
   private static TreeNode deleteNode(TreeNode root, int key) {
     if(root == null)
       return null;

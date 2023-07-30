@@ -6,39 +6,44 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author t0k02w6 on 29/09/22
+ * @author t0k02w6 on 06/07/23
  * @project ds-algo-2021-leetcode
  */
 public class GroupShiftedStringsLeetcode249 {
-    private static List<List<String>> groupStrings(String[] strings) {
-        Map<String, List<String>> map = new HashMap<>();
-        for(int i = 0; i < strings.length; i++) {
-            String key = getHash(strings[i]);
-            if(!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
-            }
-            map.get(key).add(strings[i]);
-        }
+  private static List<List<String>> groupStrings(String[] strings) {
+    Map<String, List<String>> map = new HashMap<>();
 
-        List<List<String>> result = new ArrayList<>();
-        for(Map.Entry<String, List<String>> entry: map.entrySet()) {
-            result.add(entry.getValue());
-        }
-        return result;
+    List<List<String>> result = new ArrayList<>();
+    for(String currentString: strings) {
+      String key = generateKey(currentString);
+      if(!map.containsKey(key)) {
+        map.put(key, new ArrayList<>());
+      }
+      map.get(key).add(currentString);
     }
 
-    private static String getHash(String string) {
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < string.length(); i++) {
-            int val1 = string.charAt(0) - '0';
-            int val2 = string.charAt(1) - '0';
-            int res = (val2 - val1 + 26) % 26;
-            sb.append(res + "").append(" ");
-        }
-        return sb.toString();
+    for(Map.Entry<String, List<String>> entry: map.entrySet()) {
+      result.add(entry.getValue());
     }
 
-    public static void main(String[] args) {
+    return result;
+  }
 
+  private static String generateKey(String currentString) {
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < currentString.length(); i++) {
+      int val1 = currentString.charAt(0) - '0';
+      int val2 = currentString.charAt(i) - '0';
+      int res = (val1 - val2 + 26) % 26;
+      sb.append(res).append(" ");
     }
+    return sb.toString();
+  }
+
+  public static void main(String[] args) {
+    String[] strs = {"abc","bcd","acef","xyz","az","ba","a","z"};
+    List<List<String>> result = groupStrings(strs);
+
+    System.out.println(result);
+  }
 }

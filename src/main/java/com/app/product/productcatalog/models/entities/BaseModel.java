@@ -1,5 +1,8 @@
 package com.app.product.productcatalog.models.entities;
 
+import lombok.Data;
+
+@Data
 public class BaseModel {
-    private Long id;
+    protected Long id;
 }

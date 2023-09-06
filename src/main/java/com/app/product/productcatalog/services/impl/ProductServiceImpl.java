@@ -25,8 +25,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(Long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<ProductDTO> productDTOResponseEntity = restTemplate.getForEntity(AppConstants.FAKESTORE_PRODUCT, ProductDTO.class, id);
+        String finalUrl = StringUtil
+                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, "{id}");
+        logger.info("Final Url for getProductById: {}", finalUrl);
+        ResponseEntity<ProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, ProductDTO.class, id);
         logger.info("Product DTO response - {}", productDTOResponseEntity.getBody());
+        return ProductDTOModelMapper.toProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+    }
+
+    @Override
+    public Product createProduct(ProductDTO productDTO) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        logger.info("Request body for new product is : {}", productDTO);
+        ResponseEntity<ProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
+                productDTO, ProductDTO.class);
+        logger.info("Prduct DTO response - {}", productDTOResponseEntity);
         return ProductDTOModelMapper.toProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
     }
 }

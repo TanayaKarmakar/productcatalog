@@ -1,5 +1,6 @@
 package com.app.product.productcatalog.controllers;
 
+import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
@@ -33,8 +34,9 @@ public class ProductCatalogController {
     }
 
     @PostMapping
-    public String createProduct() {
-        return "Created product with ID: " + UUID.randomUUID();
+    public Product createProduct(@RequestBody ProductDTO productDTO) {
+        logger.info("Product creation started for the product: {}", productDTO);
+        return productService.createProduct(productDTO);
     }
 
     @PutMapping("/{id}")

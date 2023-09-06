@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,8 +19,9 @@ public class ProductCatalogController {
     private ProductService productService;
 
     @GetMapping
-    public void getAllProducts() {
-
+    public List<Product> getAllProducts() {
+        logger.info("Product retrieval started for all the products");
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")

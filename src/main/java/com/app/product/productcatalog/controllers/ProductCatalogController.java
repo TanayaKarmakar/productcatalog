@@ -1,7 +1,6 @@
 package com.app.product.productcatalog.controllers;
 
 import com.app.product.productcatalog.models.dtos.ProductDTO;
-import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

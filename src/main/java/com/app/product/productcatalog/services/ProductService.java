@@ -1,7 +1,6 @@
 package com.app.product.productcatalog.services;
 
 import com.app.product.productcatalog.models.dtos.ProductDTO;
-import com.app.product.productcatalog.models.entities.Product;
 
 import java.util.List;
 

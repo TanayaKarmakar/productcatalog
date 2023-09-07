@@ -1,5 +1,6 @@
 package com.app.product.productcatalog.services.impl;
 
+import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.mappers.ModelMapper;
@@ -31,8 +32,11 @@ public class ProductServiceImpl implements ProductService {
                 .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, "{id}");
         logger.info("Final Url for getProductById: {}", finalUrl);
         ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, FakeStoreProductDTO.class, id);
+        if(Objects.isNull(productDTOResponseEntity.getBody())) {
+            throw new NotFoundException("Product with ID " + id + " doesn't exist");
+        }
         logger.info("Product DTO response - {}", productDTOResponseEntity.getBody());
-        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(productDTOResponseEntity.getBody());
     }
 
     @Override
@@ -42,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
         ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
                 productDTO, FakeStoreProductDTO.class);
         logger.info("Prduct DTO response - {}", productDTOResponseEntity);
-        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(productDTOResponseEntity.getBody());
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
         ResponseEntity<List<FakeStoreProductDTO>> listResponseEntity = restTemplate.exchange(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
                 HttpMethod.GET, null, typeReference);
         logger.info("All the products - {}", listResponseEntity.getBody());
-        return ModelMapper.toDTOsFromFakeProduct(Objects.requireNonNull(listResponseEntity.getBody()));
+        return ModelMapper.toDTOsFromFakeProduct(listResponseEntity.getBody());
     }
 
     @Override
@@ -63,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
                 .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, id.toString());
         ResponseEntity<FakeStoreProductDTO> fakeStoreProductDTOResponseEntity = restTemplate
                 .exchange(finalUrl, HttpMethod.DELETE, null, FakeStoreProductDTO.class);
-        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(fakeStoreProductDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(fakeStoreProductDTOResponseEntity.getBody());
     }
 
     @Override
@@ -77,6 +81,6 @@ public class ProductServiceImpl implements ProductService {
         HttpEntity<FakeStoreProductDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
         ResponseEntity<FakeStoreProductDTO> fakeStoreProductDTOResponseEntity = restTemplate
                 .exchange(finalUrl, HttpMethod.PUT, requestEntity, FakeStoreProductDTO.class);
-        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(fakeStoreProductDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(fakeStoreProductDTOResponseEntity.getBody());
     }
 }

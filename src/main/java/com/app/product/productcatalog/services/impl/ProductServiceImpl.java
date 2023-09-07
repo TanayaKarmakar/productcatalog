@@ -2,7 +2,7 @@ package com.app.product.productcatalog.services.impl;
 
 import com.app.product.productcatalog.models.dtos.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
-import com.app.product.productcatalog.models.mappers.ProductDTOModelMapper;
+import com.app.product.productcatalog.models.mappers.ModelMapper;
 import com.app.product.productcatalog.services.ProductService;
 import com.app.product.productcatalog.util.StringUtil;
 import com.app.product.productcatalog.util.constants.AppConstants;
@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         logger.info("Final Url for getProductById: {}", finalUrl);
         ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, FakeStoreProductDTO.class, id);
         logger.info("Product DTO response - {}", productDTOResponseEntity.getBody());
-        return ProductDTOModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
         ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
                 productDTO, FakeStoreProductDTO.class);
         logger.info("Prduct DTO response - {}", productDTOResponseEntity);
-        return ProductDTOModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
     }
 
     @Override
@@ -53,6 +52,31 @@ public class ProductServiceImpl implements ProductService {
         ResponseEntity<List<FakeStoreProductDTO>> listResponseEntity = restTemplate.exchange(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
                 HttpMethod.GET, null, typeReference);
         logger.info("All the products - {}", listResponseEntity.getBody());
-        return ProductDTOModelMapper.toDTOsFromFakeProduct(Objects.requireNonNull(listResponseEntity.getBody()));
+        return ModelMapper.toDTOsFromFakeProduct(Objects.requireNonNull(listResponseEntity.getBody()));
+    }
+
+    @Override
+    public ProductDTO deleteProductById(Long id) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        logger.info("Product with id: {} needs to be deleted ", id);
+        String finalUrl = StringUtil
+                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, id.toString());
+        ResponseEntity<FakeStoreProductDTO> fakeStoreProductDTOResponseEntity = restTemplate
+                .exchange(finalUrl, HttpMethod.DELETE, null, FakeStoreProductDTO.class);
+        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(fakeStoreProductDTOResponseEntity.getBody()));
+    }
+
+    @Override
+    public ProductDTO updateProductById(Long id, ProductDTO productDTO) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        logger.info("Product needs to be updated with id: {}", id);
+        String finalUrl = StringUtil
+                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, id.toString());
+        FakeStoreProductDTO requestDTO = ModelMapper.toFakeStoreProductDTO(productDTO);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        HttpEntity<FakeStoreProductDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);
+        ResponseEntity<FakeStoreProductDTO> fakeStoreProductDTOResponseEntity = restTemplate
+                .exchange(finalUrl, HttpMethod.PUT, requestEntity, FakeStoreProductDTO.class);
+        return ModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(fakeStoreProductDTOResponseEntity.getBody()));
     }
 }

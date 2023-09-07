@@ -5,6 +5,8 @@ import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,9 @@ public class ProductCatalogController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProductById() {
-
+    public ResponseEntity<ProductDTO> deleteProductById(@PathVariable("id") Long id) {
+        logger.info("Product deletion with id: {} has started ", id);
+        return new ResponseEntity<>(productService.deleteProductById(id), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -41,7 +44,8 @@ public class ProductCatalogController {
     }
 
     @PutMapping("/{id}")
-    public void updateProductById() {
-
+    public ProductDTO updateProductById(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
+        logger.info("Product update started for product: {} with values: {}", id, productDTO);
+        return productService.updateProductById(id, productDTO);
     }
 }

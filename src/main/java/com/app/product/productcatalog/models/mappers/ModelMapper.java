@@ -8,7 +8,18 @@ import com.app.product.productcatalog.models.entities.Product;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProductDTOModelMapper {
+public class ModelMapper {
+
+    public static FakeStoreProductDTO toFakeStoreProductDTO(ProductDTO productDTO) {
+        FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+        fakeStoreProductDTO.setId(productDTO.getId());
+        fakeStoreProductDTO.setImage(productDTO.getImage());
+        fakeStoreProductDTO.setTitle(productDTO.getTitle());
+        fakeStoreProductDTO.setDescription(productDTO.getDescription());
+        fakeStoreProductDTO.setImage(productDTO.getImage());
+        fakeStoreProductDTO.setCategory(productDTO.getCategory());
+        return fakeStoreProductDTO;
+    }
     public static ProductDTO toDTOFromFakeProduct(FakeStoreProductDTO fakeStoreProductDTO) {
         ProductDTO product = new ProductDTO();
         product.setId(fakeStoreProductDTO.getId());
@@ -21,7 +32,7 @@ public class ProductDTOModelMapper {
     }
 
     public static List<ProductDTO> toDTOsFromFakeProduct(List<FakeStoreProductDTO> fakeStoreProductDTOS) {
-        return fakeStoreProductDTOS.stream().map(ProductDTOModelMapper::toDTOFromFakeProduct)
+        return fakeStoreProductDTOS.stream().map(ModelMapper::toDTOFromFakeProduct)
                 .collect(Collectors.toList());
     }
 
@@ -39,7 +50,7 @@ public class ProductDTOModelMapper {
     }
 
     public static List<Product> toProducts(List<ProductDTO> productDTOs) {
-        return productDTOs.stream().map(ProductDTOModelMapper::toProduct)
+        return productDTOs.stream().map(ModelMapper::toProduct)
                 .collect(Collectors.toList());
     }
 }

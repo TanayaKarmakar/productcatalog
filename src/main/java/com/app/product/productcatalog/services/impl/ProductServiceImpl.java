@@ -1,5 +1,6 @@
 package com.app.product.productcatalog.services.impl;
 
+import com.app.product.productcatalog.models.dtos.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.models.mappers.ProductDTOModelMapper;
@@ -27,33 +28,33 @@ public class ProductServiceImpl implements ProductService {
     private RestTemplateBuilder restTemplateBuilder;
 
     @Override
-    public Product getProductById(Long id) {
+    public ProductDTO getProductById(Long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String finalUrl = StringUtil
                 .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, "{id}");
         logger.info("Final Url for getProductById: {}", finalUrl);
-        ResponseEntity<ProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, ProductDTO.class, id);
+        ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, FakeStoreProductDTO.class, id);
         logger.info("Product DTO response - {}", productDTOResponseEntity.getBody());
-        return ProductDTOModelMapper.toProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ProductDTOModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
     }
 
     @Override
-    public Product createProduct(ProductDTO productDTO) {
+    public ProductDTO createProduct(ProductDTO productDTO) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         logger.info("Request body for new product is : {}", productDTO);
-        ResponseEntity<ProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
-                productDTO, ProductDTO.class);
+        ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
+                productDTO, FakeStoreProductDTO.class);
         logger.info("Prduct DTO response - {}", productDTOResponseEntity);
-        return ProductDTOModelMapper.toProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
+        return ProductDTOModelMapper.toDTOFromFakeProduct(Objects.requireNonNull(productDTOResponseEntity.getBody()));
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        ParameterizedTypeReference<List<ProductDTO>> typeReference = new ParameterizedTypeReference<>() {};
-        ResponseEntity<List<ProductDTO>> listResponseEntity = restTemplate.exchange(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
+        ParameterizedTypeReference<List<FakeStoreProductDTO>> typeReference = new ParameterizedTypeReference<>() {};
+        ResponseEntity<List<FakeStoreProductDTO>> listResponseEntity = restTemplate.exchange(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
                 HttpMethod.GET, null, typeReference);
         logger.info("All the products - {}", listResponseEntity.getBody());
-        return ProductDTOModelMapper.toProducts(Objects.requireNonNull(listResponseEntity.getBody()));
+        return ProductDTOModelMapper.toDTOsFromFakeProduct(Objects.requireNonNull(listResponseEntity.getBody()));
     }
 }

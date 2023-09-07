@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -19,13 +19,13 @@ public class ProductCatalogController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductDTO> getAllProducts() {
         logger.info("Product retrieval started for all the products");
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public ProductDTO getProductById(@PathVariable("id") Long id) {
         logger.info("Product retrieval for product id: {} started", id);
         return productService.getProductById(id);
     }
@@ -36,7 +36,7 @@ public class ProductCatalogController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody ProductDTO productDTO) {
+    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
         logger.info("Product creation started for the product: {}", productDTO);
         return productService.createProduct(productDTO);
     }

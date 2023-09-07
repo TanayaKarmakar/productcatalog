@@ -6,9 +6,9 @@ import com.app.product.productcatalog.models.entities.Product;
 import java.util.List;
 
 public interface ProductService {
-    Product getProductById(Long id);
+    ProductDTO getProductById(Long id);
 
-    Product createProduct(ProductDTO productDTO);
+    ProductDTO createProduct(ProductDTO productDTO);
 
-    List<Product> getAllProducts();
+    List<ProductDTO> getAllProducts();
 }

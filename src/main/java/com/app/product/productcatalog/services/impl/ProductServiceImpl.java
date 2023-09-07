@@ -2,12 +2,10 @@ package com.app.product.productcatalog.services.impl;
 
 import com.app.product.productcatalog.models.dtos.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
-import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.models.mappers.ProductDTOModelMapper;
 import com.app.product.productcatalog.services.ProductService;
 import com.app.product.productcatalog.util.StringUtil;
 import com.app.product.productcatalog.util.constants.AppConstants;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

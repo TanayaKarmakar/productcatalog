@@ -6,10 +6,10 @@ import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.dtos.thirdparty.ThirdPartyProductDTO;
 import com.app.product.productcatalog.thirdpartyclients.product.ThirdPartyProductServiceClient;
 import com.app.product.productcatalog.util.StringUtil;
-import com.app.product.productcatalog.util.constants.AppConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -29,11 +29,17 @@ public class FakeStoreProductServiceClient implements ThirdPartyProductServiceCl
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
 
+    @Value("${fakestore.api.url}")
+    private String fakeStoreApiUrl;
+
+    @Value("${fakestore.api.paths.products}")
+    private String fakeStoreApiPathsProduct;
+
     @Override
     public ThirdPartyProductDTO getProductById(Long id) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String finalUrl = StringUtil
-                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, "{id}");
+                .buildFinalStringWithoutDelims(fakeStoreApiUrl, fakeStoreApiPathsProduct, "/{id}");
         logger.info("Final Url for getProductById: {}", finalUrl);
         ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.getForEntity(finalUrl, FakeStoreProductDTO.class, id);
         if(Objects.isNull(productDTOResponseEntity.getBody())) {
@@ -47,7 +53,8 @@ public class FakeStoreProductServiceClient implements ThirdPartyProductServiceCl
     public ThirdPartyProductDTO createProduct(ProductDTO productDTO) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         logger.info("Request body for new product is : {}", productDTO);
-        ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.postForEntity(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
+        String finalUrl = StringUtil.buildFinalStringWithoutDelims(fakeStoreApiUrl, fakeStoreApiPathsProduct);
+        ResponseEntity<FakeStoreProductDTO> productDTOResponseEntity = restTemplate.postForEntity(finalUrl,
                 productDTO, FakeStoreProductDTO.class);
         logger.info("Prduct DTO response - {}", productDTOResponseEntity);
         return productDTOResponseEntity.getBody();
@@ -57,7 +64,8 @@ public class FakeStoreProductServiceClient implements ThirdPartyProductServiceCl
     public List<ThirdPartyProductDTO> getAllProducts() {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ParameterizedTypeReference<List<FakeStoreProductDTO>> typeReference = new ParameterizedTypeReference<>() {};
-        ResponseEntity<List<FakeStoreProductDTO>> listResponseEntity = restTemplate.exchange(AppConstants.FAKESTORE_PRODUCT_BASE_URL,
+        String finalUrl = StringUtil.buildFinalStringWithoutDelims(fakeStoreApiUrl, fakeStoreApiPathsProduct);
+        ResponseEntity<List<FakeStoreProductDTO>> listResponseEntity = restTemplate.exchange(finalUrl,
                 HttpMethod.GET, null, typeReference);
         logger.info("All the products - {}", listResponseEntity.getBody());
         List<ThirdPartyProductDTO> finalResult = new ArrayList<>();
@@ -70,7 +78,7 @@ public class FakeStoreProductServiceClient implements ThirdPartyProductServiceCl
         RestTemplate restTemplate = restTemplateBuilder.build();
         logger.info("Product with id: {} needs to be deleted ", id);
         String finalUrl = StringUtil
-                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, id.toString());
+                .buildFinalStringWithoutDelims(fakeStoreApiUrl, fakeStoreApiPathsProduct, "/"+id.toString());
         ResponseEntity<FakeStoreProductDTO> fakeStoreProductDTOResponseEntity = restTemplate
                 .exchange(finalUrl, HttpMethod.DELETE, null, FakeStoreProductDTO.class);
         return fakeStoreProductDTOResponseEntity.getBody();
@@ -81,8 +89,7 @@ public class FakeStoreProductServiceClient implements ThirdPartyProductServiceCl
         RestTemplate restTemplate = restTemplateBuilder.build();
         logger.info("Product needs to be updated with id: {}", id);
         String finalUrl = StringUtil
-                .buildFinalString(AppConstants.FORWARD_SLASH, AppConstants.FAKESTORE_PRODUCT_BASE_URL, id.toString());
-        //FakeStoreProductDTO requestDTO = ModelMapper.toFakeStoreProductDTO(productDTO);
+                .buildFinalStringWithoutDelims(fakeStoreApiUrl, fakeStoreApiPathsProduct, "/"+id.toString());;
         FakeStoreProductDTO requestDTO = (FakeStoreProductDTO) productDTO;
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<FakeStoreProductDTO> requestEntity = new HttpEntity<>(requestDTO, httpHeaders);

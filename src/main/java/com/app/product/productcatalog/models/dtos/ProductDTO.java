@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 @ToString
 public class ProductDTO {
-    private Long id;
+    private String id;
     private String title;
     private BigDecimal price;
     private String image;

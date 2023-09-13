@@ -7,6 +7,7 @@ import com.app.product.productcatalog.models.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ModelMapper {
@@ -14,7 +15,7 @@ public class ModelMapper {
         if(Objects.isNull(productDTO))
             return null;
         Product product = new Product();
-        product.setId(productDTO.getId());
+        product.setId(UUID.fromString(productDTO.getId()));
         product.setImage(productDTO.getImage());
         product.setTitle(productDTO.getTitle());
         product.setDescription(productDTO.getDescription());

@@ -32,7 +32,7 @@ public class ProductCatalogController {
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProductById(@PathVariable("id") Long id) {
+    public ProductDTO getProductById(@PathVariable("id") String id) {
         logger.info("Product retrieval for product id: {} started", id);
         return productServiceMap.get(productServiceType).getProductById(id);
     }

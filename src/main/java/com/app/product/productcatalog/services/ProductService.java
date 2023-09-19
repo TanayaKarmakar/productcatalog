@@ -5,7 +5,7 @@ import com.app.product.productcatalog.models.dtos.ProductDTO;
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO getProductById(Long id);
+    ProductDTO getProductById(String id);
 
     ProductDTO createProduct(ProductDTO productDTO);
 

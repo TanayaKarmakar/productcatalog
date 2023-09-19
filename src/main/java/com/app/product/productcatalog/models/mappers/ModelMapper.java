@@ -12,17 +12,42 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ModelMapper {
+    public static ProductDTO toProductDTO(Product product) {
+        if(Objects.isNull(product))
+            return null;
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId().toString());
+        productDTO.setImage(product.getImage());
+        productDTO.setTitle(product.getTitle());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setCategory(toCategoryDTO(product.getCategory()));
+        productDTO.setPrice(product.getPrice());
+        return productDTO;
+    }
+
+    public static List<ProductDTO> toProductDTOs(List<Product> products) {
+        if(products == null || products.isEmpty())
+            return new ArrayList<>();
+        return products.stream().map(ModelMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+
     public static Product toProduct(ProductDTO productDTO) {
         if(Objects.isNull(productDTO))
             return null;
         Product product = new Product();
-        product.setId(UUID.fromString(productDTO.getId()));
+        if(Objects.isNull(productDTO.getId())) {
+            product.setId(UUID.randomUUID());
+        } else {
+            product.setId(UUID.fromString(productDTO.getId()));
+        }
         product.setImage(productDTO.getImage());
         product.setTitle(productDTO.getTitle());
         product.setDescription(productDTO.getDescription());
         product.setImage(productDTO.getImage());
-        product.setCategory(new Category());
-        product.getCategory().setName(productDTO.getCategory());
+        product.setPrice(productDTO.getPrice());
+        product.setCategory(toCategory(productDTO.getCategory()));
         return product;
     }
 

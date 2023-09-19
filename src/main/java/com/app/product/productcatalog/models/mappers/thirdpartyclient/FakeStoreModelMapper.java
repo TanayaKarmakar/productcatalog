@@ -1,5 +1,6 @@
 package com.app.product.productcatalog.models.mappers.thirdpartyclient;
 
+import com.app.product.productcatalog.models.dtos.CategoryDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.dtos.thirdparty.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.thirdparty.ThirdPartyProductDTO;
@@ -23,7 +24,8 @@ public class FakeStoreModelMapper extends ThirdPartyModelMapper {
         product.setTitle(fakeStoreProductDTO.getTitle());
         product.setDescription(fakeStoreProductDTO.getDescription());
         product.setImage(fakeStoreProductDTO.getImage());
-        product.setCategory(fakeStoreProductDTO.getCategory());
+        product.setCategory(new CategoryDTO());
+        product.getCategory().setName(fakeStoreProductDTO.getCategory());
         return product;
     }
 
@@ -48,7 +50,7 @@ public class FakeStoreModelMapper extends ThirdPartyModelMapper {
         fakeStoreProductDTO.setTitle(productDTO.getTitle());
         fakeStoreProductDTO.setDescription(productDTO.getDescription());
         fakeStoreProductDTO.setImage(productDTO.getImage());
-        fakeStoreProductDTO.setCategory(productDTO.getCategory());
+        fakeStoreProductDTO.setCategory(productDTO.getCategory().getName());
         return fakeStoreProductDTO;
     }
 }

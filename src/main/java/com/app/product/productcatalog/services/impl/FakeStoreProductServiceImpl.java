@@ -48,15 +48,15 @@ public class FakeStoreProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO deleteProductById(Long id) {
+    public ProductDTO deleteProductById(String id) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
-        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.deleteProductById(id));
+        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.deleteProductById(Long.valueOf(id)));
     }
 
     @Override
-    public ProductDTO updateProductById(Long id, ProductDTO productDTO) {
+    public ProductDTO updateProductById(String id, ProductDTO productDTO) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         ThirdPartyProductDTO thirdPartyProductDTO = thirdPartyModelMapper.toThirdPartyDTOFromProduct(productDTO);
-        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.updateProductById(id, thirdPartyProductDTO));
+        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.updateProductById(Long.valueOf(id), thirdPartyProductDTO));
     }
 }

@@ -38,7 +38,7 @@ public class ProductCatalogController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDTO> deleteProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<ProductDTO> deleteProductById(@PathVariable("id") String id) {
         logger.info("Product deletion with id: {} has started ", id);
         return new ResponseEntity<>(productServiceMap.get(productServiceType).deleteProductById(id), HttpStatus.NOT_FOUND);
     }
@@ -50,7 +50,7 @@ public class ProductCatalogController {
     }
 
     @PutMapping("/{id}")
-    public ProductDTO updateProductById(@PathVariable("id") Long id, @RequestBody ProductDTO productDTO) {
+    public ProductDTO updateProductById(@PathVariable("id") String id, @RequestBody ProductDTO productDTO) {
         logger.info("Product update started for product: {} with values: {}", id, productDTO);
         return productServiceMap.get(productServiceType).updateProductById(id, productDTO);
     }

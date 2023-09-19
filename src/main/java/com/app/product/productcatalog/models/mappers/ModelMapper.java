@@ -1,5 +1,6 @@
 package com.app.product.productcatalog.models.mappers;
 
+import com.app.product.productcatalog.models.dtos.CategoryDTO;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Category;
 import com.app.product.productcatalog.models.entities.Product;
@@ -29,6 +30,35 @@ public class ModelMapper {
         if(productDTOs == null || productDTOs.isEmpty())
             return new ArrayList<>();
         return productDTOs.stream().map(ModelMapper::toProduct)
+                .collect(Collectors.toList());
+    }
+
+    public static Category toCategory(CategoryDTO categoryDTO) {
+        if(Objects.isNull(categoryDTO))
+            return null;
+        Category category = new Category();
+        if(Objects.isNull(categoryDTO.getId())) {
+            category.setId(UUID.randomUUID());
+        } else {
+            category.setId(UUID.fromString(categoryDTO.getId()));
+        }
+        category.setName(categoryDTO.getName());
+        return category;
+    }
+
+    public static CategoryDTO toCategoryDTO(Category category) {
+        if(Objects.isNull(category))
+            return null;
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setName(category.getName());
+        categoryDTO.setId(category.getId().toString());
+        return categoryDTO;
+    }
+
+    public static List<CategoryDTO> toCategoryDTOs(List<Category> categories) {
+        if(Objects.isNull(categories) || categories.isEmpty())
+            return new ArrayList<>();
+        return categories.stream().map(ModelMapper::toCategoryDTO)
                 .collect(Collectors.toList());
     }
 }

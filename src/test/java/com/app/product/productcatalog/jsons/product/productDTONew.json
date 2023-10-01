@@ -1,0 +1,10 @@
+{
+  "title": "iPhone15",
+  "price": "65000",
+  "image": "https://www.google.com/images/iphone.jpg",
+  "description": "The brand new iPhone",
+  "category": {
+    "id": "9acefcef-856e-43ff-bb30-ed936d4222ff",
+    "name": "Electronic Devices"
+  }
+}

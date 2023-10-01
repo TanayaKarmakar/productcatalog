@@ -5,4 +5,8 @@ public class ProductCatelogConstants {
     public static final String CATEGORY_MODEL = "src/test/java/com/app/product/productcatalog/jsons/categoryModel.json";
 
     public static final String CATEGORY_DTO_EXISTING = "src/test/java/com/app/product/productcatalog/jsons/categoryDTOExisting.json";
+
+    public static final String CATEGORY_DTO_UPDATE_REQUEST = "src/test/java/com/app/product/productcatalog/jsons/categoryDTOUpdateRequest.json";
+
+    public static final String CATEGORY_MODEL_UPDATE = "src/test/java/com/app/product/productcatalog/jsons/categoryModelUpdated.json";
 }

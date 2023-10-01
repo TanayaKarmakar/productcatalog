@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
@@ -52,8 +51,7 @@ public class CatagoryServiceImplTest {
 
     @Test
     public void testGetCategoryByIdSuccess() {
-        Optional<Category> categoryOptional = Optional.of(category);
-        doReturn(categoryOptional).when(categoryRepository).findById(any());
+        findById();
         CategoryDTO existingCategoryDTO = categoryService.fetchCategoryById(categoryID);
         Assertions.assertNotNull(existingCategoryDTO);
     }
@@ -67,8 +65,7 @@ public class CatagoryServiceImplTest {
 
     @Test
     public void testDeleteCategoryByIdSuccess() {
-        Optional<Category> categoryOptional = Optional.of(category);
-        when(categoryRepository.findById(any())).thenReturn(categoryOptional);
+        findById();
         doNothing().when(categoryRepository).delete(category);
         CategoryDTO existingCategoryDTO = categoryService.deleteCategoryById(categoryID);
         Assertions.assertNotNull(existingCategoryDTO);
@@ -78,4 +75,28 @@ public class CatagoryServiceImplTest {
     public void testDeleteCategoryByIdNotFound() {
         testCategoryByIdNotFound();
     }
+
+    @Test
+    public void testUpdateCategorySuccess() throws Exception {
+        findById();
+        Category updatedCategory = ProductCatalogTestUtil.getInstance(ProductCatelogConstants.CATEGORY_MODEL_UPDATE, Category.class);
+        CategoryDTO categoryUpdateRequest =
+                ProductCatalogTestUtil.getInstance(ProductCatelogConstants.CATEGORY_DTO_UPDATE_REQUEST, CategoryDTO.class);
+        when(categoryRepository.save(any())).thenReturn(updatedCategory);
+        CategoryDTO updatedCategoryDTO = categoryService.updateCategory(categoryID, categoryUpdateRequest);
+        String updatedName = "Electronic Gadgets";
+        Assertions.assertEquals(updatedName, updatedCategoryDTO.getName());
+    }
+
+    @Test
+    public void testUpdateCategoryNotFound() {
+        testCategoryByIdNotFound();
+    }
+
+    private void findById() {
+        Optional<Category> categoryOptional = Optional.of(category);
+        when(categoryRepository.findById(any())).thenReturn(categoryOptional);
+    }
+
+
 }

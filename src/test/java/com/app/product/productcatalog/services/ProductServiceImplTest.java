@@ -2,6 +2,7 @@ package com.app.product.productcatalog.services;
 
 import com.app.product.productcatalog.ProductCatalogTestUtil;
 import com.app.product.productcatalog.ProductCatelogConstants;
+import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.repositories.ProductRepository;
@@ -14,7 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 
@@ -46,12 +51,17 @@ public class ProductServiceImplTest {
 
     @Test
     public void testGetProductByIdSuccess() {
-
+        findById();
+        ProductDTO existingProductDTO = productService.getProductById(productId);
+        Assertions.assertNotNull(existingProductDTO);
+        Assertions.assertEquals(productId, existingProductDTO.getId());
     }
 
     @Test
     public void testGetProductByIdNotFound() {
-
+        Throwable thrown = assertThrows(NotFoundException.class, () -> productService.getProductById(productId));
+        String expectedMessage = "Product with ID " + productId + " doesn't exist";
+        Assertions.assertEquals(expectedMessage, thrown.getMessage());
     }
 
     @Test
@@ -64,12 +74,15 @@ public class ProductServiceImplTest {
 
     @Test
     public void testDeleteProductByIdSuccess() {
-
+        findById();
+        doNothing().when(productRepository).delete(product);
+        ProductDTO existingProductDTO = productService.deleteProductById(productId);
+        Assertions.assertNotNull(existingProductDTO);
     }
 
     @Test
     public void testDeleteProductByIdNotFound() {
-
+        testGetProductByIdNotFound();
     }
 
     @Test
@@ -79,6 +92,11 @@ public class ProductServiceImplTest {
 
     @Test
     public void testUpdateProductNotFound() {
+        testGetProductByIdNotFound();
+    }
 
+    private void findById() {
+        Optional<Product> productOptional = Optional.of(product);
+        when(productRepository.findById(any())).thenReturn(productOptional);
     }
 }

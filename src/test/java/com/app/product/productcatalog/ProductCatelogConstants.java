@@ -13,4 +13,8 @@ public class ProductCatelogConstants {
     public static final String PRODUCT_DTO_NEW = "src/test/java/com/app/product/productcatalog/jsons/product/productDTONew.json";
 
     public static final String PRODUCT_DTO_EXISTING = "src/test/java/com/app/product/productcatalog/jsons/product/productDTOExisting.json";
+
+    public static final String PRODUCT_DTO_UPDATE_REQUEST = "src/test/java/com/app/product/productcatalog/jsons/product/productDTOUpdateRequest.json";
+
+    public static final String PRODUCT_MODEL_UPDATE = "src/test/java/com/app/product/productcatalog/jsons/product/productModelUpdate.json";
 }

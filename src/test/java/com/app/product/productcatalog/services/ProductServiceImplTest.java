@@ -86,8 +86,17 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    public void testUpdateProductSuccess() {
+    public void testUpdateProductSuccess() throws Exception {
+        findById();
+        Product updatedProduct = ProductCatalogTestUtil.getInstance(ProductCatelogConstants.PRODUCT_MODEL_UPDATE, Product.class);
+        ProductDTO productUpdateRequest =
+                ProductCatalogTestUtil.getInstance(ProductCatelogConstants.PRODUCT_DTO_UPDATE_REQUEST, ProductDTO.class);
+        when(productRepository.save(any())).thenReturn(updatedProduct);
+        ProductDTO updatedProductDTO = productService.updateProductById(productId, productUpdateRequest);
 
+
+        String updatedDescription = "The brand new iPhone, you're gonna love it";
+        Assertions.assertEquals(updatedDescription, updatedProductDTO.getDescription());
     }
 
     @Test

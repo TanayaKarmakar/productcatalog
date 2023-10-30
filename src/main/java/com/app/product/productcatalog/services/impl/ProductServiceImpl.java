@@ -5,6 +5,7 @@ import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.models.mappers.ModelMapper;
 import com.app.product.productcatalog.repositories.ProductRepository;
+import com.app.product.productcatalog.security.JwtObject;
 import com.app.product.productcatalog.services.CategoryService;
 import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService categoryService;
 
     @Override
-    public ProductDTO getProductById(String id) {
+    public ProductDTO getProductById(String id, Long userIdTryingToAccess) {
         logger.info("Retrieval of product with ID: {} started", id);
         Optional<Product> productOptional = productRepository.findById(UUID.fromString(id));
         if(productOptional.isEmpty()) {
@@ -56,9 +57,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO deleteProductById(String id) {
+    public ProductDTO deleteProductById(String id, Long userIdTryingToAccess) {
         logger.info("Deletion of product with ID: {} has started", id);
-        ProductDTO productDTO = getProductById(id);
+        ProductDTO productDTO = getProductById(id, userIdTryingToAccess);
         Product product = ModelMapper.toProduct(productDTO);
         productRepository.delete(product);
         logger.info("Deletion of product with ID: {} has finished", id);
@@ -66,9 +67,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProductById(String id, ProductDTO productDTO) {
+    public ProductDTO updateProductById(String id, ProductDTO productDTO, Long userIdTryingToAccess) {
         logger.info("Updation of product has started with ID: {} and values: {}", id, productDTO);
-        ProductDTO existingProductDTO = getProductById(id);
+        ProductDTO existingProductDTO = getProductById(id, userIdTryingToAccess);
         existingProductDTO.setPrice(productDTO.getPrice());
         existingProductDTO.setDescription(productDTO.getDescription());
         existingProductDTO.setImage(productDTO.getImage());

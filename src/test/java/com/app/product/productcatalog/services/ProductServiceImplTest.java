@@ -36,6 +36,8 @@ public class ProductServiceImplTest {
 
     private final String productId = "4e36f4c4-40f3-4b91-89b8-923635b16ddf";
 
+    private final Long userId = 1234l;
+
     private ProductDTO productDTO;
 
     private Product product;
@@ -52,14 +54,14 @@ public class ProductServiceImplTest {
     @Test
     public void testGetProductByIdSuccess() {
         findById();
-        ProductDTO existingProductDTO = productService.getProductById(productId);
+        ProductDTO existingProductDTO = productService.getProductById(productId, userId);
         Assertions.assertNotNull(existingProductDTO);
         Assertions.assertEquals(productId, existingProductDTO.getId());
     }
 
     @Test
     public void testGetProductByIdNotFound() {
-        Throwable thrown = assertThrows(NotFoundException.class, () -> productService.getProductById(productId));
+        Throwable thrown = assertThrows(NotFoundException.class, () -> productService.getProductById(productId, userId));
         String expectedMessage = "Product with ID " + productId + " doesn't exist";
         Assertions.assertEquals(expectedMessage, thrown.getMessage());
     }
@@ -76,7 +78,7 @@ public class ProductServiceImplTest {
     public void testDeleteProductByIdSuccess() {
         findById();
         doNothing().when(productRepository).delete(product);
-        ProductDTO existingProductDTO = productService.deleteProductById(productId);
+        ProductDTO existingProductDTO = productService.deleteProductById(productId, userId);
         Assertions.assertNotNull(existingProductDTO);
     }
 
@@ -92,7 +94,7 @@ public class ProductServiceImplTest {
         ProductDTO productUpdateRequest =
                 ProductCatalogTestUtil.getInstance(ProductCatelogConstants.PRODUCT_DTO_UPDATE_REQUEST, ProductDTO.class);
         when(productRepository.save(any())).thenReturn(updatedProduct);
-        ProductDTO updatedProductDTO = productService.updateProductById(productId, productUpdateRequest);
+        ProductDTO updatedProductDTO = productService.updateProductById(productId, productUpdateRequest, userId);
 
 
         String updatedDescription = "The brand new iPhone, you're gonna love it";

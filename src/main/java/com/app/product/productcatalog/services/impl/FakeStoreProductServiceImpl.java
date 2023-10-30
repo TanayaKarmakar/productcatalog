@@ -4,6 +4,7 @@ import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.dtos.thirdparty.FakeStoreProductDTO;
 import com.app.product.productcatalog.models.dtos.thirdparty.ThirdPartyProductDTO;
 import com.app.product.productcatalog.models.mappers.thirdpartyclient.ThirdPartyModelMapper;
+import com.app.product.productcatalog.security.JwtObject;
 import com.app.product.productcatalog.services.ProductService;
 import com.app.product.productcatalog.thirdpartyclients.product.ThirdPartyProductServiceClient;
 import jakarta.annotation.Resource;
@@ -29,7 +30,7 @@ public class FakeStoreProductServiceImpl implements ProductService {
     private Map<String, ThirdPartyModelMapper> thirdPartyModelMapperMap;
 
     @Override
-    public ProductDTO getProductById(String id) {
+    public ProductDTO getProductById(String id, Long userIdTryingToAccess) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.getProductById(Long.valueOf(id)));
     }
@@ -48,13 +49,13 @@ public class FakeStoreProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO deleteProductById(String id) {
+    public ProductDTO deleteProductById(String id, Long userIdTryingToAccess) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.deleteProductById(Long.valueOf(id)));
     }
 
     @Override
-    public ProductDTO updateProductById(String id, ProductDTO productDTO) {
+    public ProductDTO updateProductById(String id, ProductDTO productDTO, Long userIdTryingToAccess) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         ThirdPartyProductDTO thirdPartyProductDTO = thirdPartyModelMapper.toThirdPartyDTOFromProduct(productDTO);
         return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.updateProductById(Long.valueOf(id), thirdPartyProductDTO));

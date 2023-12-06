@@ -11,6 +11,8 @@ import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +53,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getAllProducts() {
         logger.info("Retrieval of all the products has started");
+//        List<Product> products = productRepository.getAll(Pageable.ofSize(10));
+//
+//        PageRequest pageRequest = PageRequest.of(2, 10);
+//
+//        List<Product> products1 = productRepository.getAll(pageRequest);
+
         List<Product> products = productRepository.findAll();
+
         logger.info("Retrieval of all the products has finished");
         return ModelMapper.toProductDTOs(products);
     }

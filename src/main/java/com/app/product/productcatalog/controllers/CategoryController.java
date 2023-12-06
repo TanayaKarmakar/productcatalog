@@ -48,4 +48,10 @@ public class CategoryController {
         logger.info("Deletion of category with ID: {} started", id);
         return new ResponseEntity<>(categoryService.deleteCategoryById(id), HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<CategoryDTO>> fetchCategoriesByName(@PathVariable("name") String name) {
+        logger.info("Fetching of category by name: {} has started", name);
+        return new ResponseEntity<>(categoryService.fetchCategoriesByName(name), HttpStatus.OK);
+    }
 }

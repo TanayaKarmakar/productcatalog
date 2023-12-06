@@ -67,4 +67,13 @@ public class CategoryServiceImpl implements CategoryService {
         logger.info("Deletion of category finished with ID: {}", id);
         return categoryDTO;
     }
+
+    @Override
+    public List<CategoryDTO> fetchCategoriesByName(String name) {
+        logger.info("Retrieval of category started with name: {}", name);
+        List<Category> categories = categoryRepository.findAllByNameContaining(name);
+        List<CategoryDTO> categoryDTOS = ModelMapper.toCategoryDTOs(categories);
+        logger.info("Categories with name containing: {} is : {}", name, categoryDTOS);
+        return categoryDTOS;
+    }
 }

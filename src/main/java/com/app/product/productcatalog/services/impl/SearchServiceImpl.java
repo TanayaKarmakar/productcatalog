@@ -20,7 +20,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Page<ProductDTO> searchProducts(String query, Pageable pageable) {
         Page<Product> productPage = productRepository.findAllByTitleContaining(query, pageable);
-        List<Product> productList = productPage.get().toList();
+        List<Product> productList = productPage.getContent();
         List<ProductDTO> productDTOList = productList.stream()
                 .map(ModelMapper::toProductDTO).toList();
 

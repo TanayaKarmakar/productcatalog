@@ -22,7 +22,7 @@ public class SearchController {
     public Page<ProductDTO> searchProducts(@RequestBody ProductSearchDTO productSearchDTO) {
         return searchService.searchProducts(productSearchDTO.getQuery(), PageRequest.of(
                 productSearchDTO.getPageNumber(),
-                productSearchDTO.getPageNumber())
+                productSearchDTO.getPageSize())
         );
     }
 }

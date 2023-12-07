@@ -5,7 +5,6 @@ import com.app.product.productcatalog.models.dtos.ProductSearchDTO;
 import com.app.product.productcatalog.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,6 @@ public class SearchController {
 
     @PostMapping
     public Page<ProductDTO> searchProducts(@RequestBody ProductSearchDTO productSearchDTO) {
-        return searchService.searchProducts(productSearchDTO.getQuery(), PageRequest.of(
-                productSearchDTO.getPageNumber(),
-                productSearchDTO.getPageSize())
-        );
+        return searchService.searchProducts(productSearchDTO);
     }
 }

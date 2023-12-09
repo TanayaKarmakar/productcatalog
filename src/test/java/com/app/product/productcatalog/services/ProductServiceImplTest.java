@@ -5,7 +5,7 @@ import com.app.product.productcatalog.ProductCatelogConstants;
 import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
-import com.app.product.productcatalog.repositories.ProductRepository;
+import com.app.product.productcatalog.repositories.mysql.ProductRepository;
 import com.app.product.productcatalog.services.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

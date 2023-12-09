@@ -4,7 +4,7 @@ import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.CategoryDTO;
 import com.app.product.productcatalog.models.entities.Category;
 import com.app.product.productcatalog.models.mappers.ModelMapper;
-import com.app.product.productcatalog.repositories.CategoryRepository;
+import com.app.product.productcatalog.repositories.mysql.CategoryRepository;
 import com.app.product.productcatalog.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

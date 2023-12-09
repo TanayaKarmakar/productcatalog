@@ -1,4 +1,4 @@
-package com.app.product.productcatalog.repositories;
+package com.app.product.productcatalog.repositories.mysql;
 
 import com.app.product.productcatalog.models.entities.Product;
 import org.springframework.data.domain.Page;

@@ -4,15 +4,13 @@ import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.ProductDTO;
 import com.app.product.productcatalog.models.entities.Product;
 import com.app.product.productcatalog.models.mappers.ModelMapper;
-import com.app.product.productcatalog.repositories.ProductRepository;
-import com.app.product.productcatalog.security.JwtObject;
+import com.app.product.productcatalog.repositories.elasticsearch.ProductElasticSearchRepository;
+import com.app.product.productcatalog.repositories.mysql.ProductRepository;
 import com.app.product.productcatalog.services.CategoryService;
 import com.app.product.productcatalog.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +23,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductElasticSearchRepository productElasticSearchRepository;
 
     @Autowired
     private CategoryService categoryService;
@@ -45,7 +46,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO createProduct(ProductDTO productDTO) {
         logger.info("Create product has started with values: {}", productDTO);
         Product product = ModelMapper.toProduct(productDTO);
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        productElasticSearchRepository.save(savedProduct);
         logger.info("Create product has finished with values: {} and ID: {}", productDTO, product.getId());
         return ModelMapper.toProductDTO(product);
     }
@@ -71,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = getProductById(id, userIdTryingToAccess);
         Product product = ModelMapper.toProduct(productDTO);
         productRepository.delete(product);
+        productElasticSearchRepository.delete(product);
         logger.info("Deletion of product with ID: {} has finished", id);
         return productDTO;
     }
@@ -85,7 +88,8 @@ public class ProductServiceImpl implements ProductService {
         existingProductDTO.setTitle(productDTO.getTitle());
         existingProductDTO.getCategory().setName(productDTO.getCategory().getName());
         Product product = ModelMapper.toProduct(existingProductDTO);
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        productElasticSearchRepository.save(savedProduct);
         logger.info("Updation of product has started with ID: {} and values: {}", id, existingProductDTO);
         return existingProductDTO;
     }

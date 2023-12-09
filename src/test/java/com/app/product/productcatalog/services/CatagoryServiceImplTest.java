@@ -5,7 +5,7 @@ import com.app.product.productcatalog.ProductCatelogConstants;
 import com.app.product.productcatalog.exceptions.NotFoundException;
 import com.app.product.productcatalog.models.dtos.CategoryDTO;
 import com.app.product.productcatalog.models.entities.Category;
-import com.app.product.productcatalog.repositories.CategoryRepository;
+import com.app.product.productcatalog.repositories.mysql.CategoryRepository;
 import com.app.product.productcatalog.services.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -42,18 +42,18 @@ public class ProductCatalogController {
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") String id) {
+    public ProductDTO getProductById(/*@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,*/ @PathVariable("id") String id) {
         logger.info("Product retrieval for product id: {} started", id);
-        Long userTryingToAccess = fetchUserIdFromToken(authToken);
-        return productServiceMap.get(productServiceType).getProductById(id, userTryingToAccess);
+        //Long userTryingToAccess = fetchUserIdFromToken(authToken);
+        return productServiceMap.get(productServiceType).getProductById(id, null);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDTO> deleteProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") String id) {
+    public ResponseEntity<ProductDTO> deleteProductById(/*@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,*/ @PathVariable("id") String id) {
         logger.info("Product deletion with id: {} has started ", id);
-        Long userIdTryingToAccess = fetchUserIdFromToken(authToken);
+        //Long userIdTryingToAccess = fetchUserIdFromToken(authToken);
         return new ResponseEntity<>(productServiceMap.get(productServiceType)
-                .deleteProductById(id, userIdTryingToAccess), HttpStatus.NOT_FOUND);
+                .deleteProductById(id, null), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -63,9 +63,9 @@ public class ProductCatalogController {
     }
 
     @PutMapping("/{id}")
-    public ProductDTO updateProductById(@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken, @PathVariable("id") String id, @RequestBody ProductDTO productDTO) {
-        Long userIdTryingToAccess = fetchUserIdFromToken(authToken);
-        return productServiceMap.get(productServiceType).updateProductById(id, productDTO, userIdTryingToAccess);
+    public ProductDTO updateProductById(/*@RequestHeader(HttpHeaders.AUTHORIZATION) String authToken,*/ @PathVariable("id") String id, @RequestBody ProductDTO productDTO) {
+        //Long userIdTryingToAccess = fetchUserIdFromToken(authToken);
+        return productServiceMap.get(productServiceType).updateProductById(id, productDTO, null);
     }
 
     private Long fetchUserIdFromToken(String authToken) {

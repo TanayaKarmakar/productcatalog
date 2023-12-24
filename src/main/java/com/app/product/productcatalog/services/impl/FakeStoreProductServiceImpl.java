@@ -8,18 +8,21 @@ import com.app.product.productcatalog.security.JwtObject;
 import com.app.product.productcatalog.services.ProductService;
 import com.app.product.productcatalog.thirdpartyclients.product.ThirdPartyProductServiceClient;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
+@Slf4j
 public class FakeStoreProductServiceImpl implements ProductService {
-    private static Logger logger = LoggerFactory.getLogger(FakeStoreProductServiceImpl.class);
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
 
@@ -29,10 +32,27 @@ public class FakeStoreProductServiceImpl implements ProductService {
     @Resource
     private Map<String, ThirdPartyModelMapper> thirdPartyModelMapperMap;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private final String PRODUCTS_TABLE = "PRODUCTS";
+
     @Override
     public ProductDTO getProductById(String id, Long userIdTryingToAccess) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
-        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.getProductById(Long.valueOf(id)));
+
+        ProductDTO productDTO = (ProductDTO) redisTemplate.opsForHash().get(PRODUCTS_TABLE, id);
+        if(Objects.nonNull(productDTO)) {
+            log.info("Product with ID: {} found in the cache", id);
+            return productDTO;
+        }
+
+        log.info("Product with ID: {} is not present in the cache", id);
+        productDTO = thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.getProductById(Long.valueOf(id)));
+
+        log.info("Saving the product: {} in the cache", productDTO);
+        redisTemplate.opsForHash().put(PRODUCTS_TABLE, id, productDTO);
+        return productDTO;
     }
 
     @Override

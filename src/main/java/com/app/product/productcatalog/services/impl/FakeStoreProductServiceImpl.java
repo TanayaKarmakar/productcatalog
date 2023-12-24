@@ -9,8 +9,6 @@ import com.app.product.productcatalog.services.ProductService;
 import com.app.product.productcatalog.thirdpartyclients.product.ThirdPartyProductServiceClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -58,7 +56,9 @@ public class FakeStoreProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
-        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.createProduct(productDTO));
+        ProductDTO createdProduct = thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.createProduct(productDTO));
+        redisTemplate.opsForHash().put(PRODUCTS_TABLE, createdProduct.getId(), createdProduct);
+        return createdProduct;
     }
 
     @Override
@@ -70,14 +70,27 @@ public class FakeStoreProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO deleteProductById(String id, Long userIdTryingToAccess) {
+        ProductDTO productDTO = (ProductDTO) redisTemplate.opsForHash().get(PRODUCTS_TABLE, id);
+        if(Objects.nonNull(productDTO)) {
+            log.info("Product with ID: {} is also present in the cache", id);
+            redisTemplate.delete(id);
+        }
+
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.deleteProductById(Long.valueOf(id)));
     }
 
     @Override
     public ProductDTO updateProductById(String id, ProductDTO productDTO, Long userIdTryingToAccess) {
+        ProductDTO storedProductDTO = (ProductDTO) redisTemplate.opsForHash().get(PRODUCTS_TABLE, id);
+        if(Objects.nonNull(storedProductDTO)) {
+            log.info("Product with ID: {} is also present in the cache", id);
+            redisTemplate.delete(id);
+        }
         ThirdPartyModelMapper thirdPartyModelMapper = thirdPartyModelMapperMap.get(FakeStoreProductDTO.class.getSimpleName());
         ThirdPartyProductDTO thirdPartyProductDTO = thirdPartyModelMapper.toThirdPartyDTOFromProduct(productDTO);
-        return thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.updateProductById(Long.valueOf(id), thirdPartyProductDTO));
+        ProductDTO updatedProductDTO = thirdPartyModelMapper.toDTOFromThirdPartyProduct(productServiceClient.updateProductById(Long.valueOf(id), thirdPartyProductDTO));
+        redisTemplate.opsForHash().put(PRODUCTS_TABLE, id, updatedProductDTO);
+        return updatedProductDTO;
     }
 }

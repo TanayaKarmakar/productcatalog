@@ -1,24 +1,19 @@
 package com.app.easy;
 
-/**
- * @author t0k02w6 on 28/01/23
- * @project ds-algo-2021
- */
 public class ClimbingStairsLeetcode70 {
-  private static int climbStairs(int n) {
-    int prev = 1;
-    int curr = 1;
-    for(int i = 2; i <= n; i++) {
-      int total = prev + curr;
-      prev = curr;
-      curr = total;
+
+    private static int climbStairs(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+
+        for(int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
     }
-    return curr;
-  }
-
-  public static void main(String[] args) {
-    int ans = climbStairs(3);
-
-    System.out.println(ans);
-  }
+    public static void main(String[] args) {
+        System.out.println(climbStairs(3));
+        System.out.println(climbStairs(2));
+    }
 }

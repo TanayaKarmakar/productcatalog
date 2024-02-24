@@ -5,64 +5,56 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-/**
- * @author t0k02w6 on 31/05/23
- * @project ds-algo-2021-leetcode
- */
-
-class LRUCache {
-  static class Item {
-    int key;
-    int value;
-
-    public Item(int key, int value) {
-      this.key = key;
-      this.value = value;
-    }
-  }
-
-  private Map<Integer, Item> itemMap;
-  private Deque<Item> items;
-  private int maxCap;
-  private int currentCap;
-
-  public LRUCache(int capacity) {
-    this.itemMap = new HashMap<>();
-    this.items = new LinkedList<>();
-    this.maxCap = capacity;
-    this.currentCap = 0;
-  }
-
-  public int get(int key) {
-    if(!itemMap.containsKey(key))
-      return -1;
-    return itemMap.get(key).value;
-  }
-
-  public void put(int key, int value) {
-    if(!itemMap.containsKey(key)) {
-      Item newItem = new Item(key, value);
-      if(currentCap >= maxCap) {
-        Item itemToBeRemoved = items.pollLast();
-        itemMap.remove(itemToBeRemoved.key);
-        currentCap--;
-      }
-      itemMap.put(key, newItem);
-      items.addFirst(newItem);
-      currentCap++;
-    } else {
-      Item existingItem = itemMap.get(key);
-      items.remove(existingItem);
-
-      existingItem.value = value;
-      itemMap.put(key, existingItem);
-      items.addFirst(existingItem);
-    }
-  }
-}
-
 public class LRUCacheLeetcode146 {
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-  }
+    }
+
+    static class LRUCache {
+        private Map<Integer, Item> map;
+        private Deque<Item> dq;
+        int maxCapacity;
+        int currentCapacity;
+
+        public LRUCache(int capacity) {
+            map = new HashMap<>();
+            dq = new LinkedList<>();
+            maxCapacity = capacity;
+            currentCapacity = 0;
+        }
+
+        public int get(int key) {
+            if(!map.containsKey(key)) {
+                return -1;
+            }
+            Item item = map.get(key);
+            dq.remove(item);
+            dq.addFirst(item);
+            return item.value;
+        }
+
+        public void put(int key, int value) {
+            if(!map.containsKey(key)) {
+                Item newItem = new Item(key, value);
+                if(currentCapacity == maxCapacity) {
+                    Item leastUsedItem = dq.pollLast();
+                    map.remove(leastUsedItem.key);
+                } else {
+                    currentCapacity++;
+                }
+                map.put(key, newItem);
+                dq.addFirst(newItem);
+            }
+        }
+
+        static class Item {
+            int key;
+            int value;
+
+            public Item(int key, int value) {
+                this.key = key;
+                this.value = value;
+            }
+        }
+    }
 }

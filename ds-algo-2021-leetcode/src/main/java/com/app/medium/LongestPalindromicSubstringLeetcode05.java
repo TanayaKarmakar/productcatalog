@@ -1,49 +1,54 @@
 package com.app.medium;
 
-/**
- * @author t0k02w6 on 30/05/23
- * @project ds-algo-2021-leetcode
- */
 public class LongestPalindromicSubstringLeetcode05 {
-  private static String longestPalindrome(String s) {
-    int n = s.length();
-    int left = 0;
-    int right = 0;
-    int i = 0;
-    int start = 0;
-    int end = 0;
-    int max = 1;
-    while(i < n) {
-      left = i;
-      right = i;
-      while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
-        if(max < (right - left + 1)) {
-          max = right - left + 1;
-          start = left;
-          end = right;
-        }
-        left--;
-        right++;
-      }
+    private static String longestPalindrome(String s) {
+        if(s.length() <= 1)
+            return s;
+        int left = 0;
+        int right = 0;
+        int n = s.length();
+        int maxLen = 1;
+        int start = 0;
+        int end = 0;
 
-      left = i - 1;
-      right = i;
-      while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
-        if(max < (right - left + 1)) {
-          max = right - left + 1;
-          start = left;
-          end = right;
+        int i = 0;
+        while(i < n) {
+            left = i;
+            right = i;
+
+            while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
+                if(right - left + 1 > maxLen) {
+                    maxLen = right - left + 1;
+                    start = left;
+                    end = right;
+                }
+                left--;
+                right++;
+            }
+
+
+            left = i - 1;
+            right = i;
+            while(left >= 0 && right < n && s.charAt(left) == s.charAt(right)) {
+                if(right - left + 1 > maxLen) {
+                    maxLen = right - left + 1;
+                    start = left;
+                    end = right;
+                }
+                left--;
+                right++;
+            }
+            i++;
         }
-        left--;
-        right++;
-      }
-      i++;
+
+        if(start == -1)
+            return "";
+        return s.substring(start, end + 1);
     }
-    return s.substring(start, end + 1);
-  }
 
-  public static void main(String[] args) {
-    System.out.println(longestPalindrome("babad"));
-    System.out.println(longestPalindrome("cbbd"));
-  }
+
+    public static void main(String[] args) {
+        System.out.println(longestPalindrome("babad"));
+        System.out.println(longestPalindrome("cbbd"));
+    }
 }

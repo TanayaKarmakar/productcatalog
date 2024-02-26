@@ -1,50 +1,52 @@
 package com.app.medium;
 
-/**
- * @author t0k02w6 on 05/06/23
- * @project ds-algo-2021-leetcode
- */
 public class ValidSudokuLeetcode36 {
-  private static boolean isValidSudoku(char[][] board) {
-    int n = board.length;
-    for(int i = 0; i < n; i++) {
-      for(int j = 0; j < n; j++) {
-        if(board[i][j] != '.') {
-          char num = board[i][j];
-          board[i][j] = '$';
-          if(!isValid(board, i, j, num))
-            return false;
-          board[i][j] = num;
+    private static boolean isValidSudoku(char[][] board) {
+        int n = board.length;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                if(board[i][j] != '.') {
+                    char ch = board[i][j];
+                    board[i][j] = '.';
+                    if(!isValid(board, i, j, n, ch)) {
+                        return false;
+                    }
+                    board[i][j] = ch;
+                }
+            }
         }
-      }
-    }
-    return true;
-  }
-
-  private static boolean isValid(char[][] board, int i, int j, char num) {
-    for(int row = 0; row < board.length; row++) {
-      if(board[row][j] == num)
-        return false;
+        return true;
     }
 
-    for(int col = 0; col < board[0].length; col++) {
-      if(board[i][col] == num)
-        return false;
+    private static boolean isValid(char[][] board, int i, int j, int n, char ch) {
+        // check for current row
+        for(int col = 0; col < n; col++) {
+            if(board[i][col] == ch)
+                return false;
+        }
+
+        // check for current row
+        for(int row = 0; row < n; row++) {
+            if(board[row][j] == ch)
+                return false;
+        }
+
+        int sqrt = (int)Math.sqrt(n);
+        int startRow = i - (i % sqrt);
+        int startCol = j - (j % sqrt);
+
+        for(int i1= startRow; i1 < (startRow + sqrt); i1++) {
+            for(int j1 = startCol; j1 < (startCol + sqrt); j1++) {
+                if(board[i1][j1] == ch)
+                    return false;
+            }
+        }
+        return true;
     }
 
-    int startRow = i - (i % 3);
-    int startCol = j - (j % 3);
-    for(int row = startRow; row < startRow + 3; row++) {
-      for(int col = startCol; col < startCol + 3; col++) {
-        if(board[row][col] == num)
-          return false;
-      }
+
+    public static void main(String[] args) {
+
     }
-    return true;
-  }
-
-
-  public static void main(String[] args) {
-
-  }
 }

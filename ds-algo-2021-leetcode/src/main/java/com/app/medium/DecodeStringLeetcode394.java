@@ -2,56 +2,51 @@ package com.app.medium;
 
 import java.util.Stack;
 
-/**
- * @author t0k02w6 on 01/06/23
- * @project ds-algo-2021-leetcode
- */
 public class DecodeStringLeetcode394 {
-  private static String decodeString(String s) {
-    Stack<String> textStack = new Stack<>();
-    Stack<Integer> digitStack = new Stack<>();
-    int n = s.length();
-    int digit = 0;
-    StringBuilder sb = null;
-    for(int i = 0; i < n;) {
-      if(Character.isDigit(s.charAt(i))) {
-        digit = 0;
-        while(i < n && Character.isDigit(s.charAt(i))) {
-          digit = digit * 10 + (s.charAt(i) - '0');
-          i++;
-        }
-        digitStack.push(digit);
-      }
+    private static String decodeString(String s) {
+        StringBuilder sb = new StringBuilder();
+        Stack<Integer> numStack = new Stack<>();
+        Stack<String> charStack = new Stack<>();
+        for(int i = 0; i < s.length(); ) {
+            if(Character.isDigit(s.charAt(i))) {
+                int num = 0;
+                while(i < s.length() && Character.isDigit(s.charAt(i))) {
+                    num = num * 10 + (s.charAt(i) - '0');
+                    i++;
+                }
+                numStack.push(num);
+            }
+            else if(s.charAt(i) == ']') {
 
-      else if(s.charAt(i) == ']') {
-        sb = new StringBuilder();
-        while(!textStack.isEmpty() && !textStack.peek().equals("[")) {
-          sb.insert(0, textStack.pop());
+                sb = new StringBuilder();
+                while(!charStack.isEmpty() && !charStack.peek().equals("[")) {
+                    sb.insert(0, charStack.pop());
+                }
+                charStack.pop();
+
+                String str = sb.toString();
+                sb = new StringBuilder();
+                int number = numStack.pop();
+                while(number-- > 0) {
+                    sb.append(str);
+                }
+                charStack.push(sb.toString());
+                i++;
+            } else {
+                charStack.push(s.charAt(i) + "");
+                i++;
+            }
         }
-        textStack.pop();
-        String str = sb.toString();
         sb = new StringBuilder();
-        digit = digitStack.pop();
-        while(digit-- > 0) {
-          sb.append(str);
+        while(!charStack.isEmpty()) {
+            sb.insert(0, charStack.pop());
         }
-        textStack.push(sb.toString());
-        i++;
-      } else {
-        textStack.push(s.charAt(i) + "");
-        i++;
-      }
+        return sb.toString();
     }
 
-    sb = new StringBuilder();
-    while(!textStack.isEmpty()) {
-      sb.insert(0, textStack.pop());
+    public static void main(String[] args) {
+        System.out.println(decodeString("3[a]2[bc]"));
+        System.out.println(decodeString("2[abc]3[cd]ef"));
+        System.out.println(decodeString("3[a2[c]]"));
     }
-    return sb.toString();
-  }
-
-  public static void main(String[] args) {
-    System.out.println(decodeString("3[a]2[bc]"));
-    System.out.println(decodeString("3[a2[c]]"));
-  }
 }

@@ -1,54 +1,58 @@
 package com.app.hard;
 
 import com.app.common.LinkedList.ListNode;
+
 import java.util.PriorityQueue;
 
-/**
- * @author t0k02w6 on 29/01/23
- * @project ds-algo-2021
- */
+
 public class MergeKSortedListLeetcode23 {
-  static class ListItem implements Comparable<ListItem> {
-    ListNode curr;
-    int aNode;
-    int vNode;
+    static class Item implements Comparable<Item> {
+        ListNode node;
+        int aNode;
+        int vNode;
 
-    public ListItem(ListNode curr, int aNode, int vNode) {
-      this.curr = curr;
-      this.aNode = aNode;
-      this.vNode = vNode;
+        public Item(ListNode node, int aNode, int vNode) {
+            this.node = node;
+            this.aNode = aNode;
+            this.vNode = vNode;
+        }
+
+        @Override
+        public int compareTo(Item o) {
+            return this.node.val - o.node.val;
+        }
     }
 
-    @Override
-    public int compareTo(ListItem o) {
-      return this.curr.val - o.curr.val;
+    private static ListNode mergeKLists(ListNode[] lists) {
+        ListNode result = new ListNode(Integer.MAX_VALUE);
+        ListNode temp = result;
+
+        PriorityQueue<Item> pQ = new PriorityQueue<>();
+        for(int i = 0; i < lists.length; i++) {
+            if(lists[i] != null)
+                pQ.add(new Item(lists[i], i, 0));
+        }
+
+        while(!pQ.isEmpty()) {
+            Item item = pQ.poll();
+
+            ListNode curr = item.node;
+            item.node = item.node.next;
+
+            curr.next = null;
+            temp.next = curr;
+            temp = temp.next;
+
+            if(item.node != null) {
+                pQ.add(new Item(item.node, item.aNode, item.vNode + 1));
+            }
+        }
+
+        result = result.next;
+        return result;
     }
-  }
 
-  private static ListNode mergeKLists(ListNode[] lists) {
-    PriorityQueue<ListItem> pQ = new PriorityQueue<>();
-    ListNode result = new ListNode(Integer.MAX_VALUE);
-    ListNode temp = result;
-    for(int i = 0; i < lists.length; i++) {
-      if(lists[i] != null)
-        pQ.add(new ListItem(lists[i], i, 0));
+    public static void main(String[] args) {
+
     }
-
-    while(!pQ.isEmpty()) {
-      ListItem listItem = pQ.poll();
-      ListNode current = listItem.curr;
-      if(current.next != null)
-        pQ.add(new ListItem(current.next, listItem.aNode, listItem.vNode + 1));
-      temp.next = new ListNode(current.val);
-      temp = temp.next;
-      current.next = null;
-    }
-
-    result = result.next;
-    return result;
-  }
-
-  public static void main(String[] args) {
-
-  }
 }

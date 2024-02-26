@@ -1,32 +1,26 @@
 package com.app.medium;
 
-/**
- * @author t0k02w6 on 05/06/23
- * @project ds-algo-2021-leetcode
- */
 public class CoinChangeLeetcode322 {
-  private static int coinChange(int[] coins, int amount) {
-    int[] dp = new int[amount + 1];
+    private static int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        int[] dp = new int[amount + 1];
 
-    for(int j = 1; j <= amount; j++) {
-      int result = Integer.MAX_VALUE;
-      dp[j] = Integer.MAX_VALUE;
-      for(int i = 0; i < coins.length; i++) {
-        if(j >= coins[i]) {
-          result = Integer.min(result, dp[j - coins[i]]);
+        for(int i = 1; i <= amount; i++) {
+            int res = Integer.MAX_VALUE;
+            for(int j = 0; j < n; j++) {
+                if(i >= coins[j]) {
+                    res = Integer.min(res, dp[i - coins[j]]);
+                }
+            }
+            if(res != Integer.MAX_VALUE)
+                res = res + 1;
+            dp[i] = res;
         }
-      }
-      if(result != Integer.MAX_VALUE) {
-        dp[j] = result + 1;
-      }
+        return dp[amount] == Integer.MAX_VALUE ? -1: dp[amount];
     }
-    return dp[amount] == Integer.MAX_VALUE ? -1: dp[amount];
-  }
 
-  public static void main(String[] args) {
-    int[] coins = {1,2,5};
-    int amount = 11;
-
-    System.out.println(coinChange(coins, amount));
-  }
+    public static void main(String[] args) {
+        System.out.println(coinChange(new int[]{1,2,5}, 11));
+        System.out.println(coinChange(new int[]{2}, 3));
+    }
 }

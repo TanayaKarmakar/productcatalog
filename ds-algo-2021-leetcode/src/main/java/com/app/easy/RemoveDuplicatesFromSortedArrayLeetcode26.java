@@ -1,37 +1,52 @@
 package com.app.easy;
 
-/**
- * @author t0k02w6 on 29/01/23
- * @project ds-algo-2021
- */
-public class RemoveDuplicatesFromSortedArrayLeetcode26 {
-  private static int removeDuplicates(int[] nums) {
-    if(nums.length <= 1)
-      return nums.length;
-    int n = nums.length;
-    int len = 1;
+import java.util.Arrays;
 
-    int i = 0;
-    while(i < n) {
-      int j = i + 1;
-      while(j < n && nums[i] == nums[j]) {
-        j++;
-      }
-      if(j < n) {
-        nums[len] = nums[j];
-        len++;
-      }
-      i = j;
+public class RemoveDuplicatesFromSortedArrayLeetcode26 {
+    private static int removeDuplicates(int[] nums) {
+        int n = nums.length;
+        for(int i = 0; i < n; i++) {
+            int count = 1;
+            int j = i + 1;
+            while(j < n && nums[i] == nums[j]) {
+                count++;
+                j++;
+            }
+
+            if(count > 1) {
+                j = i + 1;
+                int end = i + count;
+                while(j < end) {
+                    nums[j] = Integer.MIN_VALUE;
+                    j++;
+                }
+            }
+        }
+
+        int i = -1;
+        for(int j = 0; j < n; j++) {
+            if(nums[j] != Integer.MIN_VALUE) {
+                i++;
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+            }
+        }
+        return (i + 1);
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {1,1,2};
+        int ans = removeDuplicates(nums);
+
+        System.out.println(Arrays.toString(nums));
+        System.out.println(ans);
+
+        nums = new int[] {0,0,1,1,1,2,2,3,3,4};
+        ans = removeDuplicates(nums);
+
+        System.out.println(Arrays.toString(nums));
+        System.out.println(ans);
 
     }
-    return len;
-  }
-
-
-  public static void main(String[] args) {
-    int[] nums = {1,1,2};
-    int len = removeDuplicates(nums);
-
-    System.out.println(len);
-  }
 }

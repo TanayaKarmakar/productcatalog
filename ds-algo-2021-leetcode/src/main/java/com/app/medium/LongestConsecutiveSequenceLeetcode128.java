@@ -3,42 +3,47 @@ package com.app.medium;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author t0k02w6 on 05/06/23
- * @project ds-algo-2021-leetcode
- */
 public class LongestConsecutiveSequenceLeetcode128 {
-  private static int longestConsecutive(int[] nums) {
-    if(nums.length <= 1)
-      return nums.length;
-    Map<Integer, Boolean> map = new HashMap<>();
-    for(int i = 0; i < nums.length; i++) {
-      map.put(nums[i], false);
+    private static int longestConsecutive(int[] nums) {
+        Map<Integer, Boolean> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++) {
+            map.put(nums[i], false);
+        }
+
+        int maxLen = 0;
+        for(int i = 0; i < nums.length; i++) {
+            int currLen = 0;
+            int currItem = nums[i];
+            while(map.containsKey(currItem) && !map.get(currItem)) {
+                map.put(currItem, true);
+                currItem++;
+                currLen++;
+            }
+
+            currItem = nums[i] - 1;
+            while(map.containsKey(currItem) && !map.get(currItem)) {
+                map.put(currItem, true);
+                currItem--;
+                currLen++;
+            }
+
+            maxLen = Integer.max(maxLen, currLen);
+        }
+
+        return maxLen;
     }
 
-    int maxLen = 1;
-    for(int i = 0; i < nums.length; i++) {
-      int currentNum = nums[i];
-      int currentLen = 0;
-      while(map.containsKey(currentNum) && !map.get(currentNum)) {
-        map.put(currentNum, true);
-        currentNum--;
-        currentLen++;
-      }
+    public static void main(String[] args) {
+        int[] nums = {100,4,200,1,3,2};
 
-      currentNum = nums[i] + 1;
-      while(map.containsKey(currentNum) && !map.get(currentNum)) {
-        map.put(currentNum, true);
-        currentNum++;
-        currentLen++;
-      }
+        int ans = longestConsecutive(nums);
 
-      maxLen = Integer.max(maxLen, currentLen);
+        System.out.println(ans);
+
+        nums = new int[]{0,3,7,2,5,8,4,6,0,1};
+
+        ans = longestConsecutive(nums);
+
+        System.out.println(ans);
     }
-    return maxLen;
-  }
-
-  public static void main(String[] args) {
-    System.out.println(longestConsecutive(new int[] {100,4,200,1,3,2}));
-  }
 }

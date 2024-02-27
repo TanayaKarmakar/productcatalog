@@ -1,77 +1,78 @@
 package com.app.medium.design;
 
-/**
- * @author t0k02w6 on 19/06/23
- * @project ds-algo-2021-leetcode
- */
+
 class TicTacToe {
-  int[][] board;
-  int boardSize;
+    char[][] board;
+    int size;
 
-  public TicTacToe(int n) {
-    this.board = new int[n][n];
-    this.boardSize = n;
-  }
-
-  public int move(int row, int col, int player) {
-    board[row][col] = player;
-    boolean hasWon = hasOwn(row, col, player);
-    if(hasWon)
-      return player;
-    return 0;
-  }
-
-  private boolean hasOwn(int row, int col, int player) {
-    boolean hasOwn = true;
-    for(int i = 0; i < boardSize; i++) {
-      if(board[row][i] != player) {
-        hasOwn = false;
-        break;
-      }
+    public TicTacToe(int n) {
+        this.board = new char[n][n];
+        this.size =n;
     }
 
-    if(hasOwn)
-      return true;
-
-    hasOwn = true;
-    for(int i = 0; i < boardSize; i++) {
-      if(board[i][col] != player) {
-        hasOwn = false;
-        break;
-      }
+    public int move(int row, int col, int player) {
+        char ch = player == 1 ? 'X': '0';
+        board[row][col] = ch;
+        boolean hasWon = hasWon(ch, row, col);
+        if(hasWon)
+            return player;
+        return 0;
     }
 
-    if(hasOwn)
-      return true;
+    private boolean hasWon(char ch, int row, int col) {
+        boolean hasWon = true;
+        for(int c = 0; c < size; c++) {
+            if(board[row][c] != ch) {
+                hasWon = false;
+                break;
+            }
+        }
 
-    hasOwn = true;
-    for(int i = 0; i < boardSize; i++) {
-      if(board[i][i] != player) {
-        hasOwn = false;
-        break;
-      }
+        if(hasWon)
+            return true;
+
+        hasWon = true;
+        for(int r = 0; r < size; r++) {
+            if(board[r][col] != ch) {
+                hasWon = false;
+                break;
+            }
+        }
+
+        if(hasWon)
+            return true;
+
+
+        hasWon = true;
+        int i =0;
+        while(i < size) {
+            if(board[i][i] != ch) {
+                hasWon = false;
+                break;
+            }
+            i++;
+        }
+
+        if(hasWon)
+            return true;
+
+        hasWon = true;
+        i = 0;
+        int j = size - 1;
+        while(i < size && j >= 0) {
+            if(board[i][j] != ch) {
+                hasWon = false;
+                break;
+            }
+            i++;
+            j--;
+        }
+
+        return hasWon;
     }
-
-    if(hasOwn)
-      return true;
-
-    hasOwn = true;
-    int j = boardSize - 1;
-    int i = 0;
-    while(i < boardSize && j >= 0) {
-      if(board[i][j] != player) {
-        hasOwn = false;
-        break;
-      }
-      i++;
-      j--;
-    }
-    return hasOwn;
-  }
 }
-
 public class DesignTicTacToeLeetcode348 {
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-  }
+    }
 }

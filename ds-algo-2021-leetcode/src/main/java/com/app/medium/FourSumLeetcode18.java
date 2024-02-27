@@ -2,15 +2,12 @@ package com.app.medium;
 
 import java.util.*;
 
-/**
- * @author t0k02w6 on 02/04/22
- * @project ds-algo-2021
- */
 public class FourSumLeetcode18 {
-    public List<List<Integer>> fourSum(int[] nums, int target) {
+    private static List<List<Integer>> fourSum(int[] nums, int target) {
         Arrays.sort(nums);
 
-        Set<List<Integer>> list = new HashSet<>();
+        Set<List<Integer>> result = new HashSet<>();
+
         for(int i = 0; i < nums.length - 3; i++) {
             for(int j = i + 1; j < nums.length - 2; j++) {
                 int start = j + 1;
@@ -23,20 +20,25 @@ public class FourSumLeetcode18 {
                         current.add(nums[j]);
                         current.add(nums[start]);
                         current.add(nums[end]);
-                        list.add(current);
+                        result.add(current);
                         start++;
                         end--;
-                    } else if(sum > target)
+                    } else if(sum > target) {
                         end--;
-                    else
+                    } else {
                         start++;
+                    }
                 }
             }
         }
-        return new ArrayList<>(list);
+        return new ArrayList<>(result);
     }
 
     public static void main(String[] args) {
+        int[] nums = {1,0,-1,0,-2,2};
+        int target = 0;
+        List<List<Integer>> result = fourSum(nums, target);
 
+        System.out.println(result);
     }
 }

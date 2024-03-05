@@ -5,53 +5,50 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-/**
- * @author t0k02w6 on 25/06/23
- * @project ds-algo-2021-leetcode
- */
 public class MinimumKnightMovesLeetcode1197 {
-  private static int[][] directions = {{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2},{2,-1}};
+    private static int minKnightMoves(int x, int y) {
+        int count = 0;
+        int[][] directions = {{1,2},{2,1},{2,-1},{1,-2},{-1,2},{-2,1},{-2,-1},{-1,-2}};
+        x = Math.abs(x);
+        y = Math.abs(y);
+        if(x == 1 && y == 1)
+            return 2;
 
-  private static int minKnightMoves(int x, int y) {
-    if(x == 1 && y == 1)
-      return 2;
-    int count = 0;
-    Queue<int[]> q = new LinkedList<>();
-    q.add(new int[]{0,0});
-    Set<String> visited = new HashSet<>();
-    visited.add(0 + "-" + 0);
+        Queue<int[]> q = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
 
-    while(!q.isEmpty()) {
-      int size = q.size();
-      for(int i = 0; i < size; i++) {
-        int [] currentPos = q.poll();
-        int r = currentPos[0];
-        int c = currentPos[1];
-        visited.add(r + "-" + c);
-        if(r == x && c == y)
-          return count;
-        for(int j = 0; j < directions.length; j++) {
-          int newRow = r + directions[j][0];
-          int newCol = c + directions[j][1];
-          if(newRow < 0 || newRow > 300 || newCol < 0 || newCol > 300)
-            continue;
-          if(!visited.contains(newRow + "-" + newCol)) {
-            q.add(new int[]{newRow, newCol});
-            visited.add(newRow + "-" + newCol);
-          }
+        visited.add("0:0");
+        q.add(new int[]{0,0});
+
+        while(!q.isEmpty()) {
+            int size = q.size();
+
+            for(int i = 0; i < size; i++) {
+                int[] point = q.poll();
+                if(point[0] == x && point[1] == y)
+                    return count;
+
+                for(int j = 0; j < directions.length; j++) {
+                    int newX = point[0] + directions[j][0];
+                    int newY = point[1] + directions[j][1];
+
+                    if(newX < 0 || newX > 300 || newY < 0 || newY > 300)
+                        continue;
+                    if(!visited.contains(newX + ":" + newY)) {
+                        visited.add(newX + ":" + newY);
+                        q.add(new int[]{newX, newY});
+
+                    }
+                }
+            }
+            count++;
         }
-      }
-      count++;
+        return -1;
     }
-    return -1;
-  }
 
-  public static void main(String[] args) {
-    int ans = minKnightMoves(2,1);
-
-    System.out.println(ans);
-
-    ans = minKnightMoves(5, 5);
-    System.out.println(ans);
-  }
+    public static void main(String[] args) {
+        System.out.println(minKnightMoves(2,1));
+        System.out.println(minKnightMoves(1,1));
+        System.out.println(minKnightMoves(5,5));
+    }
 }

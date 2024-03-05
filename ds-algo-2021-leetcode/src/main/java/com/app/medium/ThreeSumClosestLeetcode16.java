@@ -2,40 +2,41 @@ package com.app.medium;
 
 import java.util.Arrays;
 
-/**
- * @author t0k02w6 on 17/04/23
- * @project ds-algo-2021-leetcode
- */
 public class ThreeSumClosestLeetcode16 {
-  private static int threeSumClosest(int[] nums, int target) {
-    Arrays.sort(nums);
-    int minDiff = Integer.MAX_VALUE;
-    int closestTarget = 0;
+    private static int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int minDiff = Integer.MAX_VALUE;
+        int finalTarget = 0;
 
-    for(int i = 0; i < nums.length - 1; i++) {
-      int start = i + 1;
-      int end = nums.length - 1;
-      while(start < end) {
-        int currentSum = nums[i] + nums[start] + nums[end];
-        int currentDiff = Math.abs(target - currentSum);
-        if(minDiff > currentDiff) {
-          minDiff = currentDiff;
-          closestTarget = currentSum;
+        int n = nums.length;
+        for(int i = 0; i < n - 1; i++) {
+            int start = i + 1;
+            int end = n - 1;
+            while(start < end) {
+                int currentTarget = nums[i] + nums[start] + nums[end];
+                if(currentTarget == target)
+                    return currentTarget;
+                int currentDiff = Math.abs(target - currentTarget);
+                if(currentDiff < minDiff) {
+                    minDiff = currentDiff;
+                    finalTarget = currentTarget;
+                }
+                if(currentTarget > target)
+                    end--;
+                else
+                    start++;
+            }
         }
-        if(currentSum < target) {
-          start++;
-        } else {
-          end--;
-        }
-      }
+
+        return finalTarget;
     }
-    return closestTarget;
-  }
 
-  public static void main(String[] args) {
-    int[] nums = {-1,2,1,4};
-    int target = 1;
+    public static void main(String[] args) {
+        int[] nums = {-1,2,1,4};
+        int target = 1;
 
-    System.out.println(threeSumClosest(nums, target));
-  }
+        int ans = threeSumClosest(nums, target);
+
+        System.out.println(ans);
+    }
 }

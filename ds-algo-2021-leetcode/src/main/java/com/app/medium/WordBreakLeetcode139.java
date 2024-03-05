@@ -1,48 +1,45 @@
 package com.app.medium;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-/**
- * @author t0k02w6 on 20/06/23
- * @project ds-algo-2021-leetcode
- */
 public class WordBreakLeetcode139 {
-  private static boolean wordBreak(String s, List<String> wordDict) {
-    int n = s.length();
-    boolean[] isWordBreak = new boolean[n + 1];
-    Set<String> wordSet = new HashSet<>();
-    wordSet.addAll(wordDict);
+    private static boolean wordBreak(String s, List<String> wordDict) {
+        int[] dp = new int[s.length()];
 
-    isWordBreak[0] = true;
-
-    for(int i = 1; i <= n; i++) {
-      for(int j = 0; j < i; j++) {
-        if(!isWordBreak[j])
-          continue;
-        String str = s.substring(j, i);
-        if(wordSet.contains(str)) {
-          isWordBreak[i] = true;
-          break;
+        for(int i = 0; i < s.length(); i++) {
+            for(int j = 0; j <= i; j++) {
+                String currentWord = s.substring(j, i + 1);
+                if(wordDict.contains(currentWord)) {
+                    if(j > 0) {
+                        dp[i] += dp[j - 1];
+                    } else {
+                        dp[i] += 1;
+                    }
+                }
+            }
         }
-      }
+
+        return dp[s.length() - 1] > 0;
     }
-    return isWordBreak[n];
-  }
 
-  public static void main(String[] args) {
-    String s = "leetcode";
-    List<String> wordDict = Arrays.asList("leet", "code");
-    System.out.println(wordBreak(s, wordDict));
+    public static void main(String[] args) {
+        List<String> wordDict = new ArrayList<>();
+        wordDict.add("leet");
+        wordDict.add("code");
+        System.out.println(wordBreak("leetcode", wordDict));
 
-    s = "applepenapple";
-    wordDict = Arrays.asList("apple", "pen");
-    System.out.println(wordBreak(s, wordDict));
+        wordDict = new ArrayList<>();
+        wordDict.add("apple");
+        wordDict.add("pen");
+        System.out.println(wordBreak("applepenapple", wordDict));
 
-    s = "catsandog";
-    wordDict = Arrays.asList("cats", "dog", "sand", "and", "cat");
-    System.out.println(wordBreak(s, wordDict));
-  }
+        wordDict = new ArrayList<>();
+        wordDict.add("cats");
+        wordDict.add("dog");
+        wordDict.add("sand");
+        wordDict.add("and");
+        wordDict.add("cat");
+        System.out.println(wordBreak("catsandog", wordDict));
+    }
 }

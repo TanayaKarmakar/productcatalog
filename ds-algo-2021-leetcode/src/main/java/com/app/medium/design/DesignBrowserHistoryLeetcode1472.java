@@ -1,49 +1,45 @@
 package com.app.medium.design;
 
+
 import java.util.Stack;
 
-/**
- * @author t0k02w6 on 01/06/23
- * @project ds-algo-2021-leetcode
- */
-
 class BrowserHistory {
-  private Stack<String> backwardStack;
-  private Stack<String> forwardStack;
+    Stack<String> forward;
+    Stack<String> backward;
 
-  public BrowserHistory(String homepage) {
-    backwardStack = new Stack<>();
-    forwardStack = new Stack<>();
-    backwardStack.push(homepage);
-  }
-
-  public void visit(String url) {
-    if(!forwardStack.isEmpty()) {
-      forwardStack.clear();
+    public BrowserHistory(String homepage) {
+        forward = new Stack<>();
+        backward = new Stack<>();
+        forward.push(homepage);
     }
-    backwardStack.push(url);
-  }
 
-  public String back(int steps) {
-    int maxSteps = Integer.min(steps, backwardStack.size() - 1);
-    while(maxSteps-- > 0) {
-      forwardStack.push(backwardStack.pop());
+    public void visit(String url) {
+        if(!backward.isEmpty()) {
+            backward.clear();
+        }
+        forward.add(url);
     }
-    return backwardStack.peek();
-  }
 
-  public String forward(int steps) {
-    int maxSteps = Integer.min(steps, forwardStack.size());
-    while(maxSteps-- > 0) {
-      backwardStack.push(forwardStack.pop());
+    public String back(int steps) {
+        int maxStep = Integer.min(forward.size() - 1, steps);
+        while(maxStep-- > 0) {
+            backward.push(forward.pop());
+        }
+        return !forward.isEmpty() ? forward.peek(): "";
     }
-    return backwardStack.peek();
-  }
+
+    public String forward(int steps) {
+        int maxStep = Integer.min(backward.size(), steps);
+        while(maxStep-- > 0) {
+            forward.push(backward.pop());
+        }
+
+        return forward.peek();
+    }
 }
 
-
 public class DesignBrowserHistoryLeetcode1472 {
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-  }
+    }
 }

@@ -1,40 +1,35 @@
 package com.app.easy;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * @author t0k02w6 on 13/05/23
- * @project ds-algo-2021-leetcode
- */
 public class IntersectionOfTwoArraysLeetcode349 {
-  private static int[] intersection(int[] nums1, int[] nums2) {
-    if(nums1.length < nums2.length)
-      return intersection(nums2, nums1);
+    private static int[] intersection(int[] nums1, int[] nums2) {
+        List<Integer> intersection = new ArrayList<>();
+        Map<Integer, Boolean> map = new HashMap<>();
 
-    Set<Integer> set = new HashSet<>();
+        for(int el: nums1) {
+            map.put(el, false);
+        }
 
-    for(int i = 0; i < nums1.length; i++) {
-      set.add(nums1[i]);
+        for(int el: nums2) {
+            if(map.containsKey(el) && !map.get(el)) {
+                intersection.add(el);
+                map.put(el, true);
+            }
+        }
+
+        int[] result = new int[intersection.size()];
+        for(int i = 0; i < intersection.size(); i++) {
+            result[i] = intersection.get(i);
+        }
+
+        return result;
     }
 
-    Set<Integer> result = new HashSet<>();
-    for(int i = 0; i < nums2.length; i++) {
-      if(set.contains(nums2[i])) {
-        result.add(nums2[i]);
-      }
+    public static void main(String[] args) {
+
     }
-
-    int[] finalResult = new int[result.size()];
-
-    int j = 0;
-    for(Integer el: result) {
-      finalResult[j++] = el;
-    }
-    return finalResult;
-  }
-
-  public static void main(String[] args) {
-
-  }
 }

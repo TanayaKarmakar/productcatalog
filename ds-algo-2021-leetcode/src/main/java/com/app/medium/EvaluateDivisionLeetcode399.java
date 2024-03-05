@@ -1,81 +1,120 @@
 package com.app.medium;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-/**
- * @author t0k02w6 on 06/06/23
- * @project ds-algo-2021-leetcode
- */
 public class EvaluateDivisionLeetcode399 {
-  static class Neighbor {
-    String node;
-    double value;
+    static class Node {
+        String node;
+        double value;
 
-    public Neighbor(String node, double value) {
-      this.node = node;
-      this.value = value;
-    }
-  }
-
-  private static double finalAns = 1;
-
-  private static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-    Map<String, List<Neighbor>> adjList = new HashMap<>();
-
-    for(int i = 0; i < equations.size(); i++) {
-      String s = equations.get(i).get(0);
-      String d = equations.get(i).get(1);
-      if(!adjList.containsKey(s)) {
-        adjList.put(s, new ArrayList<>());
-      }
-      adjList.get(s).add(new Neighbor(d, values[i]));
-      if(!adjList.containsKey(d)) {
-        adjList.put(d, new ArrayList<>());
-      }
-      adjList.get(d).add(new Neighbor(s, 1/values[i]));
+        public Node(String node, double value) {
+            this.node = node;
+            this.value = value;
+        }
     }
 
-    double[] result = new double[queries.size()];
-    int j = 0;
-    for(List<String> currentQuery: queries) {
-      String s = currentQuery.get(0);
-      String d = currentQuery.get(1);
-      if(!adjList.containsKey(s) || !adjList.containsKey(d)) {
-        result[j++] = -1;
-      } else if(s.equals(d)) {
-        result[j++] = 1;
-      } else {
-        finalAns = 1;
-        Set<String> visited = new HashSet<>();
-        boolean hasPath = dfs(adjList, s, d, visited);
-        result[j++] = hasPath ? finalAns: -1;
-      }
+    private static double finalAns = 1;
+
+    private static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        Map<String, List<Node>> adjList = new HashMap<>();
+
+        for(int i = 0; i < equations.size(); i++) {
+            String source = equations.get(i).get(0);
+            String target = equations.get(i).get(1);
+
+            if(!adjList.containsKey(source)) {
+                adjList.put(source, new ArrayList<>());
+            }
+            adjList.get(source).add(new Node(target, values[i]));
+            if(!adjList.containsKey(target)) {
+                adjList.put(target, new ArrayList<>());
+            }
+            adjList.get(target).add(new Node(source, 1 / values[i]));
+        }
+
+        double[] result = new double[queries.size()];
+
+
+        int j = 0;
+        for(List<String> query: queries) {
+            if(!adjList.containsKey(query.get(0)) || !adjList.containsKey(query.get(1)))
+                result[j++] = -1;
+            else if(query.get(0).equals(query.get(1)))
+                result[j++] = 1;
+            else {
+                finalAns = 1;
+                Set<String> visited = new HashSet<>();
+                if(dfs(query.get(0), query.get(1), adjList, visited))
+                    result[j++] = finalAns;
+                else
+                    result[j++] = -1;
+            }
+        }
+        return result;
     }
-    return result;
-  }
 
-  private static boolean dfs(Map<String, List<Neighbor>> adjList, String s, String d, Set<String> visited) {
-    if(s.equals(d))
-      return true;
-    visited.add(s);
-    List<Neighbor> neighbors = adjList.get(s);
-    for(Neighbor nei: neighbors) {
-      if(!visited.contains(nei.node)) {
-        finalAns = finalAns * nei.value;
-        if(dfs(adjList, nei.node, d, visited))
-          return true;
-        finalAns = finalAns / nei.value;
-      }
+    private static boolean dfs(String source, String target, Map<String, List<Node>> adjList, Set<String> visited) {
+        if(source.equals(target))
+            return true;
+        visited.add(source);
+        List<Node> neighbors = adjList.getOrDefault(source, new ArrayList<>());
+        if(!neighbors.isEmpty()) {
+            for(Node nei: neighbors) {
+                if(!visited.contains(nei.node)) {
+                    finalAns = finalAns * nei.value;
+                    if(dfs(nei.node, target, adjList, visited))
+                        return true;
+                    finalAns = finalAns / nei.value;
+                }
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
-  public static void main(String[] args) {
 
-  }
+
+    public static void main(String[] args) {
+        List<List<String>> equations = new ArrayList<>();
+        List<String> equation = new ArrayList<>();
+        equation.add("a");
+        equation.add("b");
+        equations.add(equation);
+
+        equation = new ArrayList<>();
+        equation.add("b");
+        equation.add("c");
+        equations.add(equation);
+
+        double[] values = {2.0,3.0};
+
+        List<List<String>> queries = new ArrayList<>();
+        List<String> query = new ArrayList<>();
+        query.add("a");
+        query.add("c");
+        queries.add(query);
+
+        query = new ArrayList<>();
+        query.add("b");
+        query.add("a");
+        queries.add(query);
+
+        query = new ArrayList<>();
+        query.add("a");
+        query.add("e");
+        queries.add(query);
+
+        query = new ArrayList<>();
+        query.add("a");
+        query.add("a");
+        queries.add(query);
+
+        query = new ArrayList<>();
+        query.add("x");
+        query.add("x");
+        queries.add(query);
+
+        double[] result = calcEquation(equations, values, queries);
+
+        System.out.println(Arrays.toString(result));
+    }
 }

@@ -1,26 +1,21 @@
 package com.app.easy;
 
-/**
- * @author t0k02w6 on 21/03/22
- * @project ds-algo-2021
- */
 public class PowerOfFourLeetcode342 {
     private static boolean isPowerOfFour(int n) {
-        if(n < 0)
-            return false;
-        int countOfZeros = 0;
-        int countOfOnes = 0;
-
         int temp = n;
+        int numZeros = 0;
+        int numOnes = 0;
         while(temp != 0) {
-            if((temp & 1) == 1) {
-                countOfOnes++;
+            if((temp & 1) == 0) {
+                numZeros++;
             } else {
-                countOfZeros++;
+                numOnes++;
+                if(numOnes > 1)
+                    return false;
             }
             temp = temp >> 1;
         }
-        return (countOfOnes == 1 && countOfZeros % 2 == 0);
+        return numZeros % 2 == 0 && numOnes == 1;
     }
 
     public static void main(String[] args) {

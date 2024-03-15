@@ -4,43 +4,37 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author t0k02w6 on 17/04/23
- * @project ds-algo-2021-leetcode
- */
 public class CombinationSumIILeetcode40 {
-  private static List<List<Integer>> combinationSum2(int[] candidates, int target) {
-    Arrays.sort(candidates);
-    List<List<Integer>> result = new ArrayList<>();
-    List<Integer> current = new ArrayList<>();
-    combinationSumRec(candidates, target, 0, result, current);
-    return result;
-  }
-
-  private static void combinationSumRec(int[] candidates, int target, int i, List<List<Integer>> result, List<Integer> current) {
-    if(i >= candidates.length || target < 0)
-      return;
-    if(target == 0) {
-      List<Integer> newList = new ArrayList<>();
-      newList.addAll(current);
-      result.add(newList);
-      return;
+    private static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> currentResult = new ArrayList<>();
+        combinationRec(candidates, 0, target, result, currentResult);
+        return result;
     }
-    for(int indx = i; indx < candidates.length; indx++) {
-      if(indx != i && candidates[indx - 1] == candidates[indx])
-        continue;
-      current.add(candidates[indx]);
-      combinationSumRec(candidates, target - candidates[indx], indx + 1, result, current);
-      current.remove(current.size() - 1);
+
+    private static void combinationRec(int[] candidates, int indx, int target, List<List<Integer>> result, List<Integer> currentResult) {
+        if(target == 0) {
+            List<Integer> newList = new ArrayList<>(currentResult);
+            result.add(newList);
+            return;
+        }
+        if(indx >= candidates.length || target < 0)
+            return;
+        for(int currentIndx = indx; currentIndx < candidates.length; currentIndx++) {
+            if(currentIndx != indx && candidates[currentIndx - 1] == candidates[currentIndx])
+                continue;
+            currentResult.add(candidates[currentIndx]);
+            combinationRec(candidates, currentIndx + 1, target - candidates[currentIndx], result, currentResult);
+            currentResult.remove(currentResult.size() - 1);
+        }
     }
-  }
 
-  public static void main(String[] args) {
-    int[] nums = {10,1,2,7,6,1,5};
-    int target = 8;
+    public static void main(String[] args) {
+        int[] candidates = {10,1,2,7,6,1,5};
+        int target = 8;
+        List<List<Integer>> result = combinationSum2(candidates, target);
 
-    List<List<Integer>> result = combinationSum2(nums, target);
-
-    System.out.println(result);
-  }
+        System.out.println(result);
+    }
 }

@@ -5,55 +5,48 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @author t0k02w6 on 30/07/23
- * @project ds-algo-2021-leetcode
- */
 public class ConcatenatedWordsLeetcode472 {
-  private static List<String> findAllConcatenatedWordsInADict(String[] words) {
-    if(words.length <= 1)
-      return new ArrayList<>();
-    List<String> result = new ArrayList<>();
+    private static List<String> findAllConcatenatedWordsInADict(String[] words) {
+        if(words.length <= 1)
+            return new ArrayList<>();
 
-    Set<String> wordDictSet = new HashSet<>();
-    for(String word: words) {
-      wordDictSet.add(word);
-    }
-
-    for(String word: words) {
-      if(word.equals(""))
-        continue;
-      wordDictSet.remove(word);
-      if(canBreak(wordDictSet, word)) {
-        result.add(word);
-      }
-      wordDictSet.add(word);
-    }
-    return result;
-  }
-
-  private static boolean canBreak(Set<String> wordDictSet, String word) {
-    int n = word.length();
-    boolean[] isWordBreak = new boolean[n + 1];
-    isWordBreak[0] = true;
-
-    for(int i = 1; i <= n; i++) {
-      for(int j = 0; j < n; j++) {
-        if(!isWordBreak[j]) {
-          continue;
+        List<String> result = new ArrayList<>();
+        Set<String> wordSet = new HashSet<>();
+        for(String word: words) {
+            wordSet.add(word);
         }
-        String substr = word.substring(j, i);
-        if(wordDictSet.contains(substr)) {
-          isWordBreak[i] = true;
-          break;
+
+        for(String word: words) {
+            if(word.equals(""))
+                continue;
+            wordSet.remove(word);
+            if(canBreak(word, wordSet)) {
+                result.add(word);
+            }
+            wordSet.add(word);
         }
-      }
+        return result;
     }
-    return isWordBreak[n];
-  }
 
+    private static boolean canBreak(String word, Set<String> wordSet) {
+        int n = word.length();
+        boolean[] canBreak = new boolean[n + 1];
+        canBreak[0] = true;
 
-  public static void main(String[] args) {
+        for(int i = 1; i <= n; i++) {
+            for(int j = 0; j < i; j++) {
+                if(canBreak[j]) {
+                    String str = word.substring(j, i);
+                    if(wordSet.contains(str)) {
+                        canBreak[i] = true;
+                    }
+                }
+            }
+        }
+        return canBreak[n];
+    }
 
-  }
+    public static void main(String[] args) {
+
+    }
 }

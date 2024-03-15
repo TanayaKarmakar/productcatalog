@@ -1,72 +1,64 @@
 package com.app.medium;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-/**
- * @author t0k02w6 on 13/06/23
- * @project ds-algo-2021-leetcode
- */
 public class AccountsMergeLeetcode721 {
-  private static List<List<String>> accountsMerge(List<List<String>> accounts) {
-    Map<String, List<String>> adjList = createAdjacencyList(accounts);
-    Set<String> visited = new HashSet<>();
-    List<List<String>> result = new ArrayList<>();
-    for(Map.Entry<String, List<String>> entry: adjList.entrySet()) {
-      if(!visited.contains(entry.getKey())) {
-        List<String> currentResult = new ArrayList<>();
-        dfs(adjList, entry.getKey(), visited, currentResult);
-        Collections.sort(currentResult);
-        currentResult.add(0, adjList.get(entry.getKey()).get(0));
-        result.add(currentResult);
-      }
-    }
-    return result;
-  }
-
-  private static void dfs(Map<String, List<String>> adjList, String key, Set<String> visited, List<String> currentResult) {
-    visited.add(key);
-    currentResult.add(key);
-
-    List<String> neighbours = adjList.getOrDefault(key, new ArrayList<>());
-    if(!neighbours.isEmpty()) {
-      neighbours = neighbours.subList(1, neighbours.size());
-      for(String nei: neighbours) {
-        if(!visited.contains(nei)) {
-          dfs(adjList, nei, visited, currentResult);
+    private static List<List<String>> accountsMerge(List<List<String>> accounts) {
+        Map<String, List<String>> adjList = createList(accounts);
+        List<List<String>> result = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
+        for(Map.Entry<String, List<String>> entry: adjList.entrySet()) {
+            if(!visited.contains(entry.getKey())) {
+                List<String> currentResult = new ArrayList<>();
+                dfs(adjList, entry.getKey(), visited, currentResult);
+                Collections.sort(currentResult);
+                currentResult.add(0, entry.getValue().get(0));
+                result.add(currentResult);
+            }
         }
-      }
+
+        return result;
     }
-  }
 
-  private static Map<String, List<String>> createAdjacencyList(List<List<String>> accounts) {
-    Map<String, List<String>> adjList = new HashMap<>();
-    for(List<String> currentAccount: accounts) {
-      List<String> emailList = currentAccount.subList(1, currentAccount.size());
-      for(String email: emailList) {
-        if(!adjList.containsKey(email)) {
-          adjList.put(email, new ArrayList<>());
-          adjList.get(email).add(currentAccount.get(0));
+    private static void dfs(Map<String, List<String>> adjList, String email, Set<String> visited, List<String> currentResult) {
+        visited.add(email);
+        currentResult.add(email);
+        List<String> neighbors = adjList.getOrDefault(email, new ArrayList<>());
+        if(!neighbors.isEmpty()) {
+            neighbors = neighbors.subList(1, neighbors.size());
+            for(String nei: neighbors) {
+                if(!visited.contains(nei)) {
+                    dfs(adjList, nei, visited, currentResult);
+                }
+            }
         }
-      }
-
-      for(String email1: emailList) {
-        for(String email2: emailList) {
-          if(!email1.equals(email2)) {
-            adjList.get(email1).add(email2);
-          }
-        }
-      }
     }
-    return adjList;
-  }
 
-  public static void main(String[] args) {
+    private static Map<String, List<String>> createList(List<List<String>> accounts) {
+        Map<String, List<String>> adjList = new HashMap<>();
+        for(List<String> account: accounts) {
+            List<String> emails = account.subList(1, account.size());
+            for(String email: emails) {
+                if(!adjList.containsKey(email)) {
+                    adjList.put(email, new ArrayList<>());
+                    adjList.get(email).add(account.get(0));
+                }
+            }
 
-  }
+            for(String email1: emails) {
+                for(String email2: emails) {
+                    if(!email1.equals(email2)) {
+                        adjList.get(email1).add(email2);
+                    }
+                }
+            }
+        }
+        return adjList;
+    }
+
+
+
+    public static void main(String[] args) {
+
+    }
 }

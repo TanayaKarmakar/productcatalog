@@ -1,54 +1,52 @@
 package com.app.medium;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
-/**
- * @author t0k02w6 on 01/07/23
- * @project ds-algo-2021-leetcode
- */
 public class TimeNeededToInformAllTheEmployeesLeetcode1376 {
-  private static int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
-    Map<Integer, List<Integer>> adjList = new HashMap<>();
+    static class NodeItem {
+        int node;
+        int informTime;
 
-    for(int i = 0; i < manager.length; i++) {
-      if(manager[i] == -1)
-        continue;
-      if(!adjList.containsKey(manager[i]))
-        adjList.put(manager[i], new ArrayList<>());
-      adjList.get(manager[i]).add(i);
+        public NodeItem(int node, int informTime) {
+            this.node = node;
+            this.informTime = informTime;
+        }
     }
 
-    int maxTime = 0;
-    Queue<int[]> q = new LinkedList<>();
-    q.add(new int[]{headID, 0});
+    private static int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {
+        Map<Integer, List<Integer>> adjList = new HashMap<>();
 
-    while(!q.isEmpty()) {
-      int[] currentItem = q.poll();
+        for(int i = 0; i < manager.length; i++) {
+            int value = manager[i];
+            if(value != -1) {
+                if(!adjList.containsKey(value)) {
+                    adjList.put(value, new ArrayList<>());
+                }
+                adjList.get(value).add(i);
+            }
+        }
 
-      List<Integer> reportees = adjList.getOrDefault(currentItem[0], new ArrayList<>());
-      for(Integer nei: reportees) {
-        int currentTime = currentItem[1] + informTime[currentItem[0]];
-        q.add(new int[]{nei, currentTime});
-        maxTime = Integer.max(maxTime, currentTime);
-      }
+        int maxTime = 0;
+        Queue<NodeItem> queue = new LinkedList<>();
+        queue.add(new NodeItem(headID, 0));
+
+        while(!queue.isEmpty()) {
+            NodeItem remItem = queue.poll();
+
+            List<Integer> neighbors = adjList.getOrDefault(remItem.node, new ArrayList<>());
+
+            if(!neighbors.isEmpty()) {
+                for(Integer nei: neighbors) {
+                    int nextInformTime = informTime[remItem.node] + remItem.informTime;
+                    queue.add(new NodeItem(nei, nextInformTime));
+                    maxTime = Integer.max(maxTime, nextInformTime);
+                }
+            }
+        }
+        return maxTime;
     }
 
-    return maxTime;
-  }
+    public static void main(String[] args) {
 
-  public static void main(String[] args) {
-    int n = 6;
-    int headId = 2;
-    int[] manager = {2,2,-1,2,2,2};
-    int[] informTime = {0,0,1,0,0,0};
-
-    int ans = numOfMinutes(n, headId, manager, informTime);
-
-    System.out.println(ans);
-  }
+    }
 }

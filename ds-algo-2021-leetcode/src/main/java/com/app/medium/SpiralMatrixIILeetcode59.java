@@ -1,51 +1,41 @@
 package com.app.medium;
 
-import java.util.Arrays;
-
-/**
- * @author t0k02w6 on 26/04/23
- * @project ds-algo-2021-leetcode
- */
 public class SpiralMatrixIILeetcode59 {
-  private static int[][] generateMatrix(int n) {
-    int value = 1;
-    int[][] matrix = new int[n][n];
+    private static int[][] generateMatrix(int n) {
+        int[][] matrix = new int[n][n];
 
-    int startRow = 0;
-    int endRow = n - 1;
-    int startCol = 0;
-    int endCol = n - 1;
+        int startRow = 0;
+        int endRow = (n - 1);
+        int startCol = 0;
+        int endCol = (n - 1);
 
-    while(startRow <= endRow && startCol <= endCol) {
-      for(int j = startCol; j <= endCol; j++) {
-        matrix[startRow][j] = value++;
-      }
+        int val = 1;
 
-      startRow++;
-      for(int j = startRow; j <= endRow; j++) {
-        matrix[j][endCol] = value++;
-      }
-      endCol--;
+        while(startRow <= endRow && startCol <= endCol) {
+            for(int j = startCol;j <= endCol; j++) {
+                matrix[startRow][j] = val++;
+            }
+            startRow++;
 
-      for(int j = endCol; j >= startCol; j--) {
-        matrix[endRow][j] = value++;
-      }
-      endRow--;
+            for(int j = startRow; j <= endRow; j++) {
+                matrix[j][endCol] = val++;
+            }
+            endCol--;
 
-      for(int j = endRow; j >= startRow; j--) {
-        matrix[j][startCol] = value++;
-      }
-      startCol++;
+            for(int j = endCol; j >= startCol; j--) {
+                matrix[endRow][j] = val++;
+            }
+            endRow--;
+
+            for(int j = endRow; j >= startRow; j--) {
+                matrix[j][startCol] = val++;
+            }
+            startCol++;
+        }
+        return matrix;
     }
 
-    return matrix;
+    public static void main(String[] args) {
 
-  }
-
-  public static void main(String[] args) {
-    int[][] matrix = generateMatrix(3);
-    for(int i = 0; i < 3; i++) {
-      System.out.println(Arrays.toString(matrix[i]));
     }
-  }
 }

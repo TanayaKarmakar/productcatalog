@@ -1,63 +1,58 @@
 package com.app.medium;
 
-
-import com.app.common.BinaryTree.TreeNode;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author t0k02w6 on 01/07/23
- * @project ds-algo-2021-leetcode
- */
+import com.app.common.BinaryTree.TreeNode;
+
 public class FindLeavesOfBinaryTreeLeetcode366 {
-  private static List<List<Integer>> findLeaves(TreeNode root) {
-    List<List<Integer>> result = new ArrayList<>();
-    Map<TreeNode, TreeNode> nodeMap = new LinkedHashMap<>();
-    while(root != null) {
-      nodeMap = new LinkedHashMap<>();
-      populateLeaves(root, null, nodeMap);
-      List<Integer> current = new ArrayList<>();
-      for(Map.Entry<TreeNode, TreeNode> entry: nodeMap.entrySet()) {
-        TreeNode currentLeaf = entry.getKey();
-        TreeNode parent = entry.getValue();
-        if(parent != null) {
-          if(parent.left == currentLeaf) {
-            parent.left = null;
-          } else {
-            parent.right = null;
-          }
-        } else {
-          root = null;
+    private static List<List<Integer>> findLeaves(TreeNode root) {
+        Map<TreeNode, TreeNode> nodeMap = new HashMap<>();
+        List<List<Integer>> result = new ArrayList<>();
+
+        while(root != null) {
+            nodeMap.clear();
+            populateMap(root, null, nodeMap);
+            List<Integer> currentResult = new ArrayList<>();
+            for(Map.Entry<TreeNode, TreeNode> entry: nodeMap.entrySet()) {
+                TreeNode leafNode = entry.getKey();
+                TreeNode parentNode = entry.getValue();
+                if(parentNode != null) {
+                    if(parentNode.left == leafNode)
+                        parentNode.left = null;
+                    else if(parentNode.right == leafNode)
+                        parentNode.right = null;
+                } else {
+                    root = null;
+                }
+
+                currentResult.add(leafNode.val);
+            }
+            result.add(currentResult);
         }
-        current.add(currentLeaf.val);
-      }
-      result.add(current);
+        return result;
     }
-    return result;
-  }
 
-  private static void populateLeaves(TreeNode root, TreeNode parent, Map<TreeNode, TreeNode> nodeMap) {
-    if(root == null)
-      return;
-    if(root.left == null && root.right == null) {
-      nodeMap.put(root, parent);
+    private static void populateMap(TreeNode root, TreeNode parent, Map<TreeNode, TreeNode> nodeMap) {
+        if(root == null)
+            return;
+        if(root.left == null && root.right == null)
+            nodeMap.put(root, parent);
+        populateMap(root.left, root, nodeMap);
+        populateMap(root.right, root, nodeMap);
     }
-    populateLeaves(root.left, root, nodeMap);
-    populateLeaves(root.right, root, nodeMap);
-  }
 
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
 
-  public static void main(String[] args) {
-    TreeNode root = new TreeNode(1);
-    root.left = new TreeNode(2);
-    root.right = new TreeNode(3);
-    root.left.left = new TreeNode(4);
-    root.left.right = new TreeNode(5);
+        List<List<Integer>> result = findLeaves(root);
 
-    List<List<Integer>> result = findLeaves(root);
-
-    System.out.println(result);
-  }
+        System.out.println(result);
+    }
 }

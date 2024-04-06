@@ -1,39 +1,29 @@
 package com.app.easy;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @author t0k02w6 on 19/03/22
- * @project ds-algo-2021
- */
 public class WordPatternLeetcode290 {
     private static boolean wordPattern(String pattern, String s) {
-        String[] sArr = s.split("\\s+");
-        if(sArr.length != pattern.length())
+        String[] tokens = s.split("\\s+");
+        if(tokens.length != pattern.length())
             return false;
-        Map<String, String> stringStringMap = new LinkedHashMap<>();
-        Map<String, String> reverseStringStringMap = new LinkedHashMap<>();
+        Map<Character, String> map = new HashMap<>();
+        Map<String, Character> revMap = new HashMap<>();
         for(int i = 0; i < pattern.length(); i++) {
-            String key = pattern.charAt(i) + "";
-            if(!stringStringMap.containsKey(key)) {
-                stringStringMap.put(key, sArr[i]);
-            } else {
-                if(!sArr[i].equals(stringStringMap.get(key)))
-                    return false;
+            char ch = pattern.charAt(i);
+            if((map.containsKey(ch) && !map.get(ch).equals(tokens[i]))
+                || (revMap.containsKey(tokens[i]) && revMap.get(tokens[i]) != ch ))
+            {
+                return false;
             }
-            if(!reverseStringStringMap.containsKey(sArr[i])) {
-                reverseStringStringMap.put(sArr[i], key);
-            } else {
-                if(!key.equals(reverseStringStringMap.get(sArr[i])))
-                    return false;
-            }
+            map.put(ch, tokens[i]);
+            revMap.put(tokens[i], ch);
         }
         return true;
     }
 
     public static void main(String[] args) {
-
+        System.out.println(wordPattern("abba", "dog dog dog dog"));
     }
 }

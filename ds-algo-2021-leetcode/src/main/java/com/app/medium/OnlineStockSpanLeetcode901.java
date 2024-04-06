@@ -1,45 +1,42 @@
 package com.app.medium;
 
+
 import java.util.Stack;
 
-/**
- * @author t0k02w6 on 02/07/23
- * @project ds-algo-2021-leetcode
- */
-public class OnlineStockSpanLeetcode901 {
-  static class StockSpanner {
+class StockSpanner {
     static class StockItem {
-      int indx;
-      int value;
+        int currentItem;
+        int indx;
 
-      public StockItem(int indx, int value) {
-        this.indx = indx;
-        this.value = value;
-      }
+        public StockItem(int currentItem, int indx) {
+            this.currentItem = currentItem;
+            this.indx = indx;
+        }
     }
 
-    private Stack<StockItem> stack;
+    Stack<StockItem> stockItems;
 
     public StockSpanner() {
-      stack = new Stack<>();
+        stockItems = new Stack<>();
     }
 
     public int next(int price) {
-      int value = 1;
-      if(stack.isEmpty() || stack.peek().value > price) {
-        stack.push(new StockItem(value, price));
-      } else {
-        while(!stack.isEmpty() && stack.peek().value <= price) {
-          StockItem stockItem = stack.pop();
-          value += stockItem.indx;
+        int value = 1;
+        if(stockItems.isEmpty() || stockItems.peek().currentItem > price) {
+            stockItems.push(new StockItem(price,  value));
+        } else {
+            while(!stockItems.isEmpty() && stockItems.peek().currentItem <= price) {
+                StockItem si = stockItems.pop();
+                value += si.indx;
+            }
+
+            stockItems.push(new StockItem(price, value));
         }
-        stack.push(new StockItem(value, price));
-      }
-      return value;
+        return value;
     }
-  }
+}
+public class OnlineStockSpanLeetcode901 {
+    public static void main(String[] args) {
 
-  public static void main(String[] args) {
-
-  }
+    }
 }

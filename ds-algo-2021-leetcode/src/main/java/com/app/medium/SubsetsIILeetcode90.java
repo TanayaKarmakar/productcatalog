@@ -1,42 +1,33 @@
 package com.app.medium;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-/**
- * @author t0k02w6 on 01/07/23
- * @project ds-algo-2021-leetcode
- */
 public class SubsetsIILeetcode90 {
-  private static List<List<Integer>> subsetsWithDup(int[] nums) {
-    int n = nums.length;
-    int totalCombination = (int)Math.pow(2, n);
-    Arrays.sort(nums);
-    Set<List<Integer>> intermediateResult = new HashSet<>();
-    for(int i = 0; i < totalCombination; i++) {
-      List<Integer> current = new ArrayList<>();
-      int temp = i;
-      int j = 0;
-      while(temp != 0) {
-        if((temp & 1) == 1) {
-          current.add(nums[j]);
+    private static List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        Set<List<Integer>> result = new HashSet<>();
+        int n = nums.length;
+        int totalCombinations = (int)Math.pow(2, n);
+        for(int i = 0; i < totalCombinations; i++) {
+            int current = i;
+            List<Integer> currentResult = new ArrayList<>();
+            int j = 0;
+            while(current != 0) {
+                if((current & 1) == 1) {
+                    currentResult.add(nums[j]);
+                }
+                current = (current >> 1);
+                j++;
+            }
+            result.add(currentResult);
         }
-        j++;
-        temp = temp >> 1;
-      }
-      intermediateResult.add(current);
+        return new ArrayList<>(result);
     }
 
-    return new ArrayList<>(intermediateResult);
-  }
+    public static void main(String[] args) {
+        int[] nums = {1,2,2};
+        List<List<Integer>> result = subsetsWithDup(nums);
 
-  public static void main(String[] args) {
-    int[] nums = {1,2,2};
-    List<List<Integer>> result = subsetsWithDup(nums);
-
-    System.out.println(result);
-  }
+        System.out.println(result);
+    }
 }

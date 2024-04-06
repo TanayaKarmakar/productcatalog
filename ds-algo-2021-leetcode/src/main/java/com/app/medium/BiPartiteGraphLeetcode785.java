@@ -4,51 +4,46 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-/**
- * @author t0k02w6 on 27/06/23
- * @project ds-algo-2021-leetcode
- */
 public class BiPartiteGraphLeetcode785 {
-  private static boolean isBipartite(int[][] graph) {
-    int n = graph.length;
-    int[] colors = new int[n];
-    Arrays.fill(colors, -1);
+    private static boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        int[] colors = new int[n];
+        Arrays.fill(colors, -1);
 
-    for(int i = 0; i < n; i++) {
-      if(colors[i] == -1) {
-        if(!isBipartiteHelper(graph, i, colors))
-          return false;
-      }
-    }
-    return true;
-  }
-
-  private static boolean isBipartiteHelper(int[][] graph, int currentNode, int[] colors) {
-    Queue<Integer> q = new LinkedList<>();
-    q.add(currentNode);
-    colors[currentNode] = 1;
-
-    while(!q.isEmpty()) {
-      int node = q.poll();
-      int[] neighbors = graph[node];
-      for(int nei: neighbors) {
-        if(colors[nei] == -1) {
-          colors[nei] = 1 - colors[node];
-          q.add(nei);
-        } else if(colors[nei] == colors[node]) {
-          return false;
+        for(int i = 0; i < n; i++) {
+            if(colors[i] == -1) {
+                if(!isBipartite(graph, i, colors))
+                    return false;
+            }
         }
-      }
+        return true;
     }
-    return true;
-  }
 
+    private static boolean isBipartite(int[][] graph, int node, int[] colors) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(node);
+        colors[node] = 1;
 
-  public static void main(String[] args) {
-    int[][] graph = {{1,2,3},{0,2},{0,1,3},{0,2}};
+        while(!queue.isEmpty()) {
+            Integer remNode = queue.poll();
+            int[] neighbors = graph[remNode];
 
-    boolean isBipartite = isBipartite(graph);
+            for(Integer nei: neighbors) {
+                if(colors[nei] == -1) {
+                    colors[nei] = 1 - colors[node];
+                    queue.add(nei);
+                } else if(colors[nei] == colors[node])
+                    return false;
+            }
+        }
+        return true;
+    }
 
-    System.out.println(isBipartite);
-  }
+    public static void main(String[] args) {
+        int[][] graph = {{1,2,3},{0,2},{0,1,3},{0,2}};
+
+        boolean ans = isBipartite(graph);
+
+        System.out.println(ans);
+    }
 }

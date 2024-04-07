@@ -1,65 +1,73 @@
 package com.app.hard;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-/**
- * @author t0k02w6 on 04/09/22
- * @project ds-algo-2021-leetcode
- */
 public class BasicCalculatorIIILeetcode772 {
-    private static int calculate(String s) {
-        Queue<Character> q = new LinkedList<>();
-        for(int i = 0; i < s.length(); i++) {
-            q.add(s.charAt(i));
+    static class Pair {
+        Stack<Integer> stack;
+        char sign;
+
+        public Pair(Stack<Integer> stack, char sign) {
+            this.stack = stack;
+            this.sign = sign;
         }
-        q.add(' ');
-        return helper(q);
     }
 
-    private static int helper(Queue<Character> q) {
-        int num = 0;
-        int sum = 0;
-        int prev = 0;
-        char prevOp = '+';
-
-        while(!q.isEmpty()) {
-            char c = q.poll();
-            if(c == '(') {
-                num = helper(q);
-            }
-            else if(Character.isDigit(c)) {
-                num = num * 10 + (c - '0');
-            } else {
-                switch (prevOp) {
-                    case '+':
-                        sum += prev;
-                        prev = num;
-                        break;
-                    case '-':
-                        sum += prev;
-                        prev = -num;
-                        break;
-                    case '*':
-                        prev *= num;
-                        break;
-                    case '/':
-                        prev /= num;
-                        break;
+    private static int calculate(String s) {
+        Stack<Integer> stack = new Stack<>();
+        Stack<Pair> parenStack = new Stack<>();
+        char sign = '+';
+        int value = 0;
+        int n = s.length();
+        for(int i = 0; i < n; ) {
+            if(Character.isDigit(s.charAt(i))) {
+                value = 0;
+                while(i < n && Character.isDigit(s.charAt(i))) {
+                    value = (value * 10) + (s.charAt(i) - '0');
+                    i++;
                 }
-                if(c == ')')
-                    break;
-                prevOp = c;
-                num = 0;
+                performOp(stack, value, sign);
+            } else if(s.charAt(i) == '(') {
+                parenStack.push(new Pair(stack, sign));
+                stack = new Stack<>();
+                sign = '+';
+                i++;
+            } else if(s.charAt(i) == ')') {
+                value = 0;
+                while(!stack.isEmpty()) {
+                    value += stack.pop();
+                }
+                Pair pair = parenStack.pop();
+                stack = pair.stack;
+                sign = pair.sign;
+                performOp(stack, value, sign);
+                i++;
+            } else if(s.charAt(i) != ' ') {
+                sign = s.charAt(i);
+                i++;
             }
         }
-        return sum + prev;
+
+        int sum = 0;
+        while(!stack.isEmpty()) {
+            sum += stack.pop();
+        }
+        return sum;
+    }
+
+    private static void performOp(Stack<Integer> stack, int value, char sign) {
+        if(sign == '+') {
+            stack.push(value);
+        } else if(sign == '-') {
+            stack.push(-value);
+        } else if(sign == '*' || sign == '/') {
+            int operand = stack.pop();
+            int result = (sign == '*') ? (operand * value) : (operand / value);
+            stack.push(result);
+        }
     }
 
     public static void main(String[] args) {
-        String str = "2*(5+5*2)/3+(6/2+8)";
-        int ans = calculate(str);
-
-        System.out.println(ans);
+        System.out.println(calculate("2*(5+5*2)/3+(6/2+8)"));
     }
 }

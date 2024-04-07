@@ -1,66 +1,72 @@
 package com.app.hard;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-/**
- * @author t0k02w6 on 04/09/22
- * @project ds-algo-2021-leetcode
- */
 public class BasicCalculatorLeetcode224 {
     private static int calculate(String s) {
-        Queue<Character> q = new LinkedList<>();
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) != ' ')
-                q.add(s.charAt(i));
-        }
-        q.add(' ');
-        return helper(q);
-    }
+        int len = s.length();
+        Stack<String> stack = new Stack<>();
+        int operand = 0;
+        int pow = 0;
 
-    private static int helper(Queue<Character> q) {
-        int sum = 0;
-        int num = 0;
-        int prev = 0;
-        char prevOp = '+';
-        while(!q.isEmpty()) {
-            char c = q.poll();
-            if(c == '(')
-                num = helper(q);
-            else if(Character.isDigit(c)) {
-                num = num * 10 + (c - '0');
-            } else {
-                switch (prevOp) {
-                    case '+':
-                        sum += prev;
-                        prev = num;
-                        break;
-                    case '-':
-                        sum += prev;
-                        prev = -num;
-                        break;
-                    case '*':
-                        prev = prev * num;
-                        break;
-                    case '/':
-                        prev = prev / num;
-                        break;
+        for(int i = len - 1; i >= 0; i--) {
+            char ch = s.charAt(i);
+            if(Character.isDigit(ch)) {
+                int currentNum = (ch - '0');
+                operand = (int)Math.pow(10, pow) * currentNum + operand;
+                pow++;
+            } else if(ch != ' ') {
+                if(pow != 0) {
+                    stack.push(String.valueOf(operand));
+                    operand = 0;
+                    pow = 0;
                 }
-                if(c == ')')
-                    break;
-                prevOp = c;
-                num = 0;
+                if(ch == '(') {
+                    operand = evaluateExpr(stack);
+                    stack.pop();
+                    stack.push(String.valueOf(operand));
+                    operand = 0;
+                } else {
+                    stack.push(ch + "");
+                }
             }
         }
-        return sum + prev;
+
+        if(pow != 0) {
+            stack.push(String.valueOf(operand));
+        }
+
+        return evaluateExpr(stack);
     }
 
+    private static int evaluateExpr(Stack<String> stack) {
+        String top = stack.peek();
+        if(!isDigit(top)) {
+            stack.push("0");
+        }
+
+        int result = Integer.parseInt(stack.pop());
+        while(!stack.isEmpty() && !stack.peek().equals(")")) {
+            String token = stack.pop();
+            if(token.equals("+")) {
+                result += Integer.parseInt(stack.pop());
+            } else {
+                result -= Integer.parseInt(stack.pop());
+            }
+        }
+        return result;
+    }
+
+    private static boolean isDigit(String token) {
+        try {
+            int num = Integer.parseInt(token);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
-        String str = "(1+(4+5+2)-3)+(6+8)";
 
-        int ans = calculate(str);
-
-        System.out.println(ans);
     }
 }

@@ -3,16 +3,17 @@ package com.app.hard;
 import java.util.*;
 
 public class BusRoutesLeetcode815 {
-    private static int numBusesToDestination(int[][] routes, int source, int target) {
-        Map<Integer, Set<Integer>> adjList = new HashMap<>();
+    public static int numBusesToDestination(int[][] routes, int source, int target) {
+        Map<Integer, List<Integer>> adjList = new HashMap<>();
 
         for(int[] route: routes) {
-            for(int curr: route) {
-                if(!adjList.containsKey(curr))
-                    adjList.put(curr, new HashSet<>());
-                for(int curr1: route) {
-                    if(curr != curr1) {
-                        adjList.get(curr).add(curr1);
+            for(int rt1: route) {
+                if(!adjList.containsKey(rt1)) {
+                    adjList.put(rt1, new ArrayList<>());
+                }
+                for(int rt2: route) {
+                    if(rt1 != rt2) {
+                        adjList.get(rt1).add(rt2);
                     }
                 }
             }
@@ -20,21 +21,22 @@ public class BusRoutesLeetcode815 {
 
         int count = 0;
         Queue<Integer> queue = new LinkedList<>();
-        queue.add(source);
-
         Set<Integer> visited = new HashSet<>();
+        queue.add(source);
+        visited.add(source);
 
         while(!queue.isEmpty()) {
             int size = queue.size();
             for(int i = 0; i < size; i++) {
-                int el = queue.poll();
-                if(el == target)
+                int remNode = queue.poll();
+                if(remNode == target)
                     return count;
-                visited.add(el);
-                Set<Integer> neighbors = adjList.getOrDefault(el, new HashSet<>());
+                List<Integer> neighbors = adjList.getOrDefault(remNode, new ArrayList<>());
                 for(Integer nei: neighbors) {
-                    if(!visited.contains(nei))
+                    if(!visited.contains(nei)) {
                         queue.add(nei);
+                        visited.add(nei);
+                    }
                 }
             }
             count++;
@@ -43,12 +45,6 @@ public class BusRoutesLeetcode815 {
     }
 
     public static void main(String[] args) {
-        int[][] routes = {{1,2,7},{3,6,7}};
-        int start = 1;
-        int end = 6;
 
-        int ans = numBusesToDestination(routes, start, end);
-
-        System.out.println(ans);
     }
 }

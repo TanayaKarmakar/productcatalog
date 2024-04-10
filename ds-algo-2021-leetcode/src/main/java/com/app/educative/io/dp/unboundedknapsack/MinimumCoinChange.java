@@ -1,35 +1,30 @@
 package com.app.educative.io.dp.unboundedknapsack;
 
-import java.util.Arrays;
-
-/**
- * @author t0k02w6 on 18/04/23
- * @project ds-algo-2021-leetcode
- */
 public class MinimumCoinChange {
-  private static int minCoinChange(int[] denominations, int total) {
-    int[] dp = new int[total + 1];
-    Arrays.fill(dp, Integer.MAX_VALUE);
-    dp[0] = 0;
+    private static int minCoins(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
 
-    for(int j = 1; j <= total; j++) {
-      int result = Integer.MAX_VALUE;
-      for(int i = 0; i < denominations.length; i++) {
-        if(j >= denominations[i]) {
-          result = Integer.min(result, dp[j - denominations[i]]);
+        for(int i = 1; i <= amount; i++) {
+            dp[i] = Integer.MAX_VALUE;
+            int result = Integer.MAX_VALUE;
+            for(int j = 0; j < coins.length; j++) {
+                if(i >= coins[j]) {
+                    result = Integer.min(result, dp[i - coins[j]]);
+                }
+            }
+            if(result != Integer.MAX_VALUE) {
+                dp[i] = result + 1;
+            }
         }
-      }
-      if(result != Integer.MAX_VALUE) {
-        dp[j] = result + 1;
-      }
+        return dp[amount];
     }
-    return dp[total];
-  }
 
-  public static void main(String[] args) {
-    int[] denominations = {1,2,3};
-    int total = 5;
+    public static void main(String[] args) {
+        int[] coins = {1,2,3};
+        int amount = 5;
 
-    System.out.println(minCoinChange(denominations, total));
-  }
+        int ans = minCoins(coins, amount);
+
+        System.out.println(ans);
+    }
 }

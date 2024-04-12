@@ -5,7 +5,6 @@ public class WildCardMatchingLeetcode44 {
         int m = p.length();
         int n = s.length();
         boolean[][] dp = new boolean[m + 1][n + 1];
-
         dp[m][n] = true;
 
         for(int i = m - 1; i >= 0; i--) {

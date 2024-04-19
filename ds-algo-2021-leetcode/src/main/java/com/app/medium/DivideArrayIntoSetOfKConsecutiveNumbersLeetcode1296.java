@@ -2,36 +2,37 @@ package com.app.medium;
 
 import java.util.TreeMap;
 
-/**
- * @author t0k02w6 on 04/07/23
- * @project ds-algo-2021-leetcode
- */
 public class DivideArrayIntoSetOfKConsecutiveNumbersLeetcode1296 {
-  private static boolean isPossibleDivide(int[] nums, int k) {
-    TreeMap<Integer, Integer> tMap = new TreeMap<>();
+    private static boolean isPossibleDivide(int[] nums, int k) {
+        TreeMap<Integer, Integer> freqMap = new TreeMap<>();
 
-    for(int i = 0; i < nums.length; i++) {
-      tMap.put(nums[i], tMap.getOrDefault(nums[i], 0) + 1);
-    }
-
-    while(tMap.size() > 0) {
-      int firstKey = tMap.firstKey();
-      for(int i = firstKey; i < (firstKey + k); i++) {
-        if(!tMap.containsKey(i))
-          return false;
-        int value = tMap.get(i);
-        value--;
-        if(value == 0) {
-          tMap.remove(i);
-        } else {
-          tMap.put(i, value);
+        for(int i = 0; i < nums.length; i++) {
+            freqMap.put(nums[i], freqMap.getOrDefault(nums[i], 0) + 1);
         }
-      }
+
+        while(!freqMap.isEmpty()) {
+            int start = freqMap.firstKey();
+
+            for(int num = start; num < (start + k); num++) {
+                if(!freqMap.containsKey(num))
+                    return false;
+                int value = freqMap.get(num);
+                value--;
+                if(value == 0) {
+                    freqMap.remove(num);
+                    continue;
+                }
+                freqMap.put(num, value);
+            }
+        }
+        return true;
     }
-    return true;
-  }
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
+        int[] nums = {3,2,1,2,3,4,3,4,5,9,10,11};
+        int k = 3;
+        boolean ans = isPossibleDivide(nums, k);
 
-  }
+        System.out.println(ans);
+    }
 }

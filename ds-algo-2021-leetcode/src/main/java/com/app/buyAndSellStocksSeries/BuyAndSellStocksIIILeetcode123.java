@@ -4,38 +4,36 @@ public class BuyAndSellStocksIIILeetcode123 {
     private static int maxProfit(int[] prices) {
         int n = prices.length;
         int[] dpLeft = new int[n];
-        int minPriceSoFar = Integer.MAX_VALUE;
-        int maxProfitSoFar = Integer.MIN_VALUE;
+        int[] dpRight = new int[n];
 
+        int maxProfitSoFar = 0;
+        int minBuyPrice = prices[0];
         for(int i = 0; i < n; i++) {
-            minPriceSoFar = Integer.min(prices[i], minPriceSoFar);
-            int currentProfit = prices[i] - minPriceSoFar;
+            minBuyPrice = Integer.min(minBuyPrice, prices[i]);
+            int currentProfit = prices[i] - minBuyPrice;
             maxProfitSoFar = Integer.max(maxProfitSoFar, currentProfit);
             dpLeft[i] = maxProfitSoFar;
         }
 
-        int maxPriceSoFar = Integer.MIN_VALUE;
-        maxProfitSoFar = Integer.MIN_VALUE;
-
-        int[] dpRight = new int[n];
+        maxProfitSoFar = 0;
+        int maxSellPrice = prices[n - 1];
         for(int i = n - 1; i >= 0; i--) {
-            maxPriceSoFar = Integer.max(maxPriceSoFar, prices[i]);
-            int currentProfit = maxPriceSoFar - prices[i];
+            maxSellPrice = Integer.max(maxSellPrice, prices[i]);
+            int currentProfit = maxSellPrice - prices[i];
             maxProfitSoFar = Integer.max(currentProfit, maxProfitSoFar);
             dpRight[i] = maxProfitSoFar;
         }
 
-        int maxProfit = Integer.MIN_VALUE;
+        int maxProfit = 0;
         for(int i = 0; i < n; i++) {
             maxProfit = Integer.max(maxProfit, dpLeft[i] + dpRight[i]);
         }
-
         return maxProfit;
     }
 
-
     public static void main(String[] args) {
         int[] prices = {3,3,5,0,0,3,1,4};
+
         int ans = maxProfit(prices);
 
         System.out.println(ans);

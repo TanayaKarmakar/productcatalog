@@ -1,84 +1,87 @@
 package com.app.hard.design;
 
+
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-
-class LFUCache {
-    static class Node {
-        int key;
-        int value;
-        int count;
-
-        public Node(int key, int value, int count) {
-            this.key = key;
-            this.value = value;
-            this.count = count;
-        }
-    }
-
-    Map<Integer, Node> itemMap;
-    Map<Integer, LinkedHashSet<Node>> nodesBasedOnFreq;
-    int maxCapacity;
-    int currentCapacity;
-    int leastFrequency;
-
-    public LFUCache(int capacity) {
-        this.itemMap = new HashMap<>();
-        this.nodesBasedOnFreq = new HashMap<>();
-        this.maxCapacity = capacity;
-        this.currentCapacity = 0;
-        this.leastFrequency = 1;
-    }
-
-    public int get(int key) {
-        if(!itemMap.containsKey(key))
-            return -1;
-        Node item = itemMap.get(key);
-        nodesBasedOnFreq.get(item.count).remove(item);
-        if(item.count == leastFrequency && nodesBasedOnFreq.get(item.count).isEmpty()) {
-            leastFrequency++;
-        }
-        item.count = item.count + 1;
-        if(!nodesBasedOnFreq.containsKey(item.count)) {
-            nodesBasedOnFreq.put(item.count, new LinkedHashSet<>());
-        }
-        nodesBasedOnFreq.get(item.count).add(item);
-        return item.value;
-    }
-
-    public void put(int key, int value) {
-        if(!itemMap.containsKey(key)) {
-            Node newItem = new Node(key, value, 1);
-            if(currentCapacity >= maxCapacity) {
-                LinkedHashSet<Node> nodes = nodesBasedOnFreq.get(leastFrequency);
-                Node remNode = nodes.iterator().next();
-                nodes.remove(remNode);
-                itemMap.remove(remNode.key);
-                currentCapacity--;
-            }
-            leastFrequency = 1;
-            if(!nodesBasedOnFreq.containsKey(leastFrequency)) {
-                nodesBasedOnFreq.put(leastFrequency, new LinkedHashSet<>());
-            }
-            nodesBasedOnFreq.get(leastFrequency).add(newItem);
-            itemMap.put(newItem.key, newItem);
-            currentCapacity++;
-        } else {
-            Node item = itemMap.get(key);
-            nodesBasedOnFreq.get(item.count).remove(item);
-
-            item.count = item.count + 1;
-            if(!nodesBasedOnFreq.containsKey(item.count)) {
-                nodesBasedOnFreq.put(item.count, new LinkedHashSet<>());
-            }
-            nodesBasedOnFreq.get(item.count).add(item);
-            itemMap.put(key, item);
-        }
-    }
-}
 public class LFUCacheLeetcode460 {
+    static class LFUCache {
+        static class Node {
+            int key;
+            int value;
+            int count;
+
+            public Node(int key, int value, int count) {
+                this.key = key;
+                this.value = value;
+                this.count = count;
+            }
+        }
+
+        private int currentCap;
+        private int maxCap;
+        private int leastFrequency;
+        private Map<Integer, Node> map;
+        private Map<Integer, List<Node>> mapBasedOnFreq;
+
+        public LFUCache(int capacity) {
+            map = new HashMap<>();
+            mapBasedOnFreq = new HashMap<>();
+            this.currentCap = 0;
+            this.maxCap = capacity;
+            this.leastFrequency = 1;
+        }
+
+        public int get(int key) {
+            if(!map.containsKey(key))
+                return -1;
+            Node existingNode = map.get(key);
+            mapBasedOnFreq.get(existingNode.count).remove(existingNode);
+            if(existingNode.count == leastFrequency && mapBasedOnFreq.get(leastFrequency).isEmpty()) {
+                leastFrequency++;
+            }
+
+            existingNode.count = existingNode.count + 1;
+            if(!mapBasedOnFreq.containsKey(existingNode.count)) {
+                mapBasedOnFreq.put(existingNode.count, new LinkedList<>());
+            }
+            mapBasedOnFreq.get(existingNode.count).add(existingNode);
+            return existingNode.value;
+        }
+
+        public void put(int key, int value) {
+            if(!map.containsKey(key)) {
+                Node newNode = new Node(key, value, 1);
+                if(currentCap == maxCap) {
+                    Node remNode = mapBasedOnFreq.get(leastFrequency).iterator().next();
+                    map.remove(remNode.key);
+                    mapBasedOnFreq.get(leastFrequency).remove(remNode);
+                    currentCap--;
+                }
+
+                if(leastFrequency > 1) {
+                    leastFrequency = 1;
+                }
+                if(!mapBasedOnFreq.containsKey(leastFrequency)) {
+                    mapBasedOnFreq.put(leastFrequency, new LinkedList<>());
+                }
+                mapBasedOnFreq.get(leastFrequency).add(newNode);
+                map.put(key, newNode);
+                currentCap++;
+            } else {
+                Node existingNode = map.get(key);
+                mapBasedOnFreq.get(existingNode.count).remove(existingNode);
+                existingNode.count = existingNode.count + 1;
+                if(!mapBasedOnFreq.containsKey(existingNode.count)) {
+                    mapBasedOnFreq.put(existingNode.count, new LinkedList<>());
+                }
+                mapBasedOnFreq.get(existingNode.count).add(existingNode);
+            }
+        }
+    }
+
     public static void main(String[] args) {
 
     }
